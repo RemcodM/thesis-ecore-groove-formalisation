@@ -1,0 +1,9 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=start-]
+\node[basic_node] (n0) at (1.620, -0.370) {\ml{\uline{\textit{ExampleOptionA}} : \textbf{Example\$OPTION\_A}}};
+\node[basic_node] (n1) at (1.615, -0.905) {\ml{\uline{\textit{ExampleOptionB}} : \textbf{Example\$OPTION\_B}}};
+\node[basic_node] (n2) at (1.615, -1.445) {\ml{\uline{\textit{ExampleOptionC}} : \textbf{Example\$OPTION\_C}}};
+
+\end{tikzpicture}

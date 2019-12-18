@@ -1,0 +1,10 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=test-]
+\node[type_node] (n0) at (2.000, -1.265) {\ml{\textbf{\hspace{0.2cm}A\hspace{0.2cm}}}};
+\node[type_node] (n1) at (2.000, -2.3) {\ml{\textbf{\hspace{0.2cm}B\hspace{0.2cm}}}};
+
+\path[basic_edge, composite](n0.south -| 1.800, -2.3) -- node[lab] {\ml{y}} (n1) ;
+\path[basic_edge, composite](n1) -- node[lab] {\ml{x}} (n0.south -| 2.200, -1.265) ;
+\end{tikzpicture}

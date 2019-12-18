@@ -1,0 +1,71 @@
+\begin{longtable}{|lX|}
+\hline
+\multicolumn{2}{|l|}{\textbf{Models after step 3}}\\
+\hhline{|==|}
+\endhead
+$Tm_3 = $ & $\mathrm{combine}(Tm_2, Tm_{DataField}) =$ \newline
+$\begin{aligned}
+Class =\ & \{.\type{House}, .\type{Room}\} \\
+Enum =\ & \{\} \\
+UserDataType =\ & \{\} \\
+Field =\ & \{(.\type{House}, \type{name})\} \\
+\mathrm{FieldSig} =\ & \big\{\big((.\type{House}, \type{name}), (\type{string}, 1..1)\big)\big\} \\
+EnumValue =\ & \{\} \\
+Inh =\ & \{\} \\
+Prop =\ & \{\} \\
+Constant =\ & \{\} \\
+\mathrm{ConstType} =\ & \{\}
+\end{aligned}$
+\\
+$Im_3 = $ & $\mathrm{combine}(Tm_2, Im_{DataField}) =$ \newline
+$\begin{aligned}
+Object =\ &\{TR, BHP\} \\
+\mathrm{ObjectClass}(ob) =\ & \{(TR, .\type{House}), (BHP, .\type{House})\}\\
+\mathrm{ObjectId} =\ & \{(TR, TR), (BHP, BHP)\}\\
+\mathrm{FieldValue} =\ & \Big\{
+\Big(\big(TR, (.\type{House}, \type{name})\big), \big[\type{string}, \text{``TwoRem''}\big]\Big),\\&
+\Big(\big(BHP, (.\type{House}, \type{name})\big), \big[\type{string}, \text{``B.H. Paleis''}\big]\Big)
+\Big\} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{aligned}$
+\\
+\hline
+$TG_3 = $ & $\mathrm{combine}(TG_2, TG_{DataField}) =$ \newline
+$\begin{aligned}
+NT =\ & \{\langle \type{House} \rangle, \langle \type{Room} \rangle, \type{string}\} \\
+ET =\ & \big\{
+\big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big)
+\big\} \\
+\!\!\sqsubseteq\ =\ & \big\{
+\big(\langle \type{House} \rangle, \langle \type{House} \rangle \big),
+\big(\langle \type{Room} \rangle, \langle \type{Room} \rangle \big),
+\big(\type{string}, \type{string} \big)
+\big\} \\
+abs =\ & \{\} \\
+\mathrm{mult} =\ & \Big\{
+\Big(\big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \big(0..\mstar, 1..1\big) \Big)
+\Big\} \\
+contains =\ & \{\}
+\end{aligned}$
+\\
+$IG_3 = $ & $\mathrm{combine}(TG_2, IG_{DataField}) =$ \newline
+$\begin{aligned}
+N =\ & \{TR, BHP, \text{``TwoRem''}, \text{``B.H. Paleis''}\} \\
+E =\ & \Big\{
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``TwoRem''} \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``B.H. Paleis''} \Big)
+\Big\} \\
+\mathrm{ident} =\ & \{(TR, TR), (BHP, BHP)\} \\
+\mathrm{type}_n =\ & \{
+(TR, \langle \type{House} \rangle), 
+(BHP, \langle \type{House} \rangle),
+(\text{``TwoRem''}, \type{string}),
+(\text{``B.H. Paleis''}, \type{string})
+\}
+\end{aligned}$
+\\
+\hline
+$f_3(Im_3) = $ & $f_2(Im_2) \sqcup f_{DataField}(Im_{DataField})$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_model_instance_graph})\\
+$f'_3(IG_3) = $ & $f'_2(IG_2) \sqcup f'_{DataField}(IG_{DataField})$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_graph_instance_model})\\
+\hline
+\end{longtable}

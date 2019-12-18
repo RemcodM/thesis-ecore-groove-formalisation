@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=contact1-]
+\node[basic_node] (n0) at (2.685, -3.300) {\ml{\uline{\textit{Example}} : \textbf{Contact}\\email = "networks@example.com"\\firstName = "Netwerkprofessort"}};
+
+\end{tikzpicture}

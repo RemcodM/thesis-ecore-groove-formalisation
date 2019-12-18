@@ -1,0 +1,9 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=test-]
+\node[type_node] (n0) at (3.125, -0.945) {\ml{\textbf{Example}}};
+\node[type_node] (n1) at (5.040, -0.950) {\ml{\textbf{TargetExample}}};
+
+\path[basic_edge](n0.east |- 5.040, -0.950) -- node[lab] {\ml{field}} (n1) ;
+\end{tikzpicture}

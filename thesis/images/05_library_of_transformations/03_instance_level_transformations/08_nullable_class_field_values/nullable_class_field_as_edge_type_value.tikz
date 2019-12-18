@@ -1,0 +1,12 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=start-]
+\node[basic_node] (n0) at (1.795, -0.405) {\ml{\uline{\textit{a}} : \textbf{Example}}};
+\node[basic_node] (n1) at (1.795, -0.805) {\ml{\uline{\textit{b}} : \textbf{Example}}};
+\node[basic_node] (n2) at (3.750, -0.440) {\ml{\uline{\textit{x}} : \textbf{TargetExample}}};
+\node[basic_node] (n3) at (3.745, -0.815) {\ml{\uline{\textit{y}} : \textbf{TargetExample}}};
+\node[basic_node] (n4) at (3.740, -1.205) {\ml{\uline{\textit{z}} : \textbf{TargetExample}}};
+
+\path[basic_edge](n0.east |- 3.750, -0.440) -- node[lab] {\ml{field}} (n2) ;
+\end{tikzpicture}

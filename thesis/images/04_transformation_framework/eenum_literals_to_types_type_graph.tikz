@@ -1,0 +1,13 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=type-]
+\node[type_node] (n0) at (4.420, -0.995) {\ml{\textit{\textbf{EnumExample}}}};
+\node[type_node] (n1) at (2.040, -0.165) {\ml{\textbf{EnumExample\$LITERAL\_A}}};
+\node[type_node] (n2) at (4.420, -0.165) {\ml{\textbf{EnumExample\$LITERAL\_B}}};
+\node[type_node] (n3) at (6.800, -0.165) {\ml{\textbf{EnumExample\$LITERAL\_C}}};
+
+\path[subtype_edge] (n1)  --  (n0) ;
+\path[subtype_edge](n2.south -| 4.420, -0.995) --  (n0) ;
+\path[subtype_edge] (n3)  --  (n0) ;
+\end{tikzpicture}

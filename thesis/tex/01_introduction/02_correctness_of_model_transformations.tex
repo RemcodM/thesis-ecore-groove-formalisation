@@ -1,0 +1,18 @@
+\section{Correctness of model transformations}
+\label{sec:introduction:correctness_of_model_transformations}
+
+As explained in \cref{sec:introduction:formalisation_of_model_transformations}, this thesis will define a formalisation for model transformations from EMF/Ecore to GROOVE and vice versa. However, a formalisation of the transformation itself does not prove anything about its properties and correctness. In order for the formalisation of the model transformation to be useful in the context of software verification, it is essential to prove its correctness. Therefore, it is crucial to establish what it means for a model transformation to be correct.
+
+As explained earlier, the model transformations between EMF/Ecore and GROOVE are exogenous and bidirectional. This bidirectionality means that for every transformation from EMF/Ecore to GROOVE, there exists a transformation back, from GROOVE to EMF/Ecore. Since GROOVE and EMF/Ecore are very different, there are elements in EMF/Ecore that cannot be expressed in GROOVE and vice versa. Because of the difference, it might not be possible to use one mapping in both directions. Therefore, it might be the case that for a transformation from EMF/Ecore to GROOVE, a different transformation function is used to convert the model back from GROOVE to EMF/Ecore. In this case, two unidirectional transformations are used to achieve bidirectionality.
+
+Throughout this thesis, the correctness of a model transformation is defined as the syntactical correctness. The semantics are not further discussed as the semantics might differ from model to model, depending on what the creator intended to model. The following properties must hold for the formalisation for it to be correct. Please note that since GROOVE is based on graph grammars, one does not speak of a GROOVE model, but rather a GROOVE graph:
+\begin{itemize}
+    \item For each valid EMF/Ecore model that is transformed to GROOVE, the resulting GROOVE graph must be syntactically valid.
+    \item For each valid GROOVE graph that is transformed to EMF/Ecore, the resulting EMF/Ecore model must be syntactically valid.
+    \item For each valid EMF/Ecore model that is transformed to GROOVE, there exists a known transformation from the resulting GROOVE graph back to the original EMF/Ecore model.
+    \item For each valid GROOVE graph that is transformed to EMF/Ecore, there exists a known transformation from the resulting EMF/Ecore model back to the original GROOVE graph.
+\end{itemize}
+
+These properties assume that it is clear what it means for EMF/Ecore models and GROOVE graphs to be syntactically valid. Therefore, the formalisations of EMF/Ecore and GROOVE will specify the syntactical correctness of their models and graphs.
+
+The properties discussed above are useful in the context of software verification since they show that the transformed models and graphs are indeed a valid transformation of their original counterparts. Therefore, this thesis will not only define the formalisation for the model transformations but also show that the properties discussed above hold for these transformations.

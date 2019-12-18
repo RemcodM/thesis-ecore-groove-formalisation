@@ -1,0 +1,20 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=0.6, every node/.style={scale=0.3}, name prefix=type-]
+\node[type_node] (n0) at (0.560, -0.290) {\ml{\textbf{House}\\name: \textbf{string}}};
+\node[type_node] (n1) at (0.600, -1.430) {\ml{\textbf{Room}\\number: \textbf{int}}};
+\node[type_node] (n2) at (2.470, -1.435) {\ml{\textbf{Renter}}};
+\node[type_node] (n3) at (2.470, -2.175) {\ml{\textit{\textbf{PaymentInterval}}}};
+\node[type_node] (n4) at (1.070, -2.785) {\ml{\textbf{PaymentInterval\$MONTH}}};
+\node[type_node] (n5) at (3.430, -2.785) {\ml{\textbf{PaymentInterval\$QUARTER}}};
+\node[type_node] (n6) at (2.470, -0.375) {\ml{\textit{\textbf{Person}}\\age: \textbf{int}\\name: \textbf{string}}};
+
+\path[subtype_edge](n2.north -| 2.470, -0.375) --  (n6) ;
+\path[subtype_edge] (n4)  --  (n3) ;
+\path[subtype_edge] (n5)  --  (n3) ;
+\path[basic_edge](n2.west |- 0.600, -1.430) -- node[lab] {\ml{rents}} (n1) ;
+\path[basic_edge, composite](n0.south -| 0.600, -1.430) -- node[lab] {\ml{rooms}} (n1) ;
+\path[basic_edge](n2.south -| 2.470, -2.175) -- node[lab] {\ml{payment\_interval}} (n3) ;
+\path[basic_edge](n1.east |- 2.470, -1.435) -- node[lab] {\ml{renter}} (n2) ;
+\end{tikzpicture}

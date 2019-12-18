@@ -1,0 +1,157 @@
+\subsection{Type graphs}
+\label{subsec:formalisations:groove_formalisation:type_graphs}
+
+In GROOVE, type graphs are used to constrain the valid instance graphs within the grammar. From a type graph follows a set of valid instance graphs that can be used for verification.
+
+\begin{defin}[Type graph]
+\label{defin:formalisations:groove_formalisation:type_graphs:type_graph}
+A type graph is modeled as tuple $TG$:
+\begin{equation}
+    TG = \langle NT, ET, \sqsubseteq, abs, \mathrm{mult}, contains \rangle
+\end{equation}
+with
+\begin{itemize}
+    \item $NT \subseteq Lab_t \cup Lab_{prim}$ is the set of nodes in the type graph. The nodes can consist of type labels (see \cref{defin:formalisations:groove_formalisation:definitions:labels}) or primitive type labels (see \cref{defin:formalisations:groove_formalisation:definitions:primitive_type_labels}).
+    
+    \item $ET \subseteq NT \times (Lab_e \cup Lab_f) \times NT$ is the set of (directed) edges in the type graph, which is a set of triples containing the source and target node, as well as the edge label or flag label (see \cref{defin:formalisations:groove_formalisation:definitions:labels}) used to identify the edge.
+    
+    \item $\sqsubseteq\ \subseteq NT \times NT$ is the inheritance relation, the set of tuples of nodes between which an inheritance relation exists.
+    
+    \item $abs \subseteq NT$ is the (possibly empty) subset of nodes in the type graph which are considered abstract. An instance graph cannot instantiate abstract nodes.
+    
+    \item $\mathrm{mult}: ET \Rightarrow \mathbb{M} \times \mathbb{M}$ is the function which maps edges to their multiplicity pair. See \cref{defin:formalisations:groove_formalisation:type_graphs:multiplicity_pair} for the definition.
+    
+    \item $contains \subseteq ET$ is the set of edges which identify an containment relation. 
+\end{itemize}
+
+\isabellelref{type_graph}{GROOVE.Type_Graph}
+\end{defin}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/type_graph_example.tikz}
+        \caption{Type graph in GROOVEs visual notation. Multiplicities are omitted for clarity.}
+    \end{subfigure}
+    
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{align*}
+            NT_{TG} =\ & \{ 
+                \type{House},
+                \type{PaymentInterval},
+                \type{PaymentInterval\$MONTH},\\&
+                \type{PaymentInterval\$QUARTER},
+                \type{Person},
+                \type{Renter},
+                \type{Room},
+                \type{int},
+                \type{string}
+            \}\\
+            ET_{TG} =\ & \{ 
+                ( \type{House}, \type{name}, \type{string} ),
+                ( \type{House}, \type{rooms}, \type{Room} ),\\&
+                ( \type{Person}, \type{age}, \type{int} ),
+                ( \type{Person}, \type{name}, \type{string} ),\\&
+                ( \type{Renter}, \type{payment\_interval}, \type{PaymentInterval} ),
+                ( \type{Renter}, \type{rents}, \type{Room} ),\\&
+                ( \type{Room}, \type{number}, \type{int} ),
+                ( \type{Room}, \type{renter}, \type{Renter} )
+            \}\\
+            \sqsubseteq_{TG}\: =\ & \{ 
+                ( \type{House}, \type{House} ),
+                ( \type{PaymentInterval}, \type{PaymentInterval} ),\\&
+                ( \type{PaymentInterval\$MONTH}, \type{PaymentInterval} ),\\&
+                ( \type{PaymentInterval\$MONTH}, \type{PaymentInterval\$MONTH} ),\\&
+                ( \type{PaymentInterval\$QUARTER}, \type{PaymentInterval} ),\\&
+                ( \type{PaymentInterval\$QUARTER}, \type{PaymentInterval\$QUARTER} ),\\&
+                ( \type{Person}, \type{Person} ),
+                ( \type{Renter}, \type{Person} ),
+                ( \type{Renter}, \type{Renter} ),
+                ( \type{Room}, \type{Room} ),
+                ( \type{int}, \type{int} ),
+                ( \type{string}, \type{string} )
+            \}\\
+            abs_{TG} =\ & \{ 
+                \type{PaymentInterval}, \type{Person}
+            \}\\
+            \mathrm{mult}_{TG} =\ & \big\{ 
+                \big( ( \type{House}, \type{name}, \type{string} ), ( 0..*, 1..1 ) \big),
+                \big( ( \type{House}, \type{rooms}, \type{Room} ), ( 1..1, 1..* ) \big),\\&
+                \big( ( \type{Person}, \type{age}, \type{int} ), ( 0..*, 1..1 ) \big),
+                \big( ( \type{Person}, \type{name}, \type{string} ), ( 0..*, 1..1 ) \big),\\&
+                \big( ( \type{Renter}, \type{payment\_interval}, \type{PaymentInterval} ), ( 0..*, 1..1 ) \big),\\&
+                \big( ( \type{Renter}, \type{rents}, \type{Room} ), ( 0..*, 0..* ) \big),\\&
+                \big( ( \type{Room}, \type{number}, \type{int} ), ( 0..*, 1..1 ) \big),
+                \big( ( \type{Room}, \type{renter}, \type{Renter} ), ( 0..*, 0..1 ) \big)
+            \big\}\\
+            contains_{TG} =\ & \{ 
+                ( \type{House}, \type{rooms}, \type{Room} )
+            \}
+        \end{align*}
+        \caption{Formal definition of the type graph}
+    \end{subfigure}
+    \caption{Example of a type graph corresponding with \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph}}
+    \label{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}
+\end{figure}
+
+An example of a type graph is given in \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}. This example is similar to the type model example discussed in \cref{subsec:formalisations:ecore_formalisation:type_models}. There is a node $\type{House}$ which contains $\type{Room}$s. A $\type{House}$ also has an edge to a primitive type label $\type{string}$ under edge label $\type{name}$ which represents the name of the house. Please note that in the visual representation, syntactic sugar is used to represent this edge. Instead of an extra node and edge, it is represented as part of the $\type{House}$ node. This syntactic sugar can be used for edges to primitive types and are in reality still treated as an edge to a separate node type. A $\type{Room}$ has an edge $\type{number}$, targeting the primitive type label $\type{int}$, which represents the number of the room within the house. A $\type{Room}$ can be rented by a $\type{Renter}$. The $\type{Renter}$s have edges to the $\type{Room}$s they rented under the edge label $\type{rents}$, while a $\type{Room}$ can access its $\type{Renter}$ through the edge with edge label $\type{renter}$. A $\type{Renter}$ extends the abstract $\type{Person}$ node type, which has 2 edges $\type{age}$ and $\type{name}$, targeting the primitive type labels $\type{int}$ and $\type{string}$ respectively. These edges represent the age and the name of the $\type{Person}$. Finally, a $\type{Renter}$ has an edge under the edge label $\type{payment\_interval}$, which points to a $\type{PaymentInterval}$ node type. This node type is abstract and the edge should therefore point to one of its subtypes, $\type{PaymentInterval\$MONTH}$ or $\type{PaymentInterval\$QUARTER}$. This represents the interval in which the $\type{Renter}$ pays the rent. 
+Notable from the definition is that the nodes set $N$ can contain primitive type labels. As a consequence, primitive type labels need to be added explicitly to a type graph in order to use primitive type values in an instance graph.
+
+Furthermore, each edge has a multiplicity pair tied to it, which is defined as the $\mathrm{mult}$ function in the type graph definition. The multiplicity pair consists of an incoming multiplicity and an outgoing multiplicity. The incoming multiplicity determines the allowed amount of nodes that share the same target node with this edge type. On the other hand, the outgoing multiplicity determines the number of edges a single source node may have to its target nodes.
+
+\begin{defin}[Multiplicity pair]
+\label{defin:formalisations:groove_formalisation:type_graphs:multiplicity_pair}
+A multiplicity pair is defined as a tuple of two multiplicities, $\mathbb{M} \times \mathbb{M}$, in which the first value denotes the incoming multiplicity and the second value the outgoing multiplicity.
+
+For any multiplicity pair, we define two functions:
+\begin{align*}
+    \mathrm{in}\!:&\: \mathbb{M} \times \mathbb{M} \Rightarrow \mathbb{M} \\
+    \mathrm{out}\!:&\: \mathbb{M} \times \mathbb{M} \Rightarrow \mathbb{M}
+\end{align*}
+The $\mathrm{in}$ function being the function which from a multiplicity pair returns the incoming multiplicity and the $\mathrm{out}$ function being the function that returns the outgoing multiplicity, so:
+\begin{equation*}
+\forall m = (m_{in}, m_{out}) \in \mathrm{mult}_{TG}: \mathrm{in}(m) = m_{in} \land \mathrm{out}(m) = m_{out}  
+\end{equation*}
+
+\isabellelref{multiplicity_pair}{GROOVE.Multiplicity_Pair}
+\end{defin}
+
+With all definitions in place, it is possible to define a valid type graph.
+The definition of a valid type graph introduces some new constraint that should hold for a type graph to be valid.
+
+\begin{defin}[Type graph validity]
+\label{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}
+For a type graph to be valid, the following properties must hold:
+\begin{enumerate}
+    \item There may not be any ambiguity in the use of edges: $\forall (s_1, l, t_1) \in ET_{TG}\,\land\, (s_2, l, t_2) \in ET_{TG}\!: \big((s_1, s_2) \in\ \sqsubseteq_{TG} \lor\ (s_2, s_1) \in\ \sqsubseteq_{TG}\!\!\big) \land \big((t_1, t_2) \in\ \sqsubseteq_{TG} \lor\ (t_2, t_1) \in\ \sqsubseteq_{TG}\!\!\big) \Longrightarrow s_1 = s_2 \land t_1 = t_2$.
+    \item Flags should have the same source and target node: $\forall (s, l, t) \in ET_{TG}: l \in Lab_f \Longrightarrow s = t$.
+    \item $\sqsubseteq_{TG}$ is a partial order ($\sqsubseteq_{TG}$ is reflexive, transitive and anti-symmetric on $N\!$).
+    \item The incoming multiplicities of edges that identify a containment relation are valid: $\forall e \in contains_{TG}: \mathrm{in}(\mathrm{mult}_{TG}(e)) = (0, 1) \lor \mathrm{in}(\mathrm{mult}_{TG}(e)) = (1, 1)$.
+\end{enumerate}
+
+\isabellelref{type_graph}{GROOVE.Type_Graph}
+\end{defin}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/edge_ambiguity_example_valid.tikz}
+        \caption{Valid type graph without ambiguity}
+        \label{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example:valid}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/edge_ambiguity_example_invalid.tikz}
+        \caption{Invalid type graph with an ambiguous edge type labelled $\type{f}$}
+        \label{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example:invalid}
+    \end{subfigure}
+    \caption{Example of ambiguity within edge types}
+    \label{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example}
+\end{figure}
+
+The last 3 properties presented here are mostly self-explanatory. The first property might be unclear at first. This property prevents type graphs from having ambiguous edge types. \cref{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example} shows an example of such an ambiguity. In essence, when creating edges within an instance graph, there should be an unique solution for typing the edge. In \cref{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example:valid}, this is always the case, even though both edges are labelled $\type{f}$. If an edge labelled $\type{f}$ references a node of type $\type{B}$, then the edge type should be $( \type{Y}, \type{f}, \type{B} )$. When an edge labelled $\type{f}$ references a node of type $\type{A}$, the edge type should be $( \type{X}, \type{f}, \type{A} )$. There is no ambiguity possible. 
+
+\cref{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example:invalid} shows an example of a type graph where ambiguity is possible. When a node of type $\type{Y}$ references a node of $\type{B}$ using an edge labelled $\type{f}$, it is unclear which edge type was meant. Both $( \type{Y}, \type{f}, \type{B} )$ and $( \type{X}, \type{f}, \type{A} )$ would be valid edge types here. This means there is ambiguity in how edges are typed. The first property of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity} excludes this case, since $( \type{Y}, \type{f}, \type{B} )$ and $( \type{X}, \type{f}, \type{A} )$ are both edge types, while $(\type{Y}, \type{X}) \in\ \sqsubseteq_{TG}$ and $(\type{B}, \type{A}) \in\ \sqsubseteq_{TG}$. Then according to the first property, $\type{Y}$ should be equal to $\type{X}$ and $\type{B}$ should be equal to $\type{A}$, which is not the case, so \cref{fig:formalisations:groove_formalisation:type_graphs:ambiguous_edges_example:invalid} violates the first property, hence the example is invalid.

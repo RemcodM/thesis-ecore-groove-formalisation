@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=test-]
+\node[type_node] (n0) at (0.950, -0.850) {\ml{\textbf{Example}}};
+
+\end{tikzpicture}

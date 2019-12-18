@@ -1,0 +1,8 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=1.2,every node/.style={scale=0.6},name prefix=step2to3-]
+\node[basic_node] (n4) at (1.185, -1.235) {\ml{\uline{\textit{Addr1}} : \textbf{Address}}};
+\node[basic_node] (n5) at (3.225, -1.235) {\ml{\uline{\textit{Addr2}} : \textbf{Address}}};
+
+\end{tikzpicture}

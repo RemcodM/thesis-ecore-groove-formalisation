@@ -1,0 +1,100 @@
+\subsection{User-defined data types}
+\label{subsec:library_of_transformations:instance_level_transformations:user_defined_data_types}
+
+In this section, the instance level transformation corresponding to the type level transformation of user-defined data types is discussed. The type level transformation of user-defined data types can be found in \cref{subsec:library_of_transformations:type_level_transformations:user_defined_data_types}.
+
+This definition does not actually introduce values for user-defined data types. This is done upon instantiating the type via a field. Therefore, an empty instance model and empty instance graph will be used for completeness.
+
+First, the corresponding instance model is introduced.
+
+\begin{defin}[Instance model $Im_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype}
+Let $Im_{UserType}$ be the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by the type model $Tm_{UserType}$ (\cref{defin:library_of_transformations:type_level_transformations:user_defined_data_types:tmod_userdatatype}).
+\isabellelref{imod_userdatatype}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $Im_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype_correct}
+$Im_{UserType}$ (\cref{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype}) is a valid instance model in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\isabellelref{imod_userdatatype_correct}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{thm}
+
+Since $Im_{UserType}$ does not define any objects, there is no need for a visual representation. However, in order to make composing transformation functions possible, $Im_{UserType}$ should still be compatible with the instance model it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(Im, Im_{UserType})$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype_combine_correct}
+Assume an instance model $Im$ that is valid in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}. Then $Im$ is compatible with $Im_{UserType}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:user_defined_data_types:tmod_userdatatype_combine_correct} are met, to ensure the combination of the corresponding type models is valid.
+\end{itemize}
+\isabellelref{imod_userdatatype_combine_correct}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(Im, Im_{UserType})$ is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\end{proof}
+
+The definitions and theorems for the Ecore instance model corresponding to $Tm_{UserType}$ are now complete. 
+
+\subsubsection{The node type encoding}
+
+As has been shown earlier, an possible encoding for user-defined data types is by introducing a node type. This has been done in $TG_{UserType}$. Like the Ecore instance model, the GROOVE instance graph is also empty, because the values for the type are not instantiated now. This gives rise to $IG_{UserType}$, which is defined as follows:
+
+\begin{defin}[Instance graph $IG_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_userdatatype_as_node_type}
+Let $IG_{UserType}$ be the empty instance graph $IG_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph}), except that it is typed by the type graph $TG_{UserType}$ (\cref{defin:library_of_transformations:type_level_transformations:user_defined_data_types:tg_userdatatype_as_node_type}).
+\isabellelref{ig_userdatatype_as_node_type}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $IG_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_class_as_node_type_correct}
+$IG_{UserType}$ (\cref{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_userdatatype_as_node_type}) is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_userdatatype_as_node_type_correct}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{thm}
+
+In order to make composing transformation functions possible, $IG_{UserType}$ should be compatible with the instance graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(IG, IG_{UserType})$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_userdatatype_as_node_type_combine_correct}
+Assume an instance graph $IG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG$ is compatible with $IG_{UserType}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:user_defined_data_types:tg_userdatatype_as_node_type_combine_correct} are met, to ensure the combination of the corresponding type graphs is valid.
+\end{itemize}
+\isabellelref{ig_userdatatype_as_node_type_combine_correct}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(IG, IG_{UserType})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{proof}
+
+The next definitions define the transformation function from $Im_{UserType}$ to $IG_{UserType}$:
+
+\begin{defin}[Transformation function $f_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype_to_ig_userdatatype_as_node_type}
+The transformation function $f_{UserType}(Im)$ is defined as the function that always outputs the empty instance graph $IG_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph}), except that it is typed by $TG_{UserType}$.
+\isabellelref{imod_userdatatype_to_ig_userdatatype_as_node_type}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype_to_ig_userdatatype_as_node_type_func}
+$f_{UserType}(Im)$ (\cref{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:imod_userdatatype_to_ig_userdatatype_as_node_type}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} transforming $Im_{UserType}$ into $IG_{UserType}$.
+\isabellelref{imod_userdatatype_to_ig_userdatatype_as_node_type_func}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{thm}
+
+The proof of the correctness of $f_{UserType}$ will not be included here. Instead, it can be found in the validated Isabelle theories. Obviously, the proof is trivial, as the function does not do any conversion. It does just output the empty instance model.
+
+Finally, to complete the transformation, the transformation function that transforms $IG_{UserType}$ into $Im_{UserType}$ is defined:
+
+\begin{defin}[Transformation function $f'_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_userdatatype_as_node_type_to_imod_userdatatype}
+The transformation function $f'_{UserType}(IG)$ is defined as the function that always outputs the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by $Tm_{UserType}$.
+\isabellelref{ig_userdatatype_as_node_type_to_imod_userdatatype}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{UserType}$]
+\label{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_userdatatype_as_node_type_to_imod_userdatatype_func}
+$f'_{UserType}(IG)$ (\cref{defin:library_of_transformations:instance_level_transformations:user_defined_data_types:ig_userdatatype_as_node_type_to_imod_userdatatype}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} transforming $IG_{UserType}$ into $Im_{UserType}$.
+\isabellelref{ig_userdatatype_as_node_type_to_imod_userdatatype_func}{Ecore-GROOVE-Mapping-Library.UserDataTypeInstance}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.

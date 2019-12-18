@@ -1,0 +1,50 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+	echo "No source file specified." 1>&2
+fi
+
+if [[ ! -f "$1" ]]; then
+	echo "No valid source file '$1'" 1>&2
+fi
+
+TARGET="${1%.*}.pdf"
+if [[ -n "$2" ]]; then
+	TARGET="$2"
+elif [[ -f "${TARGET}" ]]; then
+	echo "'${TARGET}' already exists. To overwrite please provide the output file explicitly."
+	exit 1
+fi
+
+if [[ ! -f "${TARGET}" ]]; then
+	touch "${TARGET}"
+	CODE="$?"
+	if [[ "${CODE}" != "0" ]]; then
+		echo "Cannot create '${TARGET}'." 1>&2
+		exit 1
+	fi
+elif [[ ! -w "${TARGET}" ]]; then
+	echo "Target '${TARGET}' is not writable." 1>&2
+	exit 1
+fi
+
+TEMP=$(mktemp --tmpdir ecore_svg_XXXXXXXXXX.svg)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+xsltproc -o "${TEMP}" "${DIR}/ecore-svg-convert.xslt" "$1"
+CODE="$?"
+if [[ "${CODE}" != "0" ]]; then
+	echo "Error while performing transformations on '$1'." 1>&2
+	rm -f "${TEMP}"
+	exit "${CODE}"
+fi
+
+inkscape --export-pdf="${TARGET}" "${TEMP}"
+if [[ "${CODE}" != "0" ]]; then
+	echo "Error while exporting PDF to '${TARGET}'." 1>&2
+	rm -f "${TEMP}"
+	exit "${CODE}"
+fi
+
+rm -f "${TEMP}"
+exit 0

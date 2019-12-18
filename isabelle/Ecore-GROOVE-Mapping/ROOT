@@ -1,0 +1,15 @@
+chapter "Ecore-GROOVE-Mapping"
+
+session "Ecore-GROOVE-Mapping" = "HOL-Library" +
+  options [timeout = 600, document = pdf, document_output = "output"]
+  sessions
+    Ecore
+    GROOVE
+  theories
+    List_Join_Split
+    Namespace_List
+    Namespace_String
+    Identifier_List
+    Identifier_String
+    Type_Model_Graph_Mapping
+    Instance_Model_Graph_Mapping

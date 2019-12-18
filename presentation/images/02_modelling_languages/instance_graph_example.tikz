@@ -1,0 +1,24 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=start-]
+\node[basic_node] (n0) at (1, 0) {\ml{\textbf{Renter}\\age = 24\\name = "John Doe"}};
+\node[basic_node] (n1) at (1, -2) {\ml{\textbf{Renter}\\age = 23\\name = "Jane Doe"}};
+\node[basic_node] (n2) at (0.5, -1) {\ml{\textbf{PaymentInterval\$MONTH}}};
+\node[basic_node] (n3) at (4, 0) {\ml{\textbf{Room}\\number = 1}};
+\node[basic_node] (n4) at (4, -1) {\ml{\textbf{Room}\\number = 2}};
+\node[basic_node] (n5) at (4, -2) {\ml{\textbf{Room}\\number = 3}};
+\node[basic_node] (n6) at (6.5, -1) {\ml{\textbf{House}\\name = "Small House"}};
+
+\path[basic_edge] (n6) -- node[lab] {\ml{rooms}} (n3) ;
+\path[basic_edge] (n6) -- node[lab] {\ml{rooms}} (n4) ;
+\path[basic_edge] (n6) -- node[lab] {\ml{rooms}} (n5) ;
+\path[basic_edge] (n3) -- node[lab] {\ml{renter}} (n0.east |- 0, -0.2) ;
+\path[basic_edge] (n0.east |- 0, 0.2) -- node[lab] {\ml{rents}} (n3) ;
+\path[basic_edge] (n4.west |- 0, -0.85)  -- node[lab] {\ml{renter}} (n0) ;
+\path[basic_edge] (n0)  -- node[lab] {\ml{rents}} (n4.west |- 0, -1.15) ;
+\path[basic_edge] (n1.east |- 0, -1.8) -- node[lab] {\ml{rents}} (n5) ;
+\path[basic_edge] (n5) -- node[lab] {\ml{renter}} (n1.east |- 0, -2.2) ;
+\path[basic_edge] (n0)  -- node[lab] {\ml{payment\_interval}} (n2) ;
+\path[basic_edge] (n1)  -- node[lab] {\ml{payment\_interval}} (n2) ;
+\end{tikzpicture}

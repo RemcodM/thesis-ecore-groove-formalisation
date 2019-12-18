@@ -1,0 +1,58 @@
+\section{Structure}
+\label{sec:transformation_framework:structure}
+
+Creating a transformation function between Ecore models and GROOVE graphs is a difficult task because there are infinitely many possible transformations that vary in complexity. Complexity in these transformation functions is created by the validity constraints of Ecore models and GROOVE graphs. Another factor that adds complexity is the possibility to mix encodings. For example, a transformation function might encode enumeration type \texttt{A} different from enumeration type \texttt{B}.
+
+The transformation framework presented in this chapter deals with the complexity by providing a structure for building transformation functions out of smaller building blocks. The framework starts with a trivial transformation (the transformation between an empty model and an empty graph). It then adds elements to this transformation, such that we build the model and graph iteratively. When applying each building block, the transformation function is extended while preserving its correctness. Furthermore, the framework ensures that when applying each building block, the correctness of both the model and graph is preserved.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture} 
+    \path
+    (-3,4) node[circle,draw,minimum size=10mm,inner sep=0pt](ME) {$E$}
+    (-4.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](MA) {$M_A$}
+    (-1.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](MB) {$M_B$}
+    (-3,0) node[circle,draw,minimum size=10mm,inner sep=0pt](MAB) {$M_{AB}$}
+    
+    (3,4) node[circle,draw,minimum size=10mm,inner sep=0pt](GN) {$N$}
+    (1.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](GA) {$G_A$}
+    (4.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](GB) {$G_B$}
+    (3,0) node[circle,draw,minimum size=10mm,inner sep=0pt](GAB) {$G_{AB}$};
+    
+    \path[]		
+    (ME) [-, black, out=240, in=90] edge node[above] {} (MA)
+    (ME) [-, black, out=300, in=90] edge node[above] {} (MB)
+    
+    (MA) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (MAB)
+    (MB) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (MAB)
+    
+    (GN) [-, black, out=240, in=90] edge node[above] {} (GA)
+    (GN) [-, black, out=300, in=90] edge node[above] {} (GB)
+    
+    (GA) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (GAB)
+    (GB) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (GAB)
+    
+    (ME) [-{Latex[width=5]}, black, out=25, in=155] edge node[above] {$f$} (GN)
+    (GN) [-{Latex[width=5]}, black, out=165, in=15] edge node[above] {} (ME)
+    
+    (MA) [-{Latex[width=5]}, black, out=35, in=145] edge node[above] {$f_A$} (GA)
+    (GA) [-{Latex[width=5]}, black, out=155, in=25] edge node[above] {} (MA)
+    
+    (MB) [-{Latex[width=5]}, black, out=35, in=145] edge node[above] {$f_B$} (GB)
+    (GB) [-{Latex[width=5]}, black, out=155, in=25] edge node[above] {} (MB)
+    
+    (MAB) [-{Latex[width=5]}, black, out=25, in=155] edge node[above] {$f_{A} \sqcup f_{B}$} (GAB)
+    (GAB) [-{Latex[width=5]}, black, out=165, in=15] edge node[above] {} (MAB)
+    ;
+    \end{tikzpicture}
+    \caption{General structure for building a transformation function}
+    \label{fig:transformation_framework:general_structure}
+\end{figure}
+
+In order for the framework to guarantee these properties, the smaller building blocks are applied in a general structure. A visualisation of this structure is given in \cref{fig:transformation_framework:general_structure}. The structure assumes that we have a partially build model $M_A$, which is valid and corresponds to a valid graph $G_A$ under a certain bijective transformation function $f_A$. In other words, $f_A$ transforms model $M_A$ to graph $G_A$ and the inverse of $f_A$ transforms graph $G_A$ to model $M_A$.
+
+The next step is to add a building block. This building block is represented by valid model $M_B$, which corresponds to a valid graph $G_B$ under a specific bijective transformation function $f_B$. Furthermore, we assume that $M_A$ and $M_B$ are entirely distinct except for some set of elements $E$, which are the only shared elements among the models $M_A$ and $M_B$. In the same way, we assume that graphs $G_A$ and $G_B$ are entirely distinct except for a set of nodes $N$, which are the only shared nodes between graphs $G_A$ and $G_B$. Finally, there also exists a specific bijective transformation function $f$, which transforms the set of elements $E$ to the set of nodes $N$ and vice-versa.
+
+Within the framework, we will present a way to merge models $M_A$ and $M_B$ into a model $M_{AB}$, while preserving validity. We also present a way to merge graphs $G_A$ and $G_B$ intro graph $G_{AB}$, again while preserving validity. Then we present a way to merge two transformation functions $f_A$ and $f_B$ in order to create a transformation function $f_{A} \sqcup f_{B}$, which transforms the combined model $M_{AB}$ to the combined graph $G_{AB}$. By performing these operations, a larger transformation function is created which can transform the larger model $M_{AB}$ to the larger graph $G_{AB}$. Since $M_{AB}$ and $G_{AB}$ are valid and $f_{A} \sqcup f_{B}$ is a bijective transformation function between model $M_{AB}$ and graph $G_{AB}$, it is possible to reuse them as the next $M_{A}$, $G_{A}$ and $f_{A}$ in the model and add another building block. This way, complex model structures and transformation functions are created iteratively while each step in the process maintains a formal proof.
+
+In the following sections, the explained structure is applied to type models and type graphs, and then also to instance models and instance graphs. These sections also discuss the necessary definitions and proofs needed to apply the framework.

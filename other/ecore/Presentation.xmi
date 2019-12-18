@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<presentation:container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:presentation="https://heliumnet.nl/thesis/presentation" xsi:schemaLocation="https://heliumnet.nl/thesis/presentation Presentation.ecore">
+  <contact name="Jane" address="//@address.0"/>
+  <contact name="John" address="//@address.1"/>
+  <address line="Addr1"/>
+  <address line="Addr2"/>
+</presentation:container>

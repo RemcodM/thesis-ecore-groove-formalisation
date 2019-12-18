@@ -1,0 +1,30 @@
+\section{Research question}
+\label{sec:introduction:research_question}
+This thesis will focus on defining a formalisation for model transformations from Ecore to GROOVE and vice versa, and also proving the correctness of these transformations. It will try to achieve this goal by providing a way to compose more substantial model transformations out of smaller ones. In short, the thesis will answer the following research question:
+
+``What is a suitable formalisation for composable model transformations between Ecore and GROOVE that gives rise to correct model transformations between Ecore and GROOVE?''
+
+It is immediately clear that this research question consists of multiple facets. In order to make answering the research question easier, the research question will be split into smaller questions based on the different facets of the main question. The following subquestions will be answered:
+\begin{enumerate}
+    \item ``What is a suitable formalisation of Ecore models and what Ecore models are valid within this formalisation?'' 
+    
+    In order to transform between Ecore and GROOVE, a formalisation of Ecore is needed. As explained earlier, this formalisation needs to give rise to a definition of valid Ecore models, which are needed to prove the correctness of the transformations later.
+    
+    \item ``What is a suitable formalisation of GROOVE grammars and what GROOVE grammars are valid within this formalisation?'' 
+    
+    Just like the previous question, a formalisation that captures GROOVE grammars is needed. Like the previous question, this formalisation should also give rise to a definition of valid GROOVE grammars for use in proving the correctness of the transformations.
+    
+    \item ``What is a suitable formalisation for the model transformations between Ecore and GROOVE?'' 
+    
+    A suitable formalisation for the model transformations between Ecore and GROOVE is needed to describe the model transformations between Ecore and GROOVE formally. Such a formalisation must be able to express the infinite combinations of possible model transformations. This formalisation forms the basis of the correctness of model transformations and their composability. Therefore, this question is the foundation of the main result of this thesis.
+    
+    \item ``What model transformations are correct within the formalisation?'' 
+    
+    This question will answer the question which model transformations within the formalisation are correct model transformations between Ecore and GROOVE. These transformations are of interest, as only these transformations can be used with confidence within formal applications.
+    
+    \item ``How can correct model transformations between Ecore and GROOVE be composed?''
+    
+    A fundamental part of this thesis is to compose small model transformations into larger ones. This composability allows for only proving the correctness of small model transformations and then combining them without loss of correctness. This question answers how to compose correct model transformations into a new model transformation while preserving correctness.
+\end{enumerate}
+
+When these subquestions are answered, it is possible to formulate an answer to the main research question. A suitable formalisation for model transformations between Ecore and GROOVE will follow from subquestions 1, 2 and 3. Subquestions 1 and 2 provide the formalisations of Ecore and GROOVE themselves, which will be used to formalise their model transformations. Subquestion 3 defines the formalisation of the model transformations. The correctness of model transformations within this formalisation will follow from subquestions 1, 2 and 4. Subquestions 1 and 2 will provide the definitions needed to prove correctness, while subquestion 4 will give a proof for the correct model transformations. Finally, the composability of these model transformations follows from subquestion 5, which answers how to combine correct model transformations while preserving correctness.

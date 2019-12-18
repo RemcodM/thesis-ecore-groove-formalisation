@@ -1,0 +1,39 @@
+\section{Building the model}
+\label{sec:application:building_the_model}
+
+Within this section, the 15 steps are provided to build the model represented by \cref{fig:application:the_model:final_ecore_model}. For each of these 15 steps, the corresponding Ecore model and GROOVE graphs are shown.
+
+Before the model is built, it is necessary to initialize the initial models. The initial models are empty and are used as a starting point. Each step will then add more elements to the model until the final model is obtained. Therefore, define the following models:
+
+\begin{tabularx}{\textwidth}{|lX|}
+\hline
+\multicolumn{2}{|l|}{\textbf{Initial models}}\\
+\hhline{|==|}
+$Tm_0 = $ & $Tm_\epsilon$ (\cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:empty_type_model}) \\
+$Im_0 = $ & $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model})\\
+\hline
+$TG_0 = $ & $TG_\epsilon$ (\cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:empty_type_graph})\\
+$IG_0 = $ & $IG_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph})\\
+\hline
+$f_0(Im_0) = $ & $IG_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph})\\
+$f'_0(IG_0) = $ & $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model})\\
+\hline
+\end{tabularx}
+
+Essentially, every model is defined to be the empty model, and every graph is defined to be the empty graph. Furthermore, $f_0$ is the mapping function which projects $Im_0$ (and $Tm_0$) onto $IG_0$ (and $TG_0$). $f'_0$ is the inverse function which maps $IG_0$ (and $TG_0$) onto $Im_0$ (and $Tm_0$).
+
+\input{tex/06_application/02_building_the_model/01_houses.tex}
+\input{tex/06_application/02_building_the_model/02_the_room_class.tex}
+\input{tex/06_application/02_building_the_model/03_house_names.tex}
+\input{tex/06_application/02_building_the_model/04_rooms.tex}
+\input{tex/06_application/02_building_the_model/05_room_identifiers.tex}
+\input{tex/06_application/02_building_the_model/06_the_room_size_enumeration_type.tex}
+\input{tex/06_application/02_building_the_model/07_room_sizes.tex}
+\input{tex/06_application/02_building_the_model/08_tenants.tex}
+\input{tex/06_application/02_building_the_model/09_tenant_names.tex}
+\input{tex/06_application/02_building_the_model/10_tenant_ages.tex}
+\input{tex/06_application/02_building_the_model/11_the_tenant_type_enumeration_type.tex}
+\input{tex/06_application/02_building_the_model/12_tenant_types.tex}
+\input{tex/06_application/02_building_the_model/13_room_tenant_relationship.tex}
+\input{tex/06_application/02_building_the_model/14_tenant_subtenant_relationship.tex}
+\input{tex/06_application/02_building_the_model/15_living_rooms.tex}

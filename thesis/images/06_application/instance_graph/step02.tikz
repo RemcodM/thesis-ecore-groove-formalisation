@@ -1,0 +1,8 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=step02-]
+\node[basic_node] (n0) at (2.680, -1.040) {\ml{\uline{\textit{BHP}} : \textbf{House}}};
+\node[basic_node] (n1) at (2.660, -0.340) {\ml{\uline{\textit{TR}} : \textbf{House}}};
+
+\end{tikzpicture}

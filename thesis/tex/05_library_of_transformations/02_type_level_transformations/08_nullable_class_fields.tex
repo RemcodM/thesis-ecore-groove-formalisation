@@ -1,0 +1,170 @@
+\subsection{Nullable class fields}
+\label{subsec:library_of_transformations:type_level_transformations:nullable_class_fields}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+        \centering
+        \includegraphics{images/05_library_of_transformations/02_type_level_transformations/08_nullable_class_fields/nullable_class_field.pdf}
+        \caption{$Tm_{NullableClassField}$ to a class type $.\type{TargetExample}$ with $name = \type{field}$}
+        \label{fig:library_of_transformations:type_level_transformations:nullable_class_fields:visualisation:ecore}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{0.95\textwidth}
+        \centering
+        \input{images/05_library_of_transformations/02_type_level_transformations/08_nullable_class_fields/nullable_class_field_as_edge_type.tikz}
+        \caption{$TG_{NullableClassField}$ to a class type $\type{TargetExample}$ with $name = \type{field}$}
+        \label{fig:library_of_transformations:type_level_transformations:nullable_class_fields:visualisation:groove}
+    \end{subfigure}
+    \caption{Visualisation of the transformation of a field typed by an optional class type}
+    \label{fig:library_of_transformations:type_level_transformations:nullable_class_fields:visualisation}
+\end{figure}
+
+The previous sections have shown transformations of fields to attribute types. It has not shown any relations between objects yet. This transformation defines the transformation of a nullable class field.
+
+\begin{defin}[Type model $Tm_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field}
+Let $Tm_{NullableClassField}$ be the type model containing a regular class with identifier $classtype$. Then $Tm_{NullableClassField}$ defines a field named $name$ with type $fieldtype$, in which $fieldtype$ is the identifier of another class type in $Tm_{NullableClassField}$. $Tm_{NullableClassField}$ is defined as:
+\begin{align*}
+Class =\ &\{classtype, fieldtype\} \\
+Enum =\ &\{\} \\
+UserDataType =\ &\{\} \\
+Field =\ &\{(classtype, name)\} \\
+\mathrm{FieldSig} =\ &\begin{cases}
+    (f, (?fieldtype, 0..1)) &\mathrm{if}\ f \in Field_{Tm_{NullableClassField}}
+\end{cases} \\
+EnumValue =\ &\{\} \\
+Inh =\ &\{\} \\
+Prop =\ &\{\} \\
+Constant =\ &\{\} \\
+\mathrm{ConstType} =\ &\{\}
+\end{align*}
+\isabellelref{tmod_nullable_class_field}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{defin}
+
+\begin{thm}[Correctness of $Tm_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field_correct}
+$Tm_{NullableClassField}$ (\cref{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field}) is a consistent type model in the sense of \cref{defin:formalisations:ecore_formalisation:type_models:type_model_consistency}.
+\isabellelref{tmod_nullable_class_field_correct}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{thm}
+
+A visual representation of $Tm_{NullableClassField}$ with field name $\type{field}$ on class $.\type{Example}$ can be seen in \cref{fig:library_of_transformations:type_level_transformations:nullable_class_fields:visualisation:ecore}. In this example, $\type{field}$ references a class of $.\type{TargetExample}$. Please note that the lower bound of the multiplicity is 0 as the class is considered nullable. That means that setting a value for $\type{field}$ on class $.\type{Example}$ is optional. The correctness proof of $Tm_{NullableClassField}$ is more involved, it is not included here for conciseness. It can be found within the validated Isabelle proofs.
+
+In order to make composing transformation functions possible, $Tm_{NullableClassField}$ should be compatible with the type model it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(Tm, Tm_{NullableClassField})$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field_combine_correct}
+Assume a type model $Tm$ that is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:type_models:type_model_consistency}. Then $Tm$ is compatible with $Tm_{NullableClassField}$ (in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:compatibility}) if:
+\begin{itemize}
+    \item The class type on which the field is defined, $classtype$, is already an existing class in $Tm$;
+    \item The class type which the field targets, $fieldtype$, is already an existing class in $Tm$;
+    \item The field named $name$ is not already a field on $classtype$ in $Tm$.
+\end{itemize}
+\isabellelref{tmod_nullable_class_field_combine_correct}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:tmod_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(Tm, Tm_{NullableClassField})$ is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:type_models:type_model_consistency}.
+\end{proof}
+
+The definitions and theorems for defining a data field within Ecore are now complete. 
+
+\subsubsection{Encoding as edge type}
+
+Like any field definition so far, an edge type will be used within GROOVE to encode the field. The field is transformed into an edge type from the encoded class type to the encoded target type. The encoding corresponding to $Tm_{NullableClassField}$ can then be represented as $TG_{NullableClassField}$, defined in the following definition:
+
+\begin{defin}[Type graph $TG_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type}
+Let $TG_{NullableClassField}$ be the type graph containing a node type which encodes the class type $classtype$. Furthermore, define an edge type from $classtype$ named $name$. This edge type targets a node of $fieldtype$. $TG_{NullableClassField}$ is defined as:
+\begin{align*}
+NT =\ &\{\mathrm{ns\_\!to\_\!list}(classtype), \mathrm{ns\_\!to\_\!list}(fieldtype)\} \\
+ET =\ &\{(\mathrm{ns\_\!to\_\!list}(classtype), \langle name \rangle, \mathrm{ns\_\!to\_\!list}(fieldtype))\} \\
+\!\!\sqsubseteq\ =\ &\{( \mathrm{ns\_\!to\_\!list}(classtype), \mathrm{ns\_\!to\_\!list}(classtype) ),\\&( \mathrm{ns\_\!to\_\!list}(fieldtype), \mathrm{ns\_\!to\_\!list}(fieldtype) )\} \\
+abs =\ &\{\} \\
+\mathrm{mult}(e) =\ &\begin{cases}
+    (0..\mstar, 0..1) &\mathrm{if}\ e \in \{(\mathrm{ns\_\!to\_\!list}(classtype), \langle name \rangle, \mathrm{ns\_\!to\_\!list}(fieldtype))\}
+\end{cases} \\
+contains =\ &\{\}
+\end{align*}
+\isabellelref{tg_nullable_class_field_as_edge_type}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{defin}
+
+\begin{thm}[Correctness of $TG_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type_correct}
+$TG_{NullableClassField}$ (\cref{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type}) is a valid type graph in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}.
+\isabellelref{tg_nullable_class_field_as_edge_type_correct}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{thm}
+
+A visual representation of $TG_{NullableClassField}$ with edge name $\type{field}$ on node type $\type{Example}$ can be seen in \cref{fig:library_of_transformations:type_level_transformations:nullable_class_fields:visualisation:groove}. Like the previous example, $\type{field}$ references the $.\type{TargetExample}$ class, but in this case the encoded node type of $\type{TargetExample}$. The correctness proof of $TG_{NullableClassField}$ is more involved, it is not included here for conciseness. It can be found within the validated Isabelle proofs.
+
+In order to make composing transformation functions possible, $TG_{NullableClassField}$ should be compatible with the type graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(TG, TG_{NullableClassField})$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type_combine_correct}
+Assume a type graph $TG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Then $TG$ is compatible with $TG_{NullableClassField}$ (in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:compatibility}) if:
+\begin{itemize}
+    \item The node types of the encoded class types in $TG_{NullableClassField}$ are already node types in $TG$;
+    \item The node type of the encoded class type in $TG_{NullableClassField}$ does not already have an edge type with the same name as the field in $TG$.
+\end{itemize}
+\isabellelref{tg_nullable_class_field_as_edge_type_combine_correct}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(TG, TG_{NullableClassField})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}.
+\end{proof}
+
+The next definitions define the transformation function from $Tm_{NullableClassField}$ to $TG_{NullableClassField}$:
+
+\begin{defin}[Transformation function $f_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field_to_tg_nullable_class_field_as_edge_type}
+The transformation function $f_{NullableClassField}(Tm)$ is defined as:
+\begin{align*}
+NT =\ &\{\mathrm{ns\_\!to\_\!list}(c) \mid c \in Class_{Tm}\}\\
+ET =\ &\{(\mathrm{ns\_\!to\_\!list}(c), \langle f \rangle, \mathrm{ns\_\!to\_\!list}(fieldtype)) \mid (c, n) \in Field_{Tm} \} \\
+\!\!\sqsubseteq\ =\ &\{( \mathrm{ns\_\!to\_\!list}(c), \mathrm{ns\_\!to\_\!list}(c) ) \mid c \in Class_{Tm} \} \\
+abs =\ &\{\} \\
+\mathrm{mult} =\ &\begin{cases}
+    (0..\mstar, 0..1) &\mathrm{if}\ e \in \{(\mathrm{ns\_\!to\_\!list}(c), \langle f \rangle, \mathrm{ns\_\!to\_\!list}(fieldtype)) \mid (c, n) \in Field_{Tm} \}
+\end{cases} \\
+contains =\ &\{\}
+\end{align*}
+\isabellelref{tmod_nullable_class_field_to_tg_nullable_class_field_as_edge_type}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field_to_tg_nullable_class_field_as_edge_type_func}
+$f_{NullableClassField}(Tm)$ (\cref{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tmod_nullable_class_field_to_tg_nullable_class_field_as_edge_type}) is a valid transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph} transforming $Tm_{NullableClassField}$ into $TG_{NullableClassField}$.
+\isabellelref{tmod_nullable_class_field_to_tg_nullable_class_field_as_edge_type_func}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{thm}
+
+The proof of the correctness of $f_{NullableClassField}$ will not be included here. Instead, it can be found in the validated Isabelle theories.
+
+Finally, to complete the transformation, the transformation function that transforms $TG_{NullableClassField}$ into $Tm_{NullableClassField}$ is defined:
+
+\begin{defin}[Transformation function $f'_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type_to_tmod_nullable_class_field}
+The transformation function $f'_{NullableClassField}(TG)$ is defined as:
+\begin{align*}
+Class =\ &\{\mathrm{list\_\!to\_\!ns}(n) \mid n \in NT_{TG} \} \\
+Enum =\ &\{\} \\
+UserDataType =\ &\{\} \\
+Field =\ &\{(\mathrm{list\_\!to\_\!ns}(\mathrm{src}(e)), l) \mid e \in ET_{TG} \land \langle l \rangle = \mathrm{lab}(e) \} \\
+\mathrm{FieldSig} =\ &\begin{cases}
+    (f, (?fieldtype, 0..1)) &\mathrm{if}\ f \in \{(\mathrm{list\_\!to\_\!ns}(\mathrm{src}(e)), l) \mid e \in ET_{TG} \land \langle l \rangle = \mathrm{lab}(e) \} 
+\end{cases} \\
+EnumValue =\ &\{\} \\
+Inh =\ &\{\} \\
+Prop =\ &\{\} \\
+Constant =\ &\{\} \\
+\mathrm{ConstType} =\ &\{\}
+\end{align*}
+\isabellelref{tg_nullable_class_field_as_edge_type_to_tmod_nullable_class_field}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{NullableClassField}$]
+\label{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type_to_tmod_nullable_class_field_func}
+$f'_{NullableClassField}(TG)$ (\cref{defin:library_of_transformations:type_level_transformations:nullable_class_fields:tg_nullable_class_field_as_edge_type_to_tmod_nullable_class_field}) is a valid transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model} transforming $TG_{NullableClassField}$ into $Tm_{NullableClassField}$.
+\isabellelref{tg_nullable_class_field_as_edge_type_to_tmod_nullable_class_field_func}{Ecore-GROOVE-Mapping-Library.NullableClassField}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.

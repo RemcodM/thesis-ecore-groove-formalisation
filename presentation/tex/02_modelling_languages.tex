@@ -1,0 +1,111 @@
+\section{Modelling languages}
+
+\begin{frame}{Modelling languages}
+    ``A modelling language is any artificial language that can be used to express systems in a structure that is defined by a consistent set of rules.''
+\end{frame}
+
+\begin{frame}{Modelling languages}
+\begin{columns}[c]
+    \begin{column}{0.05\textwidth}
+    \end{column}\begin{column}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/02_modelling_languages/lego_house.png}
+    \end{column}\begin{column}{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/02_modelling_languages/LEGO_logo.pdf}
+        \includegraphics[width=\textwidth]{images/02_modelling_languages/lego_brick_examples.png}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain what a modelling language is informally, ignore the definition.
+	    \item Explain that you could think of Lego as a modelling language.
+	\end{itemize}
+}
+
+\begin{frame}{Modelling languages}
+    EMF/Ecore
+    \begin{itemize}
+        \item Eclipse Modelling Framework
+        \item Modelling framework and code generation facility
+        \item Modelling language rules enforced by metamodel Ecore
+    \end{itemize}
+    \pause
+    GROOVE
+    \begin{itemize}
+        \item GRaphs for Object-Oriented VErification
+        \item Software verification tool using graph grammars
+        \item Modelling language rules based on graph grammars
+    \end{itemize}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain that within this thesis, we use software modelling languages.
+	    \item Explain shortly what Ecore is
+	    \item Explain shortly what GROOVE is
+	\end{itemize}
+}
+
+\begin{frame}{Modelling languages}
+    For Ecore, 2 different model types are considered:
+    \begin{itemize}
+        \item Type models, directly based on the Ecore metamodel
+        \item Instance models, based on a type model
+    \end{itemize}
+    \pause
+    For GROOVE, 2 different graph types are considered:
+    \begin{itemize}
+        \item Type graphs
+        \item Instance graphs, based on a type graph
+    \end{itemize}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain that for Ecore, two different levels of models are considered, type models and instance models.
+	    \begin{itemize}
+	        \item Type models are best viewed as UML class diagrams
+	        \item Instance models are instatiations of these diagrams.
+	    \end{itemize}
+	    \item Explain that for GROOVE, we have similar levels
+	    \begin{itemize}
+	        \item Type models will be transformed into type graphs, which are graphs that define a some structure of node types and edge types.
+	        \item Instance models are transformed into instance graphs, which is an instantiation of the structure defined by the type graph.
+	    \end{itemize}
+	\end{itemize}
+}
+
+\begin{frame}{Ecore type model}
+    \centering
+    \includegraphics[width=0.9\textwidth,trim={0 0.45cm 0 0.25cm},clip]{images/02_modelling_languages/type_model_example.pdf}
+\end{frame}
+
+\begin{frame}{GROOVE type graph}
+    \centering
+    \input{images/02_modelling_languages/type_graph_example.tikz}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain type model and type graph. Show that they have the same elements.
+	    \item Explain that certain elements need to be encoded.
+	\end{itemize}
+}
+
+\begin{frame}{Ecore instance model}
+    \centering
+    \includegraphics[]{images/02_modelling_languages/instance_model_example.pdf}
+\end{frame}
+
+\begin{frame}{GROOVE instance graph}
+    \centering
+    \input{images/02_modelling_languages/instance_graph_example.tikz}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain instance model and instance graph. Show that it are instantiations of their type counterparts.
+	\end{itemize}
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="chapter5" nsURI="https://heliumnet.nl/thesis/chapter5" nsPrefix="chapter5">
+  <eClassifiers xsi:type="ecore:EClass" name="House">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rooms" ordered="false"
+        upperBound="9" eType="#//Room" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="living_room" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Room">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="room_id" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="room_size" lowerBound="1"
+        eType="#//RoomSize"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tenant" eType="#//Tenant"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tenant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="age" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subtenant" eType="#//Tenant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//TenantType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TenantType">
+    <eLiterals name="REGULAR"/>
+    <eLiterals name="SUBTENANT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RoomSize">
+    <eLiterals name="SMALL"/>
+    <eLiterals name="MEDIUM" value="1"/>
+    <eLiterals name="LARGE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstanceModelContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tenants" upperBound="-1"
+        eType="#//Tenant" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="houses" upperBound="-1"
+        eType="#//House" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

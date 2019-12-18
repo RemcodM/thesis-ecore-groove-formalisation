@@ -1,0 +1,129 @@
+\ProvidesPackage{notes}
+
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\RequirePackage{geometry}
+\RequirePackage{fancyhdr}
+
+
+
+\def\course#1{\gdef\@course{#1}}
+\def\university#1{\gdef\@university{#1}}
+\def\faculty#1{\gdef\@faculty{#1}}
+\def\chair#1{\gdef\@chair{#1}}
+\def\examcommittee#1{\gdef\@examcommittee{#1}}
+\def\department#1{\gdef\@department{#1}}
+\def\docnum#1{\gdef\@docnum{#1}}
+
+
+%\renewcommand{\rmdefault}{cmr} % Arial
+%\renewcommand{\sfdefault}{cmr} % Arial
+
+
+\geometry{a4paper,hmargin=1in,vmargin=0.5in}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\renewcommand{\@makechapterhead}[1]{%
+
+  {\parindent \z@ \raggedright \normalfont
+  %  \hrule                                        % horizontal line
+    \vspace{5pt}%                                 % add vertical space
+    \ifnum \c@secnumdepth >\m@ne
+        \huge \bfseries \scshape \@chapapp\space \thechapter % Chapter number
+        \par\nobreak
+        \vskip 20\p@
+    \fi
+    \interlinepenalty\@M
+    \Huge \bfseries \scshape #1\par                         % chapter title
+    \vspace{5pt}%                                 % add vertical space
+   % \hrule                                        % horizontal rule
+    \nobreak
+    \vskip 40\p@
+  }}
+
+\renewcommand{\@makeschapterhead}[1]{%
+
+  {\parindent \z@ \raggedright
+    \normalfont
+  %  \hrule                                        		% horizontal line
+    \vspace{5pt}%                                 	% add vertical space
+    \interlinepenalty\@M
+    \Huge \bfseries \scshape #1\par	% chapter title
+    \vspace{5pt}%                                 	% add vertical space
+ %   \hrule                                        		% horizontal line
+    \nobreak
+    \vskip 40\p@
+  }}
+
+%-------------------------- DEFINE TITLE PAGE --------------------------
+\renewcommand{\maketitle}{{
+	\pagestyle{empty}
+	
+ 	\addtolength{\textwidth}{-1.75in}
+   	\addtolength{\oddsidemargin}{1.35in}
+  	
+	\setlength\textwidth{-3in}
+	
+	\thiswatermark{				%Put watermark on this page only
+	        \put(250.5,-770){\includegraphics[width=150pt]{images/fmt.png}}
+    		\put(-330,-875){\includegraphics[]{images/UT2.eps}}
+   	}
+
+	\addtolength{\voffset}{-5pt}
+
+	\flushleft
+
+\hspace{6cm}
+\begin{minipage}[t][1.5cm][l]{65mm}
+\@date
+\end{minipage}
+
+\vspace{2cm}
+{\fontencoding{OT1}\fontfamily{phv}\selectfont \MakeTextUppercase{\@title}}\\
+\vspace{5mm}
+\begin{minipage}[l][][l]{5in}
+\textbf{\fontsize{32}{36}\fontfamily{phv}\selectfont \@course}
+\end{minipage}
+
+\vspace{3.5cm}
+\uppercase{\@author}\\
+\vspace{1cm}
+\textbf{\fontencoding{OT1}\fontfamily{phv}\selectfont \@faculty}\\
+\textbf{\fontencoding{OT1}\fontfamily{phv}\selectfont \@chair}\\
+\vspace{0.5 cm}
+Exam committee:\\
+\uppercase{ \@examcommittee}\\
+\vspace{0.5 cm}
+Documentnumber\\
+\uppercase{ \@department} --- \uppercase{ \@docnum}
+
+   \cleardoublepage
+}
+\pagestyle{fancy}
+}
+
+%-------------------------- END TITLE PAGE --------------------------
+
+%% Remove Existing header and footers and replace with below
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{0pt}	%no line for top header
+\renewcommand{\footrulewidth}{0pt}	%no line for botom header
+
+%\fancyhead[L,L]{\leftmark} 
+%\fancyhead[R,R]{\@date}
+\fancyfoot[L,L]{ } 
+\fancyfoot[R,R]{Page \thepage} 
+
+%% For Chapter and Part start pages remove the header information
+\fancypagestyle{plain}{% 
+	\fancyhead{} %get rid of the headers on plain pages 
+	\fancyfoot[L]{} 
+	\fancyfoot[R]{Page \thepage}
+	%\renewcommand{\headrulewidth}{0pt}
+}
+
+\floatstyle{ruled}
+\newfloat{example}{H}{loe}
+\floatname{example}{Example}

@@ -1,0 +1,23 @@
+\section{Global definitions}
+\label{sec:formalisations:global_definitions}
+
+This section defines a multiplicity, which is a two tuple consisting of a lower and upper bound. In Ecore, the notion of a multiplicity is used within a field signature (\cref{defin:formalisations:ecore_formalisation:type_models:type_model}) in order to specify a limit on the allowed amount of values for a field. In GROOVE, multiplicities are used to bound the number of incoming and outgoing edges for each node type via multiplicity pairs (\cref{defin:formalisations:groove_formalisation:type_graphs:multiplicity_pair}).
+
+\begin{defin}[Multiplicity]
+\label{defin:formalisations:global_definitions:multiplicity}
+A multiplicity is a two tuple consisting of a lower bound (which is any natural number) and an upper bound (which is possibly unbounded).
+\begin{equation*}
+\mathbb{M} \subseteq (\mathbb{N} \times \mathbb{N^+} \cup {\mstar})\ \cap \leq
+\end{equation*}
+The first value represents the lower bound, the second value of the tuple represents the upper bound. The set of multiplicities $\mathbb{M}$ is formally defined as
+\begin{equation*}
+\mathbb{M} = \{ (l, u) \mid l \in \mathbb{N} \land u \in (\mathbb{N^+} \cup {\mstar}) \land l \leq u \}
+\end{equation*}
+It holds that $\mstar$ is larger than each natural number, so $\forall n \in \mathbb{N}: n < \mstar$. Furthermore, the notation $l..u$ is used to denote $(l, u) \in \mathbb{M}$.
+
+Finally, any natural number $n$ is said to be part of a multiplicity if it is within bounds, meaning:
+\begin{equation*}
+\forall m = l..u \in \mathbb{M}, n \in \mathbb{N} : n \in m \Leftrightarrow l \leq n \leq u
+\end{equation*}
+\isabellelref{multiplicity}{Ecore.Multiplicity}
+\end{defin}

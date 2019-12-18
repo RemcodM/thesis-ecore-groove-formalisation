@@ -1,0 +1,100 @@
+\subsection{Abstract classes}
+\label{subsec:library_of_transformations:instance_level_transformations:abstract_classes}
+
+In this section, the instance level transformation corresponding to the type level transformation of abstract classes is discussed. The type level transformation of abstract class types can be found in \cref{subsec:library_of_transformations:type_level_transformations:abstract_classes}.
+
+Informally speaking, it is quite weird to think about the transformation of abstract classes on the instance level, as abstract classes cannot have instances. The transformation here is included for completeness, to allow for adding abstract types while working with transformations on the type level. In practice, the instance level will consist of the empty instance model and empty instance graph, showing that after adding an abstract class on the type level, instances of the type model will still be valid.
+
+First, the corresponding instance model is introduced.
+
+\begin{defin}[Instance model $Im_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class}
+Let $Im_{AbsClass}$ be the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by the type model $Tm_{AbsClass}$ (\cref{defin:library_of_transformations:type_level_transformations:abstract_classes:tmod_abstract_class}).
+\isabellelref{imod_abstract_class}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $Im_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class_correct}
+$Im_{AbsClass}$ (\cref{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class}) is a valid instance model in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\isabellelref{imod_abstract_class_correct}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{thm}
+
+Since $Im_{AbsClass}$ does not define any objects, there is no need for a visual representation. However, in order to make composing transformation functions possible, $Im_{AbsClass}$ should still be compatible with the instance model it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(Im, Im_{AbsClass})$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class_combine_correct}
+Assume an instance model $Im$ that is valid in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}. Then $Im$ is compatible with $Im_{AbsClass}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:abstract_classes:tmod_abstract_class_combine_correct} are met, to ensure the combination of the corresponding type models is valid.
+\end{itemize}
+\isabellelref{imod_abstract_class_combine_correct}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(Im, Im_{AbsClass})$ is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\end{proof}
+
+The definitions and theorems for the Ecore instance model corresponding to $Tm_{AbsClass}$ are now complete. 
+
+\subsubsection{The node type encoding}
+
+As has been shown earlier, an possible encoding for abstract class types is by introducing an abstract node type. This has been done in $TG_{AbsClass}$. Like the Ecore instance model, the GROOVE instance graph is also empty, because abstract node types cannot be instantiated. This gives rise to $IG_{AbsClass}$, which is defined as follows:
+
+\begin{defin}[Instance graph $IG_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_abstract_class_as_node_type}
+Let $IG_{AbsClass}$ be the empty instance graph $IG_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph}), except that it is typed by the type graph $TG_{AbsClass}$ (\cref{defin:library_of_transformations:type_level_transformations:abstract_classes:tg_abstract_class_as_node_type}).
+\isabellelref{ig_abstract_class_as_node_type}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $IG_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_class_as_node_type_correct}
+$IG_{AbsClass}$ (\cref{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_abstract_class_as_node_type}) is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_abstract_class_as_node_type_correct}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{thm}
+
+In order to make composing transformation functions possible, $IG_{AbsClass}$ should be compatible with the instance graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(IG, IG_{AbsClass})$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_abstract_class_as_node_type_combine_correct}
+Assume an instance graph $IG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG$ is compatible with $IG_{AbsClass}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:abstract_classes:tg_abstract_class_as_node_type_combine_correct} are met, to ensure the combination of the corresponding type graphs is valid.
+\end{itemize}
+\isabellelref{ig_abstract_class_as_node_type_combine_correct}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(IG, IG_{AbsClass})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{proof}
+
+The next definitions define the transformation function from $Im_{AbsClass}$ to $IG_{AbsClass}$:
+
+\begin{defin}[Transformation function $f_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class_to_ig_abstract_class_as_node_type}
+The transformation function $f_{AbsClass}(Im)$ is defined as the function that always outputs the empty instance graph $IG_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph}), except that it is typed by $TG_{AbsClass}$.
+\isabellelref{imod_abstract_class_to_ig_abstract_class_as_node_type}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class_to_ig_abstract_class_as_node_type_func}
+$f_{AbsClass}(Im)$ (\cref{defin:library_of_transformations:instance_level_transformations:abstract_classes:imod_abstract_class_to_ig_abstract_class_as_node_type}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} transforming $Im_{AbsClass}$ into $IG_{AbsClass}$.
+\isabellelref{imod_abstract_class_to_ig_abstract_class_as_node_type_func}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{thm}
+
+The proof of the correctness of $f_{AbsClass}$ will not be included here. Instead, it can be found in the validated Isabelle theories. Obviously, the proof is trivial, as the function does not do any conversion. It does just output the empty instance model.
+
+Finally, to complete the transformation, the transformation function that transforms $IG_{AbsClass}$ into $Im_{AbsClass}$ is defined:
+
+\begin{defin}[Transformation function $f'_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_abstract_class_as_node_type_to_imod_abstract_class}
+The transformation function $f'_{AbsClass}(IG)$ is defined as the function that always outputs the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by $Tm_{AbsClass}$.
+\isabellelref{ig_abstract_class_as_node_type_to_imod_abstract_class}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{AbsClass}$]
+\label{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_abstract_class_as_node_type_to_imod_abstract_class_func}
+$f'_{AbsClass}(IG)$ (\cref{defin:library_of_transformations:instance_level_transformations:abstract_classes:ig_abstract_class_as_node_type_to_imod_abstract_class}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} transforming $IG_{AbsClass}$ into $Im_{AbsClass}$.
+\isabellelref{ig_abstract_class_as_node_type_to_imod_abstract_class_func}{Ecore-GROOVE-Mapping-Library.AbstractClassInstance}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.

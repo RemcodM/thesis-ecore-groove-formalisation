@@ -1,0 +1,57 @@
+\subsection{Room \& tenant relationship}
+\label{sec:application:building_the_model:room_tenant_relationship}
+
+In the thirteenth step, a relationship between two objects is introduced. This is the first step in which a relation is introduced between existing objects. For this relation, a object of $.\type{Room}$ may reference a single $.\type{Tenant}$ object. \cref{subsec:library_of_transformations:type_level_transformations:nullable_class_fields} is used to introduce the field on the type level, while on the instance level, \cref{subsec:library_of_transformations:instance_level_transformations:nullable_class_field_values} is used to introduce the values.
+
+The $classtype$ of the new field is $.\type{Room}$, as the field will be defined for rooms. The $name$ of the new field is $\type{tenant}$ and the $fieldtype$ is $.\type{Tenant}$. The set of objects that will receive a value is defined as $valobjects = \{TRRoom1, TRRoom2, BHPRoomA, BHPRoomC\}$, while the set of objects that will not receive a value is defined as $nilobjects = \{BHPRoomB\}$. The union of these sets is equal to all the room objects, as expected. The function for $obids$ returns the existing identifier of each of these objects. The $values$ function is defined as follows:
+\begin{align*}
+    values = \{&(TRRoom1, Tenant1), (TRRoom2, Tenant2), (BHPRoomA, Tenant3), \\&(BHPRoomC, Tenant4)\}
+\end{align*}
+
+For the objects referenced by the objects in $valobjects$, the function $obids$ returns their existing identifier. The following model is obtained:
+
+\LTXtable{\textwidth}{tex/06_application/02_building_the_model/tables/13_room_tenant_relationship.tex}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \includegraphics{images/06_application/instance_model/step13.pdf}
+        \caption{Instance Model $Im_{13}$}
+        \label{fig:application:building_the_model:room_tenant_relationship:ecore:instance_model}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \includegraphics{images/06_application/type_model/step13.pdf}
+        \caption{Type Model $Tm_{13}$}
+        \label{fig:application:building_the_model:room_tenant_relationship:ecore:type_model}
+    \end{subfigure}
+    \caption{The Ecore model after step 13}
+    \label{fig:application:building_the_model:room_tenant_relationship:ecore}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \input{images/06_application/instance_graph/step13.tikz}
+        \caption{Instance Graph $IG_{13}$}
+        \label{fig:application:building_the_model:room_tenant_relationship:groove:instance_graph}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \input{images/06_application/type_graph/step13.tikz}
+        \caption{Type Graph $TG_{13}$}
+        \label{fig:application:building_the_model:room_tenant_relationship:groove:type_graph}
+    \end{subfigure}
+    \caption{The GROOVE graphs after step 13}
+    \label{fig:application:building_the_model:room_tenant_relationship:groove}
+\end{figure}
+
+A visual representation of $Tm_{13}$ and $Im_{13}$ can be found in \cref{fig:application:building_the_model:room_tenant_relationship:ecore}. Similarly, a visual representation of $TG_{13}$ and $IG_{13}$ can be found in \cref{fig:application:building_the_model:room_tenant_relationship:groove}. Please note that because of the definitions of $f_{13}(Im_{13})$ and $f'_{13}(IG_{13})$, we have that $f_{13}(Im_{13}) = IG_{13}$ and $f'_{13}(IG_{13}) = Im_{13}$. Furthermore, $f_{13}(Im_{13})$ and $f'_{13}(IG_{13})$ are valid mapping functions themselves, such that they can be combined with another mapping function in the next step.
+
+The visualisation shows the references between the rooms and the tenants. This transformation shows how existing objects can be referenced by a new field, while also showing that values can be null. For example, $BHPRoomB$ has no tenant, which can be seen by the absence of a $tenant$ relation in the visualisation.
+
+\afterpage{\FloatBarrier}

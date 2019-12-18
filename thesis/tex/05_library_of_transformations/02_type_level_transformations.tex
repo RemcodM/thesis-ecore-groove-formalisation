@@ -1,0 +1,15 @@
+\section{Type level transformations}
+\label{sec:library_of_transformations:type_level_transformations}
+
+This section represents the first part of the library of transformations, as explained in the introduction of this chapter. Throughout this section, small transformations between type models and type graphs will be defined. In order for these transformations useful in the context of the transformation framework of \cref{chapter:transformation_framework}, some properties must hold for each of them. For each transformation, the corresponding type model must be consistent in the sense of \cref{defin:formalisations:ecore_formalisation:type_models:type_model_consistency} and the corresponding type graph must be valid in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Furthermore, to be able to apply the transformation, the type model must be compatible with its counterpart in the transformation framework. In the same way, the type graph corresponding to the transformation must be compatible with its counterpart in the transformation framework. Moreover, it will be shown that the transformation function $f$ that transforms the corresponding type model into a type graph is a valid transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. Finally, it will also be shown that the reverse transformation is a valid transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}.
+
+\input{tex/05_library_of_transformations/02_type_level_transformations/01_regular_classes.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/02_abstract_classes.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/03_regular_subclasses.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/04_enumeration_types.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/05_user_defined_data_types.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/06_data_fields.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/07_enum_fields.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/08_nullable_class_fields.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/09_proper_class_sequence_fields.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations/10_contained_class_set_fields.tex}

@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=invalid4-]
+\node[basic_node] (n0) at (0.900, -0.660) {\ml{\textbf{Person}\\age = 25\\name = "L.M."}};
+
+\end{tikzpicture}

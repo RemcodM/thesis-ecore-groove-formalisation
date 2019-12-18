@@ -1,0 +1,162 @@
+\begin{longtable}{|lX|}
+\hline
+\multicolumn{2}{|l|}{\textbf{Models after step 9}}\\
+\hhline{|==|}
+\endhead
+$Tm_9 = $ & $\mathrm{combine}(Tm_8, Tm_{DataField}) =$ \newline
+$\begin{aligned}
+Class =\ & \{.\type{House}, .\type{Room}, .\type{Tenant}\} \\
+Enum =\ & \{.\type{RoomSize}\} \\
+UserDataType =\ & \{\} \\
+Field =\ & \{(.\type{House}, \type{name}), (.\type{House}, \type{rooms}), (.\type{Room}, \type{room\_\!id}), \\& (.\type{Room}, \type{room\_size}), (.\type{Tenant}, \type{name})\} \\
+\mathrm{FieldSig} =\ & \big\{
+\big((.\type{House}, \type{name}), (\type{string}, 1..1)\big),\\&
+\big((.\type{House}, \type{rooms}), ([\type{setof}, !.\type{Room}], 0..9)\big),\\&
+\big((.\type{Room}, \type{room\_\!id}), (\type{string}, 1..1)\big),\\&
+\big((.\type{Room}, \type{room\_size}), (.\type{RoomSize}, 1..1)\big),\\&
+\big((.\type{Tenant}, \type{name}), (\type{string}, 1..1)\big)
+\big\} \\
+EnumValue =\ & \{(.\type{RoomSize}, \type{SMALL}), (.\type{RoomSize}, \type{MEDIUM}), (.\type{RoomSize}, \type{LARGE})\} \\
+Inh =\ & \{\} \\
+Prop =\ & \big\{\big(\type{containment}, (.\type{House}, \type{rooms})\big)\big\} \\
+Constant =\ & \{\} \\
+\mathrm{ConstType} =\ & \{\}
+\end{aligned}$
+\\
+$Im_9 = $ & $\mathrm{combine}(Tm_8, Im_{DataField}) =$ \newline
+$\begin{aligned}
+Object =\ &\{TR, BHP, TRRoom1, TRRoom2, BHPRoomA, BHPRoomB, \\& BHPRoomC, Tenant1, Tenant2, Tenant3, Tenant4, Tenant5\} \\
+\mathrm{ObjectClass}(ob) =\ & \{(TR, .\type{House}), (BHP, .\type{House}),
+(TRRoom1, .\type{Room}),\\& (TRRoom2, .\type{Room}), (BHPRoomA, .\type{Room}), (BHPRoomB, .\type{Room}),\\& (BHPRoomC, .\type{Room}, (Tenant1, .\type{Tenant}), (Tenant2, .\type{Tenant}), \\& (Tenant3, .\type{Tenant}), (Tenant4, .\type{Tenant}), (Tenant5, .\type{Tenant})\}\\
+\mathrm{ObjectId} =\ & \{(TR, TR), (BHP, BHP), (TRRoom1, TRRoom1),\\& (TRRoom2, TRRoom2), (BHPRoomA, BHPRoomA),\\& (BHPRoomB, BHPRoomB), (BHPRoomC, BHPRoomC), \\&(Tenant1, Tenant1), (Tenant2, Tenant2), (Tenant3, Tenant3),\\& (Tenant4, Tenant4), (Tenant5, Tenant5)\}\\
+\mathrm{FieldValue} =\ & \Big\{
+\Big(\big(TR, (.\type{House}, \type{name})\big), \big[\type{string}, \text{``TwoRem''}\big]\Big),\\&
+\Big(\big(BHP, (.\type{House}, \type{name})\big), \big[\type{string}, \text{``B.H. Paleis''}\big]\Big),\\&
+\Big(\big(TR, (.\type{House}, \type{rooms})\big), \big[\type{setof}, \big\langle [\type{obj}, TRRoom1], \\&\qquad [\type{obj}, TRRoom2] \big\rangle \big]\Big),\\&
+\Big(\big(BHP, (.\type{House}, \type{rooms})\big) \big[\type{setof}, \big\langle [\type{obj},  BHPRoomA], \\&\qquad [\type{obj}, BHPRoomB], (\type{obj}, BHPRoomC) \big\rangle \big]\Big),\\&
+\Big(\big(TRRoom1, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``1''}\big]\Big),\\&
+\Big(\big(TRRoom2, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``2''}\big]\Big),\\&
+\Big(\big(BHPRoomA, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``A''}\big]\Big),\\&
+\Big(\big(BHPRoomB, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``B''}\big]\Big),\\&
+\Big(\big(BHPRoomC, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``C''}\big]\Big),\\&
+\Big(\big(TRRoom1, (.\type{Room}, \type{room\_size})\big), \big[\type{enum}, (.\type{RoomSize}, \type{LARGE}) \big]\Big),\\&
+\Big(\big(TRRoom2, (.\type{Room}, \type{room\_size})\big), \big[\type{enum}, (.\type{RoomSize}, \type{MEDIUM}) \big]\Big),\\&
+\Big(\big(BHPRoomA, (.\type{Room}, \type{room\_size})\big), \big[\type{enum}, (.\type{RoomSize}, \type{SMALL}) \big]\Big),\\&
+\Big(\big(BHPRoomB, (.\type{Room}, \type{room\_size})\big), \big[\type{enum}, (.\type{RoomSize}, \type{SMALL}) \big]\Big),\\&
+\Big(\big(BHPRoomC, (.\type{Room}, \type{room\_size})\big), \big[\type{enum}, (.\type{RoomSize}, \type{SMALL}) \big]\Big),\\&
+\Big(\big(Tenant1, (.\type{Tenant}, \type{name})\big), \big[\type{string}, \text{``B.R. Mankjon''}\big]\Big),\\&
+\Big(\big(Tenant2, (.\type{Tenant}, \type{name})\big), \big[\type{string}, \text{``P.J.R. Nam''}\big]\Big),\\&
+\Big(\big(Tenant3, (.\type{Tenant}, \type{name})\big), \big[\type{string}, \text{``L. Horn''}\big]\Big),\\&
+\Big(\big(Tenant4, (.\type{Tenant}, \type{name})\big), \big[\type{string}, \text{``A.C.C. Turg''}\big]\Big),\\&
+\Big(\big(Tenant5, (.\type{Tenant}, \type{name})\big), \big[\type{string}, \text{``M. Silon''}\big]\Big)
+\Big\} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{aligned}$
+\\
+\hline
+$TG_9 = $ & $\mathrm{combine}(TG_8, TG_{DataField}) =$ \newline
+$\begin{aligned}
+NT =\ & \{\langle \type{House} \rangle, \langle \type{Room} \rangle, \langle \type{Tenant} \rangle, \langle \type{RoomSize} \rangle, \type{string}\} \\
+ET =\ & \big\{
+\big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big),
+\big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big),\\&
+\big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big),
+\big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big),\\&
+\big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big),
+\big(\langle \type{RoomSize} \rangle, \langle \type{SMALL} \rangle, \langle \type{RoomSize} \rangle \big),\\&
+\big(\langle \type{RoomSize} \rangle, \langle \type{MEDIUM} \rangle, \langle \type{RoomSize} \rangle \big),
+\big(\langle \type{RoomSize} \rangle, \langle \type{LARGE} \rangle, \langle \type{RoomSize} \rangle \big)
+\big\} \\
+\!\!\sqsubseteq\ =\ & \big\{
+\big(\langle \type{House} \rangle, \langle \type{House} \rangle \big),
+\big(\langle \type{Room} \rangle, \langle \type{Room} \rangle \big),
+\big(\langle \type{Tenant} \rangle, \langle \type{Tenant} \rangle \big),\\&
+\big(\langle \type{RoomSize} \rangle, \langle \type{RoomSize} \rangle \big),
+\big(\type{string}, \type{string} \big)
+\big\} \\
+abs =\ & \{\} \\
+\mathrm{mult} =\ & \Big\{
+\Big(\big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \big(0..\mstar, 1..1\big) \Big),\\&
+\Big(\big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), \big(0..1, 0..9\big) \Big),\\&
+\Big(\big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \big(0..\mstar, 1..1\big) \Big),\\&
+\Big(\big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big), \big(0..\mstar, 1..1\big) \Big),\\&
+\Big(\big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big), \big(0..\mstar, 1..1\big) \Big),\\&
+\Big(\big(\langle \type{RoomSize} \rangle, \langle \type{SMALL} \rangle, \langle \type{RoomSize} \rangle \big), \big(0..1, 0..1\big) \Big),\\&
+\Big(\big(\langle \type{RoomSize} \rangle, \langle \type{MEDIUM} \rangle, \langle \type{RoomSize} \rangle \big), \big(0..1, 0..1\big) \Big),\\&
+\Big(\big(\langle \type{RoomSize} \rangle, \langle \type{LARGE} \rangle, \langle \type{RoomSize} \rangle \big), \big(0..1, 0..1\big) \Big)
+\Big\} \\
+contains =\ & \big\{\big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big)\big\}
+\end{aligned}$
+\\
+$IG_9 = $ & $\mathrm{combine}(TG_8, IG_{DataField}) =$ \newline
+$\begin{aligned}
+N =\ & \{TR, BHP, TRRoom1, TRRoom2, BHPRoomA, BHPRoomB, BHPRoomC, \\& 
+Tenant1, Tenant2, Tenant3, Tenant4, Tenant5, SmallSize, MediumSize,\\& LargeSize,
+\text{``TwoRem''}, \text{``B.H. Paleis''}, \text{``1''},  \text{``2''}, \text{``A''}, \text{``B''}, \text{``C''}, \text{``B.R. Mankjon''}, \\& \text{``P.J.R. Nam''}, \text{``L. Horn''}, \text{``A.C.C. Turg''}, \text{``M. Silon''}\} \\
+E =\ & \Big\{
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``TwoRem''} \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``B.H. Paleis''} \Big),\\&
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), TRRoom1 \Big),\\&
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), TRRoom2 \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), BHPRoomA \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), BHPRoomB \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), BHPRoomC \Big),\\&
+\Big(TRRoom1, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``1''} \Big),\\&
+\Big(TRRoom2, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``2''} \Big),\\&
+\Big(BHPRoomA, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``A''} \Big),\\&
+\Big(BHPRoomB, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``B''} \Big),\\&
+\Big(BHPRoomC, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``C''} \Big),\\&
+\Big(TRRoom1, \big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big), LargeSize \Big),\\&
+\Big(TRRoom2, \big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big), MediumSize \Big),\\&
+\Big(BHPRoomA, \big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big), SmallSize \Big),\\&
+\Big(BHPRoomB, \big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big), SmallSize \Big),\\&
+\Big(BHPRoomC, \big(\langle \type{Room} \rangle, \langle \type{room\_size} \rangle, \langle \type{RoomSize} \rangle \big), SmallSize \Big),\\&
+\Big(Tenant1, \big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``B.R. Mankjon''} \Big),\\&
+\Big(Tenant2, \big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``P.J.R. Nam''} \Big),\\&
+\Big(Tenant3, \big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``L. Horn''} \Big),\\&
+\Big(Tenant4, \big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``A.C.C. Turg''} \Big),\\&
+\Big(Tenant5, \big(\langle \type{Tenant} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``M. Silon''} \Big),\\&
+\Big(SmallSize, \big(\langle \type{RoomSize} \rangle, \langle \type{SMALL} \rangle, \langle \type{RoomSize} \rangle \big), SmallSize \Big),\\&
+\Big(MediumSize, \big(\langle \type{RoomSize} \rangle, \langle \type{MEDIUM} \rangle, \langle \type{RoomSize} \rangle \big), MediumSize \Big),\\&
+\Big(LargeSize, \big(\langle \type{RoomSize} \rangle, \langle \type{LARGE} \rangle, \langle \type{RoomSize} \rangle \big), LargeSize \Big)
+\Big\}
+\end{aligned}$
+\\&
+$\begin{aligned}
+\mathrm{ident} =\ & \{(TR, TR), (BHP, BHP), (TRRoom1, TRRoom1), (TRRoom2, TRRoom2),\\& (BHPRoomA, BHPRoomA), (BHPRoomB, BHPRoomB),\\& (BHPRoomC, BHPRoomC), (Tenant1, Tenant1), (Tenant2, Tenant2),\\& (Tenant3, Tenant3), (Tenant4, Tenant4), (Tenant5, Tenant5),\\& (SmallSize, SmallSize), (MediumSize, MediumSize),\\& (LargeSize, LargeSize)\}\\
+\mathrm{type}_n =\ & \{
+(TR, \langle \type{House} \rangle), 
+(BHP, \langle \type{House} \rangle),
+(TRRoom1, \langle \type{Room} \rangle),
+(TRRoom2, \langle \type{Room} \rangle),\\&
+(BHPRoomA, \langle \type{Room} \rangle),
+(BHPRoomB, \langle \type{Room} \rangle),
+(BHPRoomC, \langle \type{Room} \rangle),\\&
+(Tenant1, \langle \type{Tenant} \rangle),
+(Tenant2, \langle \type{Tenant} \rangle),
+(Tenant3, \langle \type{Tenant} \rangle),\\&
+(Tenant4, \langle \type{Tenant} \rangle),
+(Tenant5, \langle \type{Tenant} \rangle),
+(SmallSize, \langle \type{RoomSize} \rangle),\\&
+(MediumSize, \langle \type{RoomSize} \rangle),
+(LargeSize, \langle \type{RoomSize} \rangle),
+(\text{``TwoRem''}, \type{string}),\\&
+(\text{``B.H. Paleis''}, \type{string}),
+(\text{``1''}, \type{string}),
+(\text{``2''}, \type{string}),
+(\text{``A''}, \type{string}),
+(\text{``B''}, \type{string}),\\&
+(\text{``C''}, \type{string}),
+(\text{``B.R. Mankjon''}, \type{string}),
+(\text{``P.J.R. Nam''}, \type{string}),\\&
+(\text{``A.C.C. Turg''}, \type{string}),
+(\text{``L. Horn''}, \type{string}),
+(\text{``M. Silon''}, \type{string})
+\}
+\end{aligned}$
+\\
+\hline
+$f_9(Im_9) = $ & $f_8(Im_8) \sqcup f_{DataField}(Im_{DataField})$  (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_model_instance_graph})\\
+$f'_9(IG_9) = $ & $f'_8(IG_8) \sqcup f'_{DataField}(IG_{DataField})$  (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_graph_instance_model})\\
+\hline
+\end{longtable}

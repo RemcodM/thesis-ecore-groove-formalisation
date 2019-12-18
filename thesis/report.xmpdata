@@ -1,0 +1,6 @@
+\Title{A formalisation of EMF by expressing Ecore as GROOVE graphs}
+\Author{de Man, R.J.P. (Remco)}
+\Language{en-GB}
+\Keywords{EMF\sep Ecore\sep GROOVE\sep graphs\sep formalisation\sep transformation}
+\Subject{Within the field of software verification, software is verified to be correct using models. However, the modelling landscape is very diverse, and multiple modelling techniques exist to model software. Model transformations can help to bridge the gap between these techniques, but often do not have a formal foundation, which is problematic for software verification. Within this work, the model transformations between models based on EMF's Ecore and GROOVE grammars are formalised. A transformation framework is introduced to create model transformations between Ecore models and GROOVE grammars while maintaining a formal foundation. This framework allows for creating significant model transformations out of smaller transformations that are more easy to proof. An application is used to show how model transformations can be built using this framework.}
+\URLlink{https://github.com/RemcodM/thesis-ecore-groove-formalisation}

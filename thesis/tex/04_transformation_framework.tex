@@ -1,0 +1,14 @@
+\chapter{Transformation framework}
+\label{chapter:transformation_framework}
+The previous chapter introduced formalisations for GROOVE graphs and Ecore models. These formalisations allow us to reason about the GROOVE graphs and Ecore models in a formal way. In this chapter, these formalisations will be the foundation of a framework that allows for the formalisation of model transformations between Ecore and GROOVE.
+
+Creating a formal transformation between Ecore models and GROOVE graphs is non-trivial, first and foremost because Ecore has more instrumentation to express individual elements that GROOVE cannot express directly. For example, Ecore models can directly express enumeration types and values, whereas GROOVE cannot. The same holds for properties related to relations and attributes, as well as user-defined data types and constants. This difference in instrumentation can be solved using encodings, which the transformation framework should support.
+
+Another complexity with a formal transformation between Ecore models and GROOVE graphs is the infinite number of possible transformation functions. Because of the existence of infinitely many models and graphs, there is also an infinite number of model transformations possible. Since it is impractical to prove the correctness of each transformation function, a more systematic solution is needed. As discussed in \cref{sec:introduction:approach}, the transformation framework will be structured such that individual transformation functions can be composed while preserving the correctness. This composability allows the user to combine simple transformations into more substantial transformations, without the need of proving these transformations separately.
+
+\cref{sec:transformation_framework:encodings} explains how encodings are used to deal with the elements that GROOVE cannot express directly. \cref{sec:transformation_framework:structure} explains the structure of the transformation framework, which is set up to allow the composability of transformation functions. The remaining sections in this chapter further explain how to apply this structure.
+
+\input{tex/04_transformation_framework/01_encodings.tex}
+\input{tex/04_transformation_framework/02_structure.tex}
+\input{tex/04_transformation_framework/03_type_models_and_type_graphs.tex}
+\input{tex/04_transformation_framework/04_instance_models_and_instance_graphs.tex}

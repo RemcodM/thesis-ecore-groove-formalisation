@@ -1,0 +1,59 @@
+\section{Definitions}
+\label{sec:library_of_transformations:definitions}
+
+This section introduces some general definitions that are used within the model transformations of this chapter. They are introduced before the actual transformations for readability and to prevent repeating the same definitions as part of the transformations themselves.
+
+Throughout this chapter, many sequences are used. Sequences, sometimes also called lists, are enumerated collections of objects in which repetitions are allowed. Each element in a sequence is a member of that sequence. Moreover, each element has a corresponding index that represents the position of the element within the sequence. For sequences, some definitions are defined to make it easier to reason about them.
+
+\begin{defin}[Prefix operator for sequences]
+\label{defin:library_of_transformations:definitions:prefix_sequences}
+Assume $s = \langle m_1, m_2, ..., m_n \rangle$ to be a sequence. Then define $\#$ as the prefix operator on sequences, which adds an elements $e$ to the beginning of the sequence $s$.
+\begin{equation*}
+    e \prefix s = e \prefix \langle m_1, m_2, ..., m_n \rangle = \langle e, m_1, m_2, ..., m_n \rangle
+\end{equation*}
+Please note that for every element belonging to index $i$, after adding $e$, the element belonging to index $i$ will belong to index $i + 1$:
+\begin{align*}
+    s_i &= m_i \\
+    (e \prefix s)_1 &= e \\
+    (e \prefix s)_{(i+1)} &= m_i \\
+\end{align*}
+\end{defin}
+
+\begin{defin}[Append operator for sequences]
+\label{defin:library_of_transformations:definitions:append_sequences}
+Assume $s = \langle m_1, m_2, ..., m_i \rangle$ and $t = \langle n_1, n_2, ..., n_j \rangle$ to be sequences. Then define $s @ t$ as an operator on two sequences, which appends sequence $t$ to sequence $s$.
+\begin{equation*}
+    s \append t = \langle m_1, m_2, ..., m_i, n_1, n_2, ..., n_j \rangle 
+\end{equation*}
+The following holds for the indexes of $s \append t$:
+\begin{align*}
+    (s \append t)_{1 \leq i \leq |s|} &= m_i \\
+    (s \append t)_{|s| + 1 \leq i \leq |s| + |t|} &= n_i \\
+\end{align*}
+\end{defin}
+
+Using the definitions on sequences, it becomes possible to define the transformation of identifiers and namespaces (see \cref{defin:formalisations:ecore_formalisation:definitions:identifiers_namespaces}). As explained earlier, Ecore uses the concepts of identifiers and namespaces to distinguish classes, enumeration types and user-defined data types. In GROOVE, these concepts do not exist, though it must be possible to express identifiers and namespaces in GROOVE. Therefore, a definition will be provided that allows for transforming identifiers and namespaces into sequences, and back. This definition will be used throughout this chapter to transform namespaces and identifiers.
+
+\begin{defin}[Transformation of namespaces to sequences]
+\label{defin:library_of_transformations:definitions:ns_to_list}
+Assume $n$ to be a valid namespace, in the sense of \cref{defin:formalisations:ecore_formalisation:definitions:identifiers_namespaces}. Then the recursive function \\$\mathrm{ns\_\!to\_\!list}(n)$ transforms a namespace into a sequence:
+\begin{equation*}
+    \mathrm{ns\_\!to\_\!list}(n) = \begin{cases}
+        \mathrm{ns\_\!to\_\!list}(ns) \append \langle name \rangle & \mathrm{if }\ n = \langle ns, name \rangle \\
+        \langle \rangle & \mathrm{if }\ n =\ \perp
+    \end{cases}
+\end{equation*}
+\isabellelref{ns_to_list}{Ecore-GROOVE-Mapping.Namespace_List}
+\end{defin}
+
+According to this definition $.\type{some}.\type{namespace}.\type{name}$ is transformed into $\langle \type{some}, \type{namespace}, \type{name} \rangle$. Furthermore, the top namespace is transformed into the empty sequence, $\langle \rangle$, as directly defined as part of the definition.
+
+Besides a definition to transform namespaces into sequences, there is also a transformation from sequences back to namespaces.
+
+\begin{defin}[Transformation of sequences to namespaces]
+\label{defin:library_of_transformations:definitions:list_to_ns}
+Assume $s$ to be a sequence of names. Then $\mathrm{list\_\!to\_\!ns}(s)$ is defined as the inverse function of $\mathrm{ns\_\!to\_\!list}$, so it transforms sequences into their corresponding namespace.
+\isabellelref{list_to_ns}{Ecore-GROOVE-Mapping.Namespace_List}
+\end{defin}
+
+By definition, $\mathrm{list\_\!to\_\!ns}$ will convert the sequence $\langle \type{some}, \type{namespace}, \type{name} \rangle)$ back into its corresponding namespace, $\langle \type{some}, \type{namespace}, \type{name} \rangle$. Furthermore, the empty sequence $\langle \rangle$ is converted to the top namespace $\perp$.

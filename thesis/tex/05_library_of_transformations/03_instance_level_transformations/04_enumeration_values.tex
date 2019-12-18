@@ -1,0 +1,243 @@
+\subsection{Enumeration values}
+\label{subsec:library_of_transformations:instance_level_transformations:enumeration_values}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/05_library_of_transformations/03_instance_level_transformations/04_enumeration_values/enum_as_node_types_values.tikz}
+        \caption{$IG_{EnumNodes}$ corresponding to $TG_{EnumNodes}$}
+        \label{fig:library_of_transformations:instance_level_transformations:enumeration_values:visualisation:groove_nodes}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/05_library_of_transformations/03_instance_level_transformations/04_enumeration_values/enum_as_flags_values.tikz}
+        \caption{$IG_{EnumFlags}$ corresponding to $TG_{EnumFlags}$}
+        \label{fig:library_of_transformations:instance_level_transformations:enumeration_values:visualisation:groove_flags}
+    \end{subfigure}
+    \caption{Visualisation of the transformation of enumeration values corresponding to an enumeration type}
+    \label{fig:library_of_transformations:instance_level_transformations:enumeration_values:visualisation}
+\end{figure}
+
+This section defines the transformation of enumeration values belonging to an enumeration type on the type level. The corresponding type level transformation can be found in \cref{subsec:library_of_transformations:type_level_transformations:enumeration_types}. This transformation introduces new nodes in an instance graph that correspond to the values of an enumeration type. Within an instance model, nothing new needs to be introduced, and there the empty instance model is used once more.
+
+First, the instance model corresponding to $Tm_{Enum}$ is defined.
+
+\begin{defin}[Instance model $Im_{Enum}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum}
+Let $Im_{Enum}$ be the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by the type model $Tm_{Enum}$ (\cref{defin:library_of_transformations:type_level_transformations:enumeration_types:tmod_enum}).
+\isabellelref{imod_enum}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $Im_{Enum}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_correct}
+$Im_{Enum}$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum}) is a valid instance model in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\isabellelref{imod_enum_correct}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+Since the instance model corresponding to the transformation of enumeration values does not define any objects, there is no visual representation needed. Moreover, the correctness proof of $Im_{Enum}$ is trivial, and therefore not included here. The proof can be found as part of the Isabelle validated proofs.
+
+In order to make composing transformation functions possible, $Im_{Enum}$ should be compatible with the instance model it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(Im, Im_{Enum})$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_combine_correct}
+Assume an instance model $Im$ that is valid in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}. Then $Im$ is compatible with $Im_{Enum}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:enumeration_types:tmod_enum_combine_correct} are met, to ensure the combination of the corresponding type models is valid.
+\end{itemize}
+\isabellelref{imod_enum_combine_correct}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(Im, Im_{Enum})$ is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\end{proof}
+
+Please note that this combination is trivial, as the instance model is empty. However, on the instance graph level, more complex definitions are used.
+
+The definitions and theorems for introducing plain objects of regular classes within Ecore are now complete. 
+
+\subsubsection{Encoding of node type values as nodes}
+
+Section \cref{subsec:library_of_transformations:type_level_transformations:enumeration_types} has shown two possible encodings of an enumeration type in GROOVE. Both encodings require a different definition on the instance level. In the case that an enumeration type is encoded as node types, the enumeration values will be nodes typed by these node types, one node for each value of the enumeration type. This gives rise to an instance graph $IG_{EnumNodes}$, defined in the following definition:
+
+\begin{defin}[Instance graph $IG_{EnumNodes}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_node_types}
+Let $IG_{EnumNodes}$ be the instance graph corresponding $TG_{EnumNodes}$ (\cref{defin:library_of_transformations:type_level_transformations:enumeration_types:tg_enum_as_node_types}). $IG_{EnumNodes}$ defines a node for each possible value of the enumeration type encoded by $TG_{EnumNodes}$. Each of these nodes is typed by its corresponding node type. Furthermore, the function $fob$ and $fib$ are defined. $fob$ converts each value of the enumeration type to its internal node identity. $fid$ maps each value of the enumeration type to an explicit identity. $IG_{EnumNodes}$ is defined typed by $TG_{EnumNodes}$ and is defined as:
+\begin{align*}
+N =\ & \{fob(v) \mid v \in values \} \\
+E =\ & \{\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (fid(v), fob(v)) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (v, \mathrm{ns\_\!to\_\!list}(name) \append \langle v \rangle) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+\isabellelref{ig_enum_as_node_types}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $IG_{EnumNodes}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_node_types_correct}
+$IG_{EnumNodes}$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_node_types}) is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_enum_as_node_types_correct}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+A visual representation of $IG_{EnumNodes}$ with $.\type{Example}$ as identifier for the encoded enumeration type and $\type{OPTION\_A}$, $\type{OPTION\_B}$ and $\type{OPTION\_C}$ as its values can be seen in \cref{fig:library_of_transformations:instance_level_transformations:enumeration_values:visualisation:groove_nodes}. In this representation, it can also be seen that each values has its corresponding identifier, with $fid(\type{OPTION\_A}) = ExampleOptionA$, $fid(\type{OPTION\_B}) = ExampleOptionB$ and $fid(\type{OPTION\_C}) = ExampleOptionC$. Furthermore, the instances shown here correspond to the visual representation shown in \cref{fig:library_of_transformations:type_level_transformations:enumeration_types:visualisation:groove_nodes}. The correctness proof of $IG_{EnumNodes}$ is trivial, and therefore not included here. The proof can be found as part of the Isabelle validated proofs.
+
+In order to make composing transformation functions possible, $IG_{EnumNodes}$ should be compatible with the instance graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(IG, IG_{EnumNodes})$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_node_types_combine_correct}
+Assume an instance graph $IG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG$ is compatible with $IG_{EnumNodes}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:enumeration_types:tg_enum_as_node_types_combine_correct} are met, to ensure the combination of the corresponding type graphs is valid;
+    \item All the nodes in $IG_{EnumNodes}$ have an (internal and explicit) identity that is not yet used in $IG$.
+\end{itemize}
+\isabellelref{ig_enum_as_node_types_combine_correct}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(IG, IG_{EnumNodes})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{proof}
+
+The next definitions define the transformation function from $Im_{Enum}$ to $IG_{EnumNodes}$:
+
+\begin{defin}[Transformation function $f_{EnumNodes}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_to_ig_enum_as_node_types}
+The transformation function $f_{EnumNodes}(Im)$ is defined as:
+\begin{align*}
+N =\ & \{fob(v) \mid v \in values \} \\
+E =\ & \{\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (fid(v), fob(v)) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (v, \mathrm{ns\_\!to\_\!list}(name) \append \langle v \rangle) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+\isabellelref{imod_enum_to_ig_enum_as_node_types}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{EnumNodes}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_to_ig_enum_as_node_types_func}
+$f_{EnumNodes}(Im)$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_to_ig_enum_as_node_types}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} transforming $Im_{Enum}$ into $IG_{EnumNodes}$.
+\isabellelref{imod_enum_to_ig_enum_as_node_types_func}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+The proof of the correctness of $f_{EnumNodes}$ will not be included here. Instead, it can be found in the validated Isabelle theories. It should be noted that the proof is trivial, as the function has to introduce all nodes a new nodes. There is nothing to convert from $Im_{Enum}$.
+
+Finally, to complete the transformation, the transformation function that transforms $IG_{EnumNodes}$ into $Im_{Enum}$ is defined:
+
+\begin{defin}[Transformation function $f'_{EnumNodes}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_node_types_to_imod_enum}
+The transformation function $f'_{EnumNodes}(IG)$ is defined as the function that always outputs the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by $Tm_{Enum}$.
+\isabellelref{ig_enum_as_node_types_to_imod_enum}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{EnumNodes}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_class_as_node_types_to_imod_class_func}
+$f'_{EnumNodes}(IG)$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_node_types_to_imod_enum}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} transforming $IG_{EnumNodes}$ into $Im_{Enum}$.
+\isabellelref{ig_enum_as_node_types_to_imod_enum_func}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.
+
+\subsubsection{Encoding of flag values as nodes}
+
+The previous subsection discussed how to encode the enumeration values when the enumeration type is encoded as different node types. In this subsection, the transformation of the enumeration values is discussed in the case that the enumeration type is encoded using flags in GROOVE.
+
+In the case that an enumeration type is encoded using flags for the values, a node is introduced for each value, all typed by the enumeration node type. Each of the nodes has a single flag, corresponding to the value the node represents. This gives rise to an instance graph $IG_{EnumFlags}$, defined in the following definition:
+
+\begin{defin}[Instance graph $IG_{EnumFlags}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags}
+Let $IG_{EnumFlags}$ be the instance graph corresponding $TG_{EnumFlags}$ (\cref{defin:library_of_transformations:type_level_transformations:enumeration_types:tg_enum_as_flags}). $IG_{EnumFlags}$ defines a node for each possible value of the enumeration type encoded by $TG_{EnumFlags}$. Each of these nodes is typed by the corresponding node type and has one of the flags set, the flag corresponding to the value the node represents. Furthermore, the function $fob$ and $fib$ are defined. $fob$ converts each value of the enumeration type to its internal node identity. $fid$ maps each value of the enumeration type to an explicit identity. $IG_{EnumFlags}$ is defined typed by $TG_{EnumFlags}$ and is defined as:
+\begin{align*}
+N =\ & \{fob(v) \mid v \in values \} \\
+E =\ & \Big\{\Big(fob(v), (\mathrm{ns\_\!to\_\!list}(name), \langle v \rangle, \mathrm{ns\_\!to\_\!list}(name)), fob(v)\Big) \mid v \in values \Big\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (fid(v), fob(v)) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (v, \mathrm{ns\_\!to\_\!list}(name)) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+\isabellelref{ig_enum_as_flags}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $IG_{EnumFlags}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags_correct}
+$IG_{EnumFlags}$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags}) is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_enum_as_flags_correct}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+A visual representation of $IG_{EnumFlags}$ with $.\type{Example}$ as identifier for the encoded enumeration type and $\type{OPTION\_A}$, $\type{OPTION\_B}$ and $\type{OPTION\_C}$ as its values can be seen in \cref{fig:library_of_transformations:instance_level_transformations:enumeration_values:visualisation:groove_flags}. In this representation, it can also be seen that each values has its corresponding identifier, with $fid(\type{OPTION\_A}) = ExampleOptionA$, $fid(\type{OPTION\_B}) = ExampleOptionB$ and $fid(\type{OPTION\_C}) = ExampleOptionC$. Furthermore, the instances shown here correspond to the visual representation shown in \cref{fig:library_of_transformations:type_level_transformations:enumeration_types:visualisation:groove_flags}. The correctness proof of $IG_{EnumFlags}$ is trivial, and therefore not included here. The proof can be found as part of the Isabelle validated proofs.
+
+In order to make composing transformation functions possible, $IG_{EnumFlags}$ should be compatible with the instance graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(IG, IG_{EnumFlags})$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags_combine_correct}
+Assume an instance graph $IG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG$ is compatible with $IG_{EnumFlags}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:enumeration_types:tg_enum_as_flags_combine_correct} are met, to ensure the combination of the corresponding type graphs is valid;
+    \item All the nodes in $IG_{EnumFlags}$ have an (internal and explicit) identity that is not yet used in $IG$.
+\end{itemize}
+\isabellelref{ig_enum_as_flags_combine_correct}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(IG, IG_{EnumFlags})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{proof}
+
+The next definitions define the transformation function from $Im_{Enum}$ to $IG_{EnumFlags}$:
+
+\begin{defin}[Transformation function $f_{EnumFlags}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_to_ig_enum_as_flags}
+The transformation function $f_{EnumFlags}(Im)$ is defined as:
+\begin{align*}
+N =\ & \{fob(v) \mid v \in values \} \\
+E =\ & \Big\{\Big(fob(v), (\mathrm{ns\_\!to\_\!list}(name), \langle v \rangle, \mathrm{ns\_\!to\_\!list}(name)), fob(v)\Big) \mid v \in values \Big\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (fid(v), fob(v)) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (v, \mathrm{ns\_\!to\_\!list}(name)) & \mathrm{if }\ v \in values
+\end{cases}
+\end{align*}
+\isabellelref{imod_enum_to_ig_enum_as_flags}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{EnumFlags}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_to_ig_enum_as_flags_func}
+$f_{EnumFlags}(Im)$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:imod_enum_to_ig_enum_as_flags}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} transforming $Im_{Enum}$ into $IG_{EnumFlags}$.
+\isabellelref{imod_enum_to_ig_enum_as_flags_func}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+The proof of the correctness of $f_{EnumFlags}$ will not be included here. Instead, it can be found in the validated Isabelle theories. It should be noted that the proof is trivial, as the function has to introduce all nodes a new nodes. There is nothing to convert from $Im_{Enum}$.
+
+Finally, to complete the transformation, the transformation function that transforms $IG_{EnumFlags}$ into $Im_{Enum}$ is defined:
+
+\begin{defin}[Transformation function $f'_{EnumFlags}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags_to_imod_enum}
+The transformation function $f'_{EnumFlags}(IG)$ is defined as the function that always outputs the empty instance model $Im_\epsilon$ (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:empty_instance_model}), except that it is typed by $Tm_{Enum}$.
+\isabellelref{ig_enum_as_flags_to_imod_enum}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{EnumFlags}$]
+\label{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags_to_imod_enum_func}
+$f'_{EnumFlags}(IG)$ (\cref{defin:library_of_transformations:instance_level_transformations:enumeration_values:ig_enum_as_flags_to_imod_enum}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} transforming $IG_{EnumFlags}$ into $Im_{Enum}$.
+\isabellelref{ig_enum_as_flags_to_imod_enum_func}{Ecore-GROOVE-Mapping-Library.EnumInstance}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.

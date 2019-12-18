@@ -1,0 +1,57 @@
+\subsection{The tenant type enumeration type}
+\label{sec:application:building_the_model:the_tenant_type_enumeration_type}
+
+In the eleventh step, another enumeration type is introduced. This time, the $.\type{TenantType}$ enumeration type used to specify a type for a tenant is introduced. \cref{subsec:library_of_transformations:type_level_transformations:enumeration_types} is used to introduce the enumeration type on the type level, while on the instance level, \cref{subsec:library_of_transformations:instance_level_transformations:enumeration_values} is used to introduce the values of the enumeration.
+
+The $name$ of the new enumeration type is $.\type{TenantType}$, and it has $values = \{\type{REGULAR}, \type{SUBTENANT}\}$. Please note that there are multiple encodings possible to encode an enumeration type in GROOVE. This time, the encoding using nodes is chosen. The function $fob$ which maps the enumeration values to internal node ids is defined as follows:
+\begin{align*}
+    fob = \{&(\type{REGULAR}, \text{RegularType}), (\type{SUBTENANT}, SubtenantType)\}
+\end{align*}
+
+The function $fid$ which maps the enumeration values to explicit node identifiers is equal to the definition of $fob$, so $fid = fob$. The following model is obtained:
+
+\LTXtable{\textwidth}{tex/06_application/02_building_the_model/tables/11_the_tenant_type_enumeration_type.tex}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \includegraphics{images/06_application/instance_model/step11.pdf}
+        \caption{Instance Model $Im_{11}$}
+        \label{fig:application:building_the_model:the_tenant_type_enumeration_type:ecore:instance_model}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \includegraphics{images/06_application/type_model/step11.pdf}
+        \caption{Type Model $Tm_{11}$}
+        \label{fig:application:building_the_model:the_tenant_type_enumeration_type:ecore:type_model}
+    \end{subfigure}
+    \caption{The Ecore model after step 11}
+    \label{fig:application:building_the_model:the_tenant_type_enumeration_type:ecore}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \input{images/06_application/instance_graph/step11.tikz}
+        \caption{Instance Graph $IG_{11}$}
+        \label{fig:application:building_the_model:the_tenant_type_enumeration_type:groove:instance_graph}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{0.98\textwidth}
+        \centering
+        \input{images/06_application/type_graph/step11.tikz}
+        \caption{Type Graph $TG_{11}$}
+        \label{fig:application:building_the_model:the_tenant_type_enumeration_type:groove:type_graph}
+    \end{subfigure}
+    \caption{The GROOVE graphs after step 11}
+    \label{fig:application:building_the_model:the_tenant_type_enumeration_type:groove}
+\end{figure}
+
+A visual representation of $Tm_{11}$ and $Im_{11}$ can be found in \cref{fig:application:building_the_model:the_tenant_type_enumeration_type:ecore}. Similarly, a visual representation of $TG_{11}$ and $IG_{11}$ can be found in \cref{fig:application:building_the_model:the_tenant_type_enumeration_type:groove}. Please note that because of the definitions of $f_{11}(Im_{11})$ and $f'_{11}(IG_{11})$, we have that $f_{11}(Im_{11}) = IG_{11}$ and $f'_{11}(IG_{11}) = Im_{11}$. Furthermore, $f_{11}(Im_{11})$ and $f'_{11}(IG_{11})$ are valid mapping functions themselves, such that they can be combined with another mapping function in the next step.
+
+The introduction of the tenant type enumeration type shows how different encodings can be combined within the transformation framework. The previous enumeration for room sizes was encoded using flags, while this enumeration is encoded using nodes types. Both of these encodings are present in the same model with the same transformation function.
+
+\afterpage{\FloatBarrier}

@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=type-]
+\node[type_node] (n0) at (0.620, -0.420) {\ml{\textbf{EnumExample}\\\textit{LITERAL\_A}\\\textit{LITERAL\_B}\\\textit{LITERAL\_C}}};
+
+\end{tikzpicture}

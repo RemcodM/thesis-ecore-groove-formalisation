@@ -1,0 +1,58 @@
+\section{Future work}
+\label{sec:conclusion:future_work}
+
+Although this thesis has provided a complete framework for composing transformation functions between Ecore and GROOVE, much work remains to be done to make this solution viable in practice. In future work, limitations of this work could be addressed, and additional work can be performed in order to make implementations of the work possible. Possible improvements and future work are discussed in this section.
+
+
+\subsection{Improvements to the transformation framework}
+\label{subsec:conclusion:future_work:improvements_to_the_transformation_framework}
+
+This thesis has provided a transformation framework for composable model transformations between Ecore and GROOVE. As discussed in \cref{sec:conclusion:advantages_and_limitations}, the choices made within this transformation framework have advantages and limitations. An important limitation is the requirement to maintain correctness at each step of composing a transformation function. As a consequence, the small transformations presented in the library of transformations can become quite substantial, and are more difficult to prove.
+
+One could investigate the possibility of making the requirement of correctness less strict. This could be done by allowing some partial compositions, that need to be applied in a specific order, to achieve once more a correct transformation. These partial compositions would make the individual transformation steps smaller, and thus easier to prove. However, it will probably introduce some new requirements to maintain the general correctness of the transformation, which should be researched further.
+
+
+\subsection{Complete the library of transformations}
+\label{subsec:conclusion:future_work:extend_the_library_of_transformations}
+
+This thesis has provided a non-exhaustive library of transformations that can be applied within the transformation framework. As explained in \cref{sec:conclusion:advantages_and_limitations}, several concepts of Ecore are not yet covered. Future research might focus on defining a complete library of transformations, that can compose every possible transformation function. Such research would consist of adding transformations for missing concepts and possibly a proof that all valid models and graphs can indeed be built.
+
+In order to achieve completeness of the library, at least the following transformations should be provided:
+\begin{itemize}
+    \item For all transformations that introduce fields, there should be counterparts that can introduce these fields on types that are extended by other types. In order to create these transformations, the set of shared objects should contain not only all instances of the supertype but also all instances of all subtypes. Furthermore, for all these objects, a value needs to be introduced for the newly introduced field. Please note that this should be done for both the introduction of fields on abstract classes and the introduction of fields on regular classes. When done carefully, the proof created for the instance level could be reused for both of these transformations. Furthermore, the proofs created for regular classes might be able to replace the existing transformations for introducing fields.
+    
+    \item New transformations need to be introduced that cover all the possible container types. This means that transformations should be created that introduce a field typed by a $\type{bagof}$, $\type{setof}$, $\type{seqof}$ or $\type{ordof}$ container type, containing any other possible type. Because of the limitations of the transformation framework, it will not be possible to prove this for all contained types at once, so multiple transformations will be needed here.
+    
+    \item A transformation should be created that allows for introducing multiple inheritance. Multiple inheritance can be introduced by either creating a transformation that introduces a new type that extends from a set of existing types, or by creating a transformation that introduces a set of new types from which one existing subtype does inherit. The new types should be created in one transformation, to be able to proof that the inheritance relation remains valid.
+    
+    \item For all transformations introducing some field, an additional transformation would need to be created that introduces a $\type{defaultValue}$ property on the corresponding field. This transformation would also need to introduce a new constant and its value.
+    
+    \item A transformation should be created that introduces a new class type with an $\type{identity}$ property. Because of the limitations of the transformation framework, all the attributes that are part of the identity property need to be introduced as well. Furthermore, all the instances of the new class type need to be created within the same transformation, and all values for all the attributes should be defined. Such a transformation would be substantial, and would undoubtedly benefit from the possibility to do partial compositions, as proposed by \cref{subsec:conclusion:future_work:improvements_to_the_transformation_framework}.
+    
+    \item Multiple transformations should be created which introduce a new field with an $\type{keyset}$ property. Because of the limitations of the transformation framework, all the attributes that are part of the keyset property need to be introduced as well. Furthermore, a value for the field and all related attributes needs to be introduced at the instance level, within one transformation step. Once more, such a transformation would be substantial, and would undoubtedly benefit from the possibility to do partial compositions, as proposed by \cref{subsec:conclusion:future_work:improvements_to_the_transformation_framework}.
+    
+    \item Multiple transformations should be created which introduce a new field with an $\type{opposite}$ property. Introducing the $\type{opposite}$ property can be done between existing types and instances, it only has to be made sure that transformations exist for all possible types for a field with an $\type{opposite}$ property. Extra care should be given to introducing a new field that has a $\type{opposite}$ property and a $\type{containment}$ property on one of the fields. In this case, it is needed to introduce the instances contained by the containment relation as well.
+    
+    \item For all the transformations introducing some field, an additional transformation would need to be created that introduces a $\type{readonly}$ property on the corresponding field. Since a read-only property is only used for the semantics of the model and not anywhere in the syntax, this should be quite trivial.
+    
+    \item Transformations need to be created for some combinations of properties, especially $\type{containment}$ and $\type{identity}$, to ensure that models combining these properties can be created within the transformation framework.
+\end{itemize}
+Although it is believed that introducing all these transformations would eventually result in a complete library of transformations, no proof for this claim exists. Therefore, this should be taken into account when performing this work.
+
+
+\subsection{Add more encodings}
+\label{subsec:conclusion:future_work:add_more_encodings}
+
+This thesis has shown that elements in Ecore can have multiple encodings in GROOVE. An example of this is given in \cref{subsec:library_of_transformations:type_level_transformations:enumeration_types} and \cref{subsec:library_of_transformations:instance_level_transformations:enumeration_values}. Future work might focus on defining more encodings for different elements of Ecore. Having the choice between multiple encodings for the same element when transforming an Ecore model to GROOVE might be beneficial for the verification of specific properties. Different encodings might have their advantages and disadvantages within the field of verification, and therefore a choice between encodings might make more use cases possible.
+
+Each of these encodings should be proven correct within the transformation framework. Moreover, as shown in \cref{subsec:library_of_transformations:type_level_transformations:enum_fields} and \cref{subsec:library_of_transformations:instance_level_transformations:enum_field_values}, it might be the case that introducing new encodings might also need specific transformations for related elements that use the encoding. Therefore, providing more encodings could be a quite substantial amount of work.
+
+Besides introducing more encodings, such research would also include research on the possible encodings for an element. Furthermore, the practical use of each of these encodings could be investigated.
+
+
+\subsection{Implementation}
+\label{subsec:conclusion:future_work:implementation}
+
+The framework presented in this thesis only represents a mathematical foundation. In order to apply this framework in practice, it needs to be implemented as part of EMF, GROOVE or as a standalone tool. Such implementation would allow a user to automatically transform Ecore models into GROOVE graphs and vice versa while having the framework as a formal foundation to show the syntactical correctness of the transformations.
+
+The implementation of this framework is not a trivial task in itself. Such an implementation would need to figure out how to decompose models and graphs into their separate components in order to build a transformation. This decomposition might give rise to more fundamental research, as the current framework does not describe the decomposition of models and graphs. Furthermore, an approach to the decomposition of models and graphs might be an ambiguous process, meaning that a model or graph can be decomposed in more than one way. Research on how to handle this ambiguity also needs to be carried out when applicable. Furthermore, an implementation would need to deal with multiple possible encodings when composing the transformation function, as it is possible to transform a model using multiple correct graph encodings.

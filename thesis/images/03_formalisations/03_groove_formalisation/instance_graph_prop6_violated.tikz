@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=invalid6-]
+\node[basic_node] (n0) at (0.860, -0.585) {\ml{\textbf{Room}\\number = 1}};
+
+\end{tikzpicture}

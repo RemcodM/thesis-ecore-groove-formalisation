@@ -1,0 +1,11 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=inh12-]
+\node[type_node] (n0) at (0.710, -1.420) {\ml{\textbf{B}}};
+\node[type_node] (n1) at (0.710, -0.510) {\ml{\textbf{A}}};
+\node[type_node] (n2) at (0.720, -2.340) {\ml{\textbf{C}}};
+
+\path[subtype_edge](n0.north -| 0.710, -0.510) --  (n1) ;
+\path[subtype_edge](n2.north -| 0.710, -1.420) --  (n0) ;
+\end{tikzpicture}

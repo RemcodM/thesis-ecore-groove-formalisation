@@ -1,0 +1,22 @@
+\section{Validation}
+\label{sec:introduction:validation}
+This section describes how the research questions of this thesis will be validated. The main research question of this thesis will be validated by validating the subquestions. For each subquestion, the validation process is different:
+\begin{itemize}
+    \item ``What is a suitable formalisation of Ecore models and what Ecore models are valid within this formalisation?'' and ``What is a suitable formalisation of GROOVE grammars and what GROOVE grammars are valid within this formalisation?''
+    
+    The answer to these questions will be validated through existing theory about these modelling languages. Existing theories describe the different elements in these languages and the constraints between them. These give rise to domains for both languages, which can be used to formalise the language. The correctness of the grammars and models in these languages follow from literature in the same way, as the literature defines which grammars and models are valid within these languages.
+    
+    \item ``What is a suitable formalisation for the model transformations between Ecore and GROOVE?'' 
+    
+    A suitable formalisation must be able to express a reasonable set of model transformations. If the formalisation is not able to express such a set, the formalisation is useless. Therefore, the thesis will show examples of model transformations within this formalisation and give an intuition of which transformations are possible. The existence of these examples validates the suitability of the formalisation.
+    
+    \item ``What model transformations are correct within the formalisation?'' 
+    
+    The correctness of the model transformations follows from a correctness proof. This proof is validated using a theorem prover, which ensures that the proof is sound and complete. Therefore, the theorem prover validates the proof, while the proof validates the answer to the question. Furthermore, examples of correct model transformations will be provided, which validates that correct model transformations exist within the formalisation.
+    
+    \item ``How can correct model transformations between Ecore and GROOVE be composed?''
+    
+    This subquestions answers how correct model transformations can be composed such that the result is also correct. Validating this question consists of two parts. In the first part, a correctness proof is given, which shows that the composed model transformations are indeed a correct model transformation itself. This correctness proof is validated using a theorem prover. In the second part, an application of the composability of model transformations is shown, which validates that composing model transformations is possible in practice.
+\end{itemize}
+
+Since the answer to the main research question follows directly from the answers to the subquestions, the answer to the main question is validated using the validation of the subquestions.

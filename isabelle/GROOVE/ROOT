@@ -1,0 +1,14 @@
+chapter GROOVE
+
+session "GROOVE" = HOL +
+  options [timeout = 600, document = pdf, document_output = "output"]
+  sessions
+    Graph_Theory
+    Ecore
+  theories
+    Extended_Graph_Theory
+    Multiplicity_Pair
+    Type_Graph
+    Instance_Graph
+    Type_Graph_Combination
+    Instance_Graph_Combination

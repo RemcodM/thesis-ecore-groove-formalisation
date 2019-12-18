@@ -1,0 +1,107 @@
+\begin{longtable}{|lX|}
+\hline
+\multicolumn{2}{|l|}{\textbf{Models after step 5}}\\
+\hhline{|==|}
+\endhead
+$Tm_5 = $ & $\mathrm{combine}(Tm_4, Tm_{DataField}) =$ \newline
+$\begin{aligned}
+Class =\ & \{.\type{House}, .\type{Room}\} \\
+Enum =\ & \{\} \\
+UserDataType =\ & \{\} \\
+Field =\ & \{(.\type{House}, \type{name}), (.\type{House}, \type{rooms}), (.\type{Room}, \type{room\_\!id})\} \\
+\mathrm{FieldSig} =\ & \big\{
+\big((.\type{House}, \type{name}), (\type{string}, 1..1)\big),\\&
+\big((.\type{House}, \type{rooms}), ([\type{setof}, !.\type{Room}], 0..9)\big),\\&
+\big((.\type{Room}, \type{room\_\!id}), (\type{string}, 1..1)\big)
+\big\} \\
+EnumValue =\ & \{\} \\
+Inh =\ & \{\} \\
+Prop =\ & \big\{\big(\type{containment}, (.\type{House}, \type{rooms})\big)\big\} \\
+Constant =\ & \{\} \\
+\mathrm{ConstType} =\ & \{\}
+\end{aligned}$
+\\
+$Im_5 = $ & $\mathrm{combine}(Tm_4, Im_{DataField}) =$ \newline
+$\begin{aligned}
+Object =\ &\{TR, BHP, TRRoom1, TRRoom2, BHPRoomA, BHPRoomB, \\& BHPRoomC\} \\
+\mathrm{ObjectClass}(ob) =\ & \{(TR, .\type{House}), (BHP, .\type{House}),
+(TRRoom1, .\type{Room}),\\& (TRRoom2, .\type{Room}), (BHPRoomA, .\type{Room}), (BHPRoomB, .\type{Room}),\\& (BHPRoomC, .\type{Room})\}\\
+\mathrm{ObjectId} =\ & \{(TR, TR), (BHP, BHP), (TRRoom1, TRRoom1),\\& (TRRoom2, TRRoom2), (BHPRoomA, BHPRoomA),\\& (BHPRoomB, BHPRoomB), (BHPRoomC, BHPRoomC)\}\\
+\mathrm{FieldValue} =\ & \Big\{
+\Big(\big(TR, (.\type{House}, \type{name})\big), \big[\type{string}, \text{``TwoRem''}\big]\Big),\\&
+\Big(\big(BHP, (.\type{House}, \type{name})\big), \big[\type{string}, \text{``B.H. Paleis''}\big]\Big),\\&
+\Big(\big(TR, (.\type{House}, \type{rooms})\big), \big[\type{setof}, \big\langle [\type{obj}, TRRoom1], \\&\qquad [\type{obj}, TRRoom2] \big\rangle \big]\Big),\\&
+\Big(\big(BHP, (.\type{House}, \type{rooms})\big) \big[\type{setof}, \big\langle [\type{obj},  BHPRoomA], \\&\qquad [\type{obj}, BHPRoomB], (\type{obj}, BHPRoomC) \big\rangle \big]\Big),\\&
+\Big(\big(TRRoom1, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``1''}\big]\Big),\\&
+\Big(\big(TRRoom2, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``2''}\big]\Big),\\&
+\Big(\big(BHPRoomA, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``A''}\big]\Big),\\&
+\Big(\big(BHPRoomB, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``B''}\big]\Big),\\&
+\Big(\big(BHPRoomC, (.\type{Room}, \type{room\_\!id})\big), \big[\type{string}, \text{``C''}\big]\Big)
+\Big\} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{aligned}$
+\\
+\hline
+$TG_5 = $ & $\mathrm{combine}(TG_4, TG_{DataField}) =$ \newline
+$\begin{aligned}
+NT =\ & \{\langle \type{House} \rangle, \langle \type{Room} \rangle, \type{string}\} \\
+ET =\ & \big\{
+\big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big),
+\big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big),\\&
+\big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big)
+\big\} \\
+\!\!\sqsubseteq\ =\ & \big\{
+\big(\langle \type{House} \rangle, \langle \type{House} \rangle \big),
+\big(\langle \type{Room} \rangle, \langle \type{Room} \rangle \big),
+\big(\type{string}, \type{string} \big)
+\big\} \\
+abs =\ & \{\} \\
+\mathrm{mult} =\ & \Big\{
+\Big(\big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \big(0..\mstar, 1..1\big) \Big),\\&
+\Big(\big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), \big(0..1, 0..9\big) \Big),\\&
+\Big(\big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \big(0..\mstar, 1..1\big) \Big)
+\Big\} \\
+contains =\ & \big\{\big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big)\big\}
+\end{aligned}$
+\\
+$IG_5 = $ & $\mathrm{combine}(TG_4, IG_{DataField}) =$ \newline
+$\begin{aligned}
+N =\ & \{TR, BHP, TRRoom1, TRRoom2, BHPRoomA, BHPRoomB, BHPRoomC, \\& \text{``TwoRem''}, \text{``B.H. Paleis''}, \text{``1''},  \text{``2''}, \text{``A''}, \text{``B''}, \text{``C''}\} \\
+E =\ & \Big\{
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``TwoRem''} \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{name} \rangle, \type{string} \big), \text{``B.H. Paleis''} \Big),\\&
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), TRRoom1 \Big),\\&
+\Big(TR, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), TRRoom2 \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), BHPRoomA \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), BHPRoomB \Big),\\&
+\Big(BHP, \big(\langle \type{House} \rangle, \langle \type{rooms} \rangle, \langle \type{Room} \rangle \big), BHPRoomC \Big),\\&
+\Big(TRRoom1, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``1''} \Big),\\&
+\Big(TRRoom2, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``2''} \Big),\\&
+\Big(BHPRoomA, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``A''} \Big),\\&
+\Big(BHPRoomB, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``B''} \Big),\\&
+\Big(BHPRoomC, \big(\langle \type{Room} \rangle, \langle \type{room\_\!id} \rangle, \type{string} \big), \text{``C''} \Big)
+\Big\} \\
+\mathrm{ident} =\ & \{(TR, TR), (BHP, BHP), (TRRoom1, TRRoom1), (TRRoom2, TRRoom2),\\& (BHPRoomA, BHPRoomA), (BHPRoomB, BHPRoomB),\\& (BHPRoomC, BHPRoomC)\} \\
+\mathrm{type}_n =\ & \{
+(TR, \langle \type{House} \rangle), 
+(BHP, \langle \type{House} \rangle),
+(TRRoom1, \langle \type{Room} \rangle),
+(TRRoom2, \langle \type{Room} \rangle),\\&
+(BHPRoomA, \langle \type{Room} \rangle),
+(BHPRoomB, \langle \type{Room} \rangle),
+(BHPRoomC, \langle \type{Room} \rangle),\\&
+(\text{``TwoRem''}, \type{string}),
+(\text{``B.H. Paleis''}, \type{string}),
+(\text{``1''}, \type{string}),
+(\text{``2''}, \type{string}),
+(\text{``A''}, \type{string}),\\&
+(\text{``B''}, \type{string}),
+(\text{``C''}, \type{string})
+\}
+\end{aligned}$
+\\
+\hline
+$f_5(Im_5) = $ & $f_4(Im_4) \sqcup f_{DataField}(Im_{DataField})$  (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_model_instance_graph})\\
+$f'_5(IG_5) = $ & $f'_4(IG_4) \sqcup f'_{DataField}(IG_{DataField})$  (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_graph_instance_model})\\
+\hline
+\end{longtable}

@@ -1,0 +1,394 @@
+\subsection{Combining type graphs}
+\label{subsec:transformation_framework:type_models_and_type_graphs:combining_type_graphs}
+
+The structure of \cref{fig:transformation_framework:type_models_and_type_graphs:structure_type_models_graphs} shows that the type graphs $TG_A$ and $TG_B$ are combined into one type graph $TG_{AB}$. This section provides the definition of this combination and its corresponding theorems. Please note that the definitions presented here, just like the previous section, are as generic as possible, and do not actively take into account that $TG_{A}$ and $TG_{B}$ are mostly distinct. This bit of information is added later as part of a theorem and proof.
+
+\begin{defin}[Combination function on type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine}
+$\mathrm{combine}$ is a binary function on two type graphs which combines two type graphs into one type graph. It is defined as follows:
+\begin{align*}
+\mathrm{combine}(TG_A, TG_B) = \langle&
+NT = NT_{TG_A} \cup NT_{TG_B} \\&
+ET = ET_{TG_A} \cup ET_{TG_B} \\&
+\!\!\sqsubseteq\ = (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \\&
+abs = (abs_{TG_A} \setminus NT_{TG_B}) \cup (abs_{TG_B} \setminus NT_{TG_A}) \cup (abs_{TG_A} \cap abs_{TG_B}) \\&
+\mathrm{mult} = \mathrm{mult\_\!combine}(TG_A, TG_B) \\&
+contains = contains_{TG_A} \cup contains_{TG_B} \rangle
+\end{align*}
+
+In which $\mathrm{mult\_\!combine}$ is given as part of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:mult_combine}.
+\isabellelref{tg_combine}{GROOVE.Type_Graph_Combination}
+\end{defin}
+
+Intuitively, the presented definition makes sense. In order to combine two (type) graphs, the nodes and edges of the graph need to be merged. The definition accurately describes this behaviour.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/type_graphs_combination/type_graph_combination_inh1.tikz}
+        \caption{First type graph $TG_A$}
+        \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_inh_tg1}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/type_graphs_combination/type_graph_combination_inh2.tikz}
+        \caption{Second type graph $TG_A$}
+        \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_inh_tg2}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/type_graphs_combination/type_graph_combination_inh12.tikz}
+        \caption{Combined type graph $TG_{AB}$}
+        \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_inh_tg12}
+    \end{subfigure}
+    \caption{Combination of the inheritance relation}
+    \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_inh}
+\end{figure}
+
+To preserve the correctness of the inheritance relation, the inheritance relation is merged and the transitive closure it taken. This is to ensure that the inheritance relation is correct and contains all subtypes. An example of this is given in \cref{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_inh}. The inheritance relation of the first type graph, $TG_A$ is $(( \type{B}, \type{B} ), ( \type{C}, \type{C} ), ( \type{C}, \type{B} ))$. The inheritance relation of the second type graph, $TG_B$ is $(( \type{A}, \type{A} ), ( \type{B}, \type{B} ), ( \type{B}, \type{A} ))$. Taking the union of these relations is not enough to get the correct inheritance relation for the combination of $TG_A$ and $TG_B$, as the inheritance relation is transitive. If the union is taken, the new relation would become $(( \type{B}, \type{B} ), ( \type{C}, \type{C} ), ( \type{C}, \type{B} ), ( \type{A}, \type{A} ), ( \type{B}, \type{A} ))$. This is not enough, as $\type{C}$ is also a subtype of $\type{A}$ in the combination (see \cref{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_inh_tg12}). Taking the transitive closure of the union solves this, which results in $(( \type{B}, \type{B} ), ( \type{C}, \type{C} ), ( \type{C}, \type{B} ), ( \type{A}, \type{A} ), ( \type{B}, \type{A} ), ( \type{C}, \type{A} ))$.
+
+Abstract node types are merged in a similar way to the abstract property in type models (\cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:prop_combine}). For node types that are only present in one of the type graphs, their abstract property is preserved. For node types that are present in both type graphs, the abstract property is only preserved if the node type is abstract in both graphs. Intuitively, this makes sense, as instances of a class can only appear if the node type is not abstract. When the node type was not abstract in one of the type graphs, making it abstract within the combination would make all instances of the class invalid.
+
+Containment edges are just merged, meaning that if an edge is a containment edge in one of the graphs, it is a containment edge in the combination. This behaviour makes sense from a practical standpoint. When applying models, it is undesired that ownership over a node might get lost after combining two graphs.
+
+The multiplicity function is merged using a new function, which is discussed in the next definition.
+
+\begin{defin}[Combination function for multiplicity pairs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:mult_combine}
+$\mathrm{mult\_\!combine}(TG_A, TG_B)$ is a partial function on two type graphs which returns a new function \\$ET_{TG_{AB}} \Rightarrow (\mathbb{M} \times \mathbb{M})$. It is defined as follows:
+\begin{multline*}
+    \mathrm{mult\_\!combine}(TG_{A}, TG_{B}, e) = \\
+    \begin{cases}
+        ( \max(l_{in}^A, l_{in}^B)..\min(u_{in}^A, u_{in}^B), \max(l_{out}^A, l_{out}^B)..\min(u_{out}^A, u_{out}^B) ) & \mathrm{if }\ e \in ET_{TG_A} \cap ET_{TG_B} \\
+        \mathrm{mult}_{TG_A}(e) & \mathrm{if }\ e \in ET_{TG_A} \setminus ET_{TG_B} \\
+        \mathrm{mult}_{TG_B}(e) & \mathrm{if }\ e \in ET_{TG_B} \setminus ET_{TG_A}
+    \end{cases}
+\end{multline*}
+where
+\begin{align*}
+    l_{in}^A .. u_{in}^A &= \mathrm{in}(\mathrm{mult}_{TG_A}(e)) &
+    l_{out}^A .. u_{out}^A &= \mathrm{out}(\mathrm{mult}_{TG_A}(e)) \\
+    l_{in}^B .. u_{in}^B &= \mathrm{in}(\mathrm{mult}_{TG_B}(e)) &
+    l_{out}^B .. u_{out}^B &= \mathrm{out}(\mathrm{mult}_{TG_B}(e))
+\end{align*}
+\isabellelref{tg_combine_mult}{GROOVE.Type_Graph_Combination}
+\end{defin}
+
+Although the presented function looks quite complicated, it is similar to the way multiplicities are handled in type models (see \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:fieldsig_combine}), the only difference being that there are now two multiplicities, an incoming and outgoing multiplicity. In the case that an edge $e$ is shared across $TG_A$ and $TG_B$, the incoming and outgoing multiplicities are merged. For each of these multiplicities, the maximum of the corresponding lower bounds is taken, and the minimum of the corresponding upper bounds. For an edge $e$ that only occurs in once of the type graphs, the multiplicity pair is copied.
+
+With all definitions in place, it is possible to provide a more significant example. Suppose the model of a straightforward contacts list. It consists of $\type{Contact}$s of which the name, age and email address can be stored. The formal definition of the model of such a contacts list could be as follows:
+
+\begin{align*}
+TG_{Contact} =\ &\langle&
+NT =\ &\{ \type{Contact}, \type{int}, \type{string} \} \\&&
+ET =\ &\{ 
+( \type{Contact}, \type{age}, \type{int} ),
+( \type{Contact}, \type{email}, \type{string} ),\\&&&
+( \type{Contact}, \type{firstName}, \type{string} ),
+( \type{Contact}, \type{lastName}, \type{string} )
+\} \\&&
+\sqsubseteq\ =\ &\{
+( \type{Contact}, \type{Contact} ),
+( \type{int}, \type{int} ),
+( \type{string}, \type{string} )
+\} \\&&
+abs =\ &\{\} \\&&
+\mathrm{mult} =\ &\big\{
+\big( ( \type{Contact}, \type{age}, \type{int} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( ( \type{Contact}, \type{email}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Contact}, \type{firstName}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Contact}, \type{lastName}, \type{string} ), ( 0..\mstar, 0..1 ) \big)
+\big\} \\&&
+contains =\ &\{\} 
+\\&\rangle
+\end{align*}
+
+An visual representation of $TG_{Contact}$ is included as  \cref{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example_ig1}. Now, assume a model that represents an extension to this application, adding support for adding $\type{Address}$es. Furthermore, it adds the possibility to select favourite $\type{Contact}$s. This extension could formally be defined as:
+
+\begin{align*}
+TG_{Ext} =\ &\langle&
+NT =\ &\{ \type{Address}, \type{Contact}, \type{int}, \type{string} \} \\&&
+ET =\ &\{ 
+( \type{Contact}, \type{fav}, \type{Contact} ),
+( \type{Contact}, \type{addresses}, \type{Address} ), \\&&&
+( \type{Address}, \type{addressLine}, \type{string} ),
+( \type{Address}, \type{country}, \type{string} ),\\&&&
+( \type{Address}, \type{postalCode}, \type{string} )
+\} \\&&
+\sqsubseteq\ =\ &\{
+( \type{Address}, \type{Address} ),
+( \type{Contact}, \type{Contact} ),
+( \type{int}, \type{int} ),
+( \type{string}, \type{string} )
+\} \\&&
+abs =\ &\{\} \\&&
+\mathrm{mult} =\ &\big\{
+\big( ( \type{Contact}, \type{fav}, \type{Contact} ), ( 0..1, 0..1 ) \big),\\&&&
+\big( ( \type{Contact}, \type{addresses}, \type{Address} ), ( 1..1, 1..4 ) \big),\\&&&
+\big( ( \type{Address}, \type{addressLine}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Address}, \type{country}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Address}, \type{postalCode}, \type{string} ), ( 0..\mstar, 0..1 ) \big)
+\big\} \\&&
+contains =\ &\{
+( \type{Contact}, \type{addresses}, \type{Address} )
+\}
+\\&\rangle
+\end{align*}
+
+The visual representation of the extension is included as \cref{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example_tg2}. Please note that $\type{fav}$ is modelled as a flag in this model. In the visual notation, syntactic sugar is added to flags by writing them inside the node, in an italic font. Now, using \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine}, it is possible to combine these graphs into one model. This will yield the following graph:
+
+\begin{align*}
+TG_{ContactExt} =\ &\langle&
+NT =\ &\{ \type{Address}, \type{Contact}, \type{int}, \type{string} \} \\&&
+ET =\ &\{ 
+( \type{Contact}, \type{age}, \type{int} ),
+( \type{Contact}, \type{email}, \type{string} ),\\&&&
+( \type{Contact}, \type{firstName}, \type{string} ),
+( \type{Contact}, \type{lastName}, \type{string} ), \\&&&
+( \type{Contact}, \type{fav}, \type{Contact} ),
+( \type{Contact}, \type{addresses}, \type{Address} ), \\&&&
+( \type{Address}, \type{addressLine}, \type{string} ),
+( \type{Address}, \type{country}, \type{string} ),\\&&&
+( \type{Address}, \type{postalCode}, \type{string} )
+\} \\&&
+\sqsubseteq\ =\ &\{
+( \type{Address}, \type{Address} ),
+( \type{Contact}, \type{Contact} ),
+( \type{int}, \type{int} ),
+( \type{string}, \type{string} )
+\} \\&&
+abs =\ &\{\} \\&&
+\mathrm{mult} =\ &\big\{
+\big( ( \type{Contact}, \type{age}, \type{int} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( ( \type{Contact}, \type{email}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Contact}, \type{firstName}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Contact}, \type{lastName}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( ( \type{Contact}, \type{fav}, \type{Contact} ), ( 0..1, 0..1 ) \big),\\&&&
+\big( ( \type{Contact}, \type{addresses}, \type{Address} ), ( 1..1, 1..4 ) \big),\\&&&
+\big( ( \type{Address}, \type{addressLine}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Address}, \type{country}, \type{string} ), ( 0..\mstar, 0..1 ) \big),\\&&&
+\big( \type{Address}, \type{postalCode}, \type{string} ), ( 0..\mstar, 0..1 ) \big)
+\big\} \\&&
+contains =\ &\{
+( \type{Contact}, \type{addresses}, \type{Address} )
+\}
+\\&\rangle
+\end{align*}
+
+A visual representation of this combined graph is included as \cref{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example_tg12}. The example perfectly shows why the combination of type graphs is useful: It allows for building larger graphs out of smaller building blocks. This behaviour is the exact goal of this definition within the transformation framework.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/type_graphs_combination/contact_partial1.tikz}
+        \caption{Contacts model $TG_{Contact}$}
+        \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example_ig1}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/type_graphs_combination/contact_partial2.tikz}
+        \caption{Address extension $TG_{Ext}$}
+        \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example_tg2}
+    \end{subfigure}
+    \begin{subfigure}{0.35\textwidth}
+        \centering
+        \input{images/04_transformation_framework/type_graphs_combination/contact_combined.tikz}
+        \caption{Combined model $TG_{ContactExt}$}
+        \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example_tg12}
+    \end{subfigure}
+    \caption{Example of the combination of type graphs}
+    \label{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example}
+\end{figure}
+
+Although the definitions of the combination of type graphs are given, no mathematical properties or theorems are defined yet. Some mathematical properties hold for the combination of type graphs, that will be presented in the following theorems.
+
+\begin{thm}[Commutativity of the combination of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_commute}
+Assume that $TG_A$ and $TG_B$ are type graphs, then the $\mathrm{combine}$ function is commutative:
+\begin{equation*}
+    \mathrm{combine}(TG_A, TG_B) = \mathrm{combine}(TG_B, TG_A)
+\end{equation*}
+\isabellelref{tg_combine_commute}{GROOVE.Type_Graph_Combination}
+\end{thm}
+
+\begin{thm}[Associativity of the combination of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_assoc}
+Assume that $TG_A$, $TG_B$ and $TG_C$ are type graphs, then the $\mathrm{combine}$ function is associative:
+\begin{equation*}
+    \mathrm{combine}(\mathrm{combine}(TG_A, TG_B), TG_C) = \mathrm{combine}(TG_A, \mathrm{combine}(TG_B, TG_C))
+\end{equation*}
+\isabellelref{tg_combine_assoc}{GROOVE.Type_Graph_Combination}
+\end{thm}
+
+\begin{thm}[Idempotence of the combination of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_idemp}
+Assume that $TG_A$ is a type graph and that it is valid in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Then the following property holds:
+\begin{equation*}
+    \mathrm{combine}(TG_A, TG_A) = TG_A
+\end{equation*}
+\isabellelref{tg_combine_idemp_alt}{GROOVE.Type_Graph_Combination}
+\end{thm}
+
+These properties follow directly from \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine}, but the corresponding proofs will not be included here. It should be noted that these properties are indeed proven correct as part of this thesis, and the corresponding proofs are validated within Isabelle.
+
+Besides these properties, the combination of type graphs also has an identity element. The empty type graph represents this identity element, but it needs to be defined first:
+
+\begin{defin}[Empty type graph]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:empty_type_graph}
+Let $TG_{\epsilon}$ be the empty type graph. $TG_{\epsilon}$ is defined as:
+\begin{align*}
+TG_{\epsilon} = \langle&
+NT = \{\} \\&
+ET = \{\} \\&
+\!\!\sqsubseteq\ = \{\} \\&
+abs = \{\} \\&
+\mathrm{mult} = undefined \\&
+contains = \{\} \rangle
+\end{align*}
+\end{defin}
+
+\begin{thm}[Correctness of the empty type graph]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_empty_correct}
+The empty type graph, $TG_{\epsilon}$, is valid with respect to
+\cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}.
+\isabellelref{tg_empty_correct}{GROOVE.Type_Graph}
+\end{thm}
+
+The proof for the correctness of the empty type graph is trivial. Still, a validated version of this proof can be found within the Isabelle theories of this thesis.
+
+As mentioned earlier, the empty type graph acts as an identity element when combining two type graphs. The following theorem specifies this behaviour.
+
+\begin{thm}[Identity of the combination of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_identity}
+Assume that $TG_A$ is a type graph and that it is valid in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Then $TG_{\epsilon}$ acts as an identity element in the combination function:
+\begin{equation*}
+    \mathrm{combine}(TG_{\epsilon}, TG_A) = TG_A
+\end{equation*}
+\isabellelref{tg_combine_identity_alt}{GROOVE.Type_Graph_Combination}
+\end{thm}
+
+Once more, the proof of this theorem follows directly from the definition. Therefore, the corresponding proof will not be included here, but a validated version can be found within the Isabelle theories of this thesis.
+
+Just like type models, the final desired property for the combination of type graphs is a correctness property. \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_correct} defines the theorem under which the combination of type graphs is a valid type graph. Please note that this theorem is a generic theorem, which does not take into account that the type graphs are mostly distinct.
+
+\begin{thm}[Validity of the combination of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_correct}
+Assume that $TG_A$ and $TG_B$ are valid type graphs in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Furthermore, assume the following properties:
+\begin{itemize}
+    \item For all edges in $TG_A$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the source of the edge: $\forall (s_1, l, t_1) \in ET_{TG_A} \land (s_2, l, t_2) \in ET_{TG_A}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{A}}\!\! \lor\ (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B}\!)^+\ \setminus \sqsubseteq_{TG_{A}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big) \implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all edges in $TG_A$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the target of the edge: $\forall (s_1, l, t_1) \in ET_{TG_A} \land (s_2, l, t_2) \in ET_{TG_A}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{A}}\!\! \lor\ (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{A}}\!\!\big)$\\$\implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all edges in $TG_B$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the source of the edge: $\forall (s_1, l, t_1) \in ET_{TG_B} \land (s_2, l, t_2) \in ET_{TG_B}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\! \lor\ (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big) \implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all edges in $TG_B$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the target of the edge: $\forall (s_1, l, t_1) \in ET_{TG_B} \land (s_2, l, t_2) \in ET_{TG_B}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\! \lor\ (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\!\big)$\\$\implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item Ensure that there is no possible confusion of edge types between an edge from $Tm_A$ and an edge from $Tm_B$: $\forall (s_1, l, t_1) \in ET_{TG_A} \land (s_2, l, t_2) \in ET_{TG_B}\!:$\\$\big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)$\\$\implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all shared edges, ensure the combination of multiplicity pairs is a valid multiplicity pair: $\forall e \in ET_{TG_A} \cap ET_{TG_B}\!: \mathrm{mult\_\!combine}(TG_{A}, TG_{B}, e) \in (\mathbb{M} \times \mathbb{M})$.
+    \item The transitive closure of the combine inheritance relation is antisymmetric: $(\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+$ is antisymmetric.
+\end{itemize}
+
+Then $\mathrm{combine}(TG_A, TG_B)$ is a valid type graph in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}
+\isabellelref{tg_combine_correct}{GROOVE.Type_Graph_Combination}
+\end{thm}
+
+\begin{proof}
+To proof that $\mathrm{combine}(TG_A, TG_B)$ is a valid type model, it needs to be shown that\\ $\mathrm{combine}(TG_A, TG_B)$ gives rise to a valid structure for a type graph and that \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity} holds. For readability, define $TG_{AB}$ to be $\mathrm{combine}(TG_A, TG_B)$.
+
+\emph{Structural properties}
+\begin{itemize}
+\item All elements of $NT_{TG_{AB}}$ are elements of $Lab_t \cup Lab_{prim}$.
+
+Follows from $NT_{TG_{A}} \subseteq Lab_t \cup Lab_{prim}$ and $NT_{TG_{B}} \subseteq Lab_t \cup Lab_{prim}$.
+
+
+\item All elements of $ET_{TG_{AB}}$ are elements of $NT_{TG_{AB}} \times (Lab_e \cup Lab_f) \times NT_{TG_{AB}}$.
+
+Follows from $ET_{TG_{A}} \subseteq (NT_{TG_{A}} \times (Lab_e \cup Lab_f) \times NT_{TG_{A}})$ and $ET_{TG_{B}} \subseteq (NT_{TG_{B}} \times (Lab_e \cup Lab_f) \times NT_{TG_{B}})$. To complete the proof, use $NT_{TG_{AB}} = NT_{TG_{A}} \cup NT_{TG_{B}}$.
+
+
+\item All elements of $\sqsubseteq$ are elements of $NT_{TG_{AB}} \times NT_{TG_{AB}}$.
+
+Follows from $\sqsubseteq_{TG_{A}}\ \subseteq (NT_{TG_{A}} \times NT_{TG_{A}})$ and $\sqsubseteq_{TG_{B}}\ \subseteq (NT_{TG_{B}} \times NT_{TG_{B}})$. To complete the proof, use $NT_{TG_{AB}} = NT_{TG_{A}} \cup NT_{TG_{B}}$.
+
+
+\item All elements of $abs_{TG_{AB}}$ are elements of $NT_{TG_{AB}}$.
+
+Follows from $abs_{TG_{A}} \subseteq NT_{TG_{A}}$ and $abs_{TG_{B}} \subseteq NT_{TG_{B}}$. To complete the proof, use $NT_{TG_{AB}} = NT_{TG_{A}} \cup NT_{TG_{B}}$.
+
+
+\item For each edge $e$, $\mathrm{mult}_{TG_{AB}}(e)$ must be an element of $\mathbb{M} \times \mathbb{M}$.
+
+It holds that $e \in ET_{TG_{A}} \setminus ET_{TG_{B}}$, $e \in ET_{TG_{B}} \setminus ET_{TG_{A}}$ or $e \in ET_{TG_{A}} \cap ET_{TG_{B}}$.
+
+Perform the proof by a case distinction based on this fact. In case of $e \in ET_{TG_{A}} \cap ET_{TG_{B}}$, use the assumption to complete the proof.
+
+
+\item All elements of $contains_{TG_{AB}}$ are elements of $ET_{TG_{AB}}$.
+
+Follows from $contains_{TG_{A}} \subseteq ET_{TG_{A}}$ and $contains_{TG_{B}} \subseteq ET_{TG_{B}}$. To complete the proof, use $ET_{TG_{AB}} = ET_{TG_{A}} \cup ET_{TG_{B}}$.
+\end{itemize}
+
+\emph{Properties for validity}
+\begin{itemize}
+\item $\forall (s_1, l, t_1) \in ET_{TG_{AB}}\,\land\, (s_2, l, t_2) \in ET_{TG_{AB}}\!: \big((s_1, s_2) \in\ \sqsubseteq_{TG_{AB}} \lor\ (s_2, s_1) \in\ \sqsubseteq_{TG_{AB}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in\ \sqsubseteq_{TG_{AB}} \lor\ (t_2, t_1) \in\ \sqsubseteq_{TG_{AB}}\!\!\big) \Longrightarrow s_1 = s_2 \land t_1 = t_2$.
+
+Establish that $(s_1, l, t_1) \in ET_{TG_{A}}$ or $(s_1, l, t_1) \in ET_{TG_{B}}$. Also establish that $(s_2, l, t_2) \in ET_{TG_{A}}$ or $(s_2, l, t_2) \in ET_{TG_{B}}$.
+
+Perform a case distinction on these facts. If $(s_1, l, t_1) \in ET_{TG_{A}}$ and $(s_2, l, t_2) \in ET_{TG_{B}}$, then proof by the corresponding assumption. The case $(s_1, l, t_1) \in ET_{TG_{B}}$ and $(s_2, l, t_2) \in ET_{TG_{A}}$ is proven by the same assumption.
+
+If $(s_1, l, t_1) \in ET_{TG_{A}}$ and $(s_2, l, t_2) \in ET_{TG_{A}}$, then check if $\big((s_1, s_2) \in\ \sqsubseteq_{TG_{A}} \lor\ (s_2, s_1) \in\ \sqsubseteq_{TG_{A}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in\ \sqsubseteq_{TG_{A}} \lor\ (t_2, t_1) \in\ \sqsubseteq_{TG_{A}}\!\!\big)$. If this is the case, solve using the properties of $TG_A$, when this is not the case, prove the statement using the corresponding assumptions.
+
+If $(s_1, l, t_1) \in ET_{TG_{B}}$ and $(s_2, l, t_2) \in ET_{TG_{B}}$, then check if $\big((s_1, s_2) \in\ \sqsubseteq_{TG_{B}} \lor\ (s_2, s_1) \in\ \sqsubseteq_{TG_{B}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in\ \sqsubseteq_{TG_{B}} \lor\ (t_2, t_1) \in\ \sqsubseteq_{TG_{B}}\!\!\big)$. If this is the case, solve using the properties of $TG_B$, when this is not the case, prove the statement using the corresponding assumptions.
+
+
+\item $\forall (s, l, t) \in ET_{TG_{AB}}: l \in Lab_f \Longrightarrow s = t$.
+
+Establish that $(s, l, t) \in ET_{TG_{A}}$ or $(s, l, t) \in ET_{TG_{B}}$. Then if $l \in Lab_f$, show that $s = t$.
+
+
+\item $\sqsubseteq_{TG_{AB}}$ is a partial order.
+
+First show that $(\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+$ is reflexive. Since $\sqsubseteq_{TG_{A}}$ is reflexive and $\sqsubseteq_{TG_{B}}$ is reflexive, $(\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+$ is reflexive as well.
+
+Then show that $(\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+$ is transitive. This is easily proven using the definition of the transitive closure.
+
+Finally, have that $(\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+$ is antisymmetric by assumption.
+
+
+\item $\forall e \in contains_{TG_{AB}}: \mathrm{in}(\mathrm{mult}_{TG_{AB}}(e)) = (0, 1) \lor \mathrm{in}(\mathrm{mult}_{TG_{AB}}(e)) = (1, 1)$.
+
+Use the fact that $e \in contains_{TG_{A}}$ or $e \in contains_{TG_{B}}$. Then have that incoming multiplicity is valid in $Tm_A$ or $Tm_B$. Use the assumption that the combined multiplicities are valid and the definition of $\mathrm{mult\_\!combine}(TG_{A}, TG_{B}, e)$ to show that the statement holds.
+\end{itemize}
+
+The proofs of all these individual properties completes the proof.
+\end{proof}
+
+As explained before, \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_correct} does not take into account that the type graphs are supposed to be distinct except for a set of node types. The following lemma is an alternation of the previous theorem, which takes this into account.
+
+\begin{lem}[Validity of the combination (mostly) distinct of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_merge_correct}
+Assume that $TG_A$ and $TG_B$ are valid type graphs in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Also, assume that $TG_A$ and $TG_B$ are fully distinct except for a shared set of node types $N$. Furthermore, assume the following properties:
+\begin{itemize}
+    \item For all edges in $TG_A$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the source of the edge: $\forall (s_1, l, t_1) \in ET_{TG_A} \land (s_2, l, t_2) \in ET_{TG_A}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{A}}\!\! \lor\ (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B}\!)^+\ \setminus \sqsubseteq_{TG_{A}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big) \implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all edges in $TG_A$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the target of the edge: $\forall (s_1, l, t_1) \in ET_{TG_A} \land (s_2, l, t_2) \in ET_{TG_A}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{A}}\!\! \lor\ (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{A}}\!\!\big)$\\$\implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all edges in $TG_B$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the source of the edge: $\forall (s_1, l, t_1) \in ET_{TG_B} \land (s_2, l, t_2) \in ET_{TG_B}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\! \lor\ (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\!\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big) \implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item For all edges in $TG_B$ that share the same label, ensure that there is no possible confusion of edge types because of a new subtype introduced at the target of the edge: $\forall (s_1, l, t_1) \in ET_{TG_B} \land (s_2, l, t_2) \in ET_{TG_B}\!: \big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\! \lor\ (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\ \setminus \sqsubseteq_{TG_{B}}\!\!\big)$\\$\implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item Ensure that there is no possible confusion of edge types between an edge from $Tm_A$ and an edge from $Tm_B$: $\forall (s_1, l, t_1) \in ET_{TG_A} \land (s_2, l, t_2) \in ET_{TG_B}\!:$\\$\big((s_1, s_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (s_2, s_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)\ \land$\\$\big((t_1, t_2) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+ \lor (t_2, t_1) \in (\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+\big)$\\$\implies s_1 = s_2\ \land\ t_1 = t_2$.
+    \item The transitive closure of the combine inheritance relation is antisymmetric: $(\sqsubseteq_{TG_A} \cup \sqsubseteq_{TG_B})^+$ is antisymmetric.
+\end{itemize}
+
+Then $\mathrm{combine}(TG_A, TG_B)$ is a valid type graph in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}.
+\isabellelref{tg_combine_merge_correct}{GROOVE.Type_Graph_Combination}
+\end{lem}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_correct} to show that $\mathrm{combine}(TG_A, TG_B)$ is a valid type graph. Use the assumptions given. The assumption for the correctness of the multiplicity pair for shared edges has become irrelevant because there are no shared edges.
+\end{proof}
+
+Finally, the concept of compatibility between two type graphs is defined.
+
+\begin{defin}[Compatibility of type graphs]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:compatibility}
+Assume type graphs $TG_A$ and $TG_B$. We say that $TG_A$ is compatible with $TG_B$ if $\mathrm{combine}(TG_A, TG_B)$ is a valid type graph in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}.
+\end{defin}
+
+The notion of compatibility will be used later as a way to denote type graphs that can be combined with other type graphs without loss of validity.

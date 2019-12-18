@@ -1,0 +1,32 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=step10-]
+\node[basic_node] (n0) at (2.825, -6.365) {\ml{\uline{\textit{BHP}} : \textbf{House}\\name = "B.H. Paleis"}};
+\node[basic_node] (n1) at (2.655, -0.335) {\ml{\uline{\textit{TR}} : \textbf{House}\\name = "TwoRem"}};
+\node[basic_node] (n4) at (2.845, -4.230) {\ml{\uline{\textit{SmallSize}} : \textbf{RoomSize}\\\textit{SMALL}}};
+\node[basic_node] (n5) at (4.405, -0.570) {\ml{\uline{\textit{MediumSize}} : \textbf{RoomSize}\\\textit{MEDIUM}}};
+\node[basic_node] (n6) at (0.990, -0.550) {\ml{\uline{\textit{LargeSize}} : \textbf{RoomSize}\\\textit{LARGE}}};
+\node[basic_node] (n7) at (1.815, -1.465) {\ml{\uline{\textit{TRRoom1}} : \textbf{Room}\\room\_id = "1"}};
+\node[basic_node] (n8) at (3.405, -1.475) {\ml{\uline{\textit{TRRoom2}} : \textbf{Room}\\room\_id = "2"}};
+\node[basic_node] (n9) at (1.805, -2.475) {\ml{\uline{\textit{Tenant1}} : \textbf{Tenant}\\age = 23\\name = "B.R. Mankjon"}};
+\node[basic_node] (n10) at (3.405, -2.475) {\ml{\uline{\textit{Tenant2}} : \textbf{Tenant}\\age = 24\\name = "P.J.R. Nam"}};
+\node[basic_node] (n11) at (0.945, -4.285) {\ml{\uline{\textit{Tenant3}} : \textbf{Tenant}\\age = 18\\name = "L. Horn"}};
+\node[basic_node] (n12) at (4.735, -4.225) {\ml{\uline{\textit{Tenant4}} : \textbf{Tenant}\\age = 24\\name = "A.C.C. Turg"}};
+\node[basic_node] (n13) at (4.825, -3.275) {\ml{\uline{\textit{Tenant5}} : \textbf{Tenant}\\age = 19\\name = "M. Silon"}};
+\node[basic_node] (n14) at (0.910, -5.225) {\ml{\uline{\textit{BHPRoomA}} : \textbf{Room}\\room\_id = "A"}};
+\node[basic_node] (n15) at (2.870, -5.215) {\ml{\uline{\textit{BHPRoomB}} : \textbf{Room}\\room\_id = "B"}};
+\node[basic_node] (n16) at (4.810, -5.225) {\ml{\uline{\textit{BHPRoomC}} : \textbf{Room}\\room\_id = "C"}};
+
+\path[basic_edge] (n0)  --  (n14) 
+node[lab] at (1.910, -5.840) {\ml{rooms}};
+\path[basic_edge](n0.north -| 2.870, -5.215) -- node[lab] {\ml{rooms}} (n15) ;
+\path[basic_edge] (n1)  -- node[lab] {\ml{rooms}} (n7) ;
+\path[basic_edge] (n14)  -- node[lab] {\ml{room\_size}} (n4) ;
+\path[basic_edge](n15.north -| 2.845, -4.230) -- node[lab] {\ml{room\_size}} (n4) ;
+\path[basic_edge] (n0)  -- node[lab] {\ml{rooms}} (n16) ;
+\path[basic_edge] (n1)  -- node[lab] {\ml{rooms}} (n8) ;
+\path[basic_edge] (n8)  -- node[lab] {\ml{room\_size}} (n5) ;
+\path[basic_edge] (n7)  -- node[lab] {\ml{room\_size}} (n6) ;
+\path[basic_edge] (n16)  -- node[lab] {\ml{room\_size}} (n4) ;
+\end{tikzpicture}

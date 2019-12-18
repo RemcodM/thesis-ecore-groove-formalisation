@@ -1,0 +1,19 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=step05-]
+\node[basic_node] (n0) at (2.740, -4.200) {\ml{\uline{\textit{BHP}} : \textbf{House}\\name = "B.H. Paleis"}};
+\node[basic_node] (n1) at (2.660, -0.340) {\ml{\uline{\textit{TR}} : \textbf{House}\\name = "TwoRem"}};
+\node[basic_node] (n7) at (1.820, -1.470) {\ml{\uline{\textit{TRRoom1}} : \textbf{Room}\\room\_id = "1"}};
+\node[basic_node] (n8) at (3.410, -1.480) {\ml{\uline{\textit{TRRoom2}} : \textbf{Room}\\room\_id = "2"}};
+\node[basic_node] (n14) at (0.820, -3.060) {\ml{\uline{\textit{BHPRoomA}} : \textbf{Room}\\room\_id = "A"}};
+\node[basic_node] (n15) at (2.780, -3.050) {\ml{\uline{\textit{BHPRoomB}} : \textbf{Room}\\room\_id = "B"}};
+\node[basic_node] (n16) at (4.720, -3.060) {\ml{\uline{\textit{BHPRoomC}} : \textbf{Room}\\room\_id = "C"}};
+
+\path[basic_edge] (n0)  --  (n14) 
+node[lab] at (1.584, -3.455) {\ml{rooms}};
+\path[basic_edge](n0.north -| 2.780, -3.050) -- node[lab] {\ml{rooms}} (n15) ;
+\path[basic_edge] (n0)  -- node[lab] {\ml{rooms}} (n16) ;
+\path[basic_edge] (n1)  -- node[lab] {\ml{rooms}} (n7) ;
+\path[basic_edge] (n1)  -- node[lab] {\ml{rooms}} (n8) ;
+\end{tikzpicture}

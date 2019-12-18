@@ -1,0 +1,9 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=1.2, every node/.style={scale=0.6}, name prefix=contact-]
+\node[basic_node] (n0) at (1.350, -1.600) {\ml{\textbf{Contact}\\\textit{fav}\\email = "networks@example.com"\\firstName = "Networkprofessor"}};
+\node[basic_node] (n2) at (1.300, -2.990) {\ml{\textbf{Address}\\addressLine = "University Str. 15"\\country = "NL"}};
+
+\path[basic_edge](n0.south -| 1.300, -2.990) -- node[lab] {\ml{addresses}} (n2) ;
+\end{tikzpicture}

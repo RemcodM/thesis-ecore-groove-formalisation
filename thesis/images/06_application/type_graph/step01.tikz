@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=step01-]
+\node[type_node] (n0) at (0.530, -0.370) {\ml{\textbf{House}}};
+
+\end{tikzpicture}

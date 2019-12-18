@@ -1,0 +1,8 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=step03-]
+\node[type_node] (n0) at (0.740, -0.400) {\ml{\textbf{House}\\name: \textbf{string}}};
+\node[type_node] (n1) at (0.730, -1.585) {\ml{\textbf{Room}}};
+
+\end{tikzpicture}

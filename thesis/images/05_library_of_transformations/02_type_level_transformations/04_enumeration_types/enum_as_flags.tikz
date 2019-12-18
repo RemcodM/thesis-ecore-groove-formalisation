@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=test-]
+\node[type_node] (n1) at (3.160, -0.665) {\ml{\textbf{Example}\\\textit{OPTION\_A}\\\textit{OPTION\_B}\\\textit{OPTION\_C}}};
+
+\end{tikzpicture}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:chapter5="https://heliumnet.nl/thesis/chapter5" xsi:schemaLocation="https://heliumnet.nl/thesis/chapter5 Chapter5.ecore">
+  <chapter5:InstanceModelContainer>
+    <tenants name="Tenant1"/>
+    <tenants name="Tenant2"/>
+    <tenants name="Tenant3"/>
+    <tenants name="Tenant4" subtenant="/0/@tenants.4"/>
+    <tenants name="Tenant5"/>
+    <houses name="TR">
+      <rooms href="#/2"/>
+      <rooms href="#/1"/>
+    </houses>
+    <houses name="BHP">
+      <rooms href="#/4"/>
+      <rooms href="#/5"/>
+      <rooms href="#/3"/>
+    </houses>
+  </chapter5:InstanceModelContainer>
+  <chapter5:Room room_id="TRRoom2" tenant="/0/@tenants.1"/>
+  <chapter5:Room room_id="TRRoom1" tenant="/0/@tenants.0"/>
+  <chapter5:Room room_id="BHPRoomA" tenant="/0/@tenants.2"/>
+  <chapter5:Room room_id="BHPRoomB"/>
+  <chapter5:Room room_id="BHPRoomC" tenant="/0/@tenants.3"/>
+</xmi:XMI>

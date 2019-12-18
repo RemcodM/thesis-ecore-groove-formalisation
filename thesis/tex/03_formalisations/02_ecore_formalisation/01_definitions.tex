@@ -1,0 +1,62 @@
+\subsection{Definitions}
+\label{subsec:formalisations:ecore_formalisation:definitions}
+This section discusses some definitions specific to the Ecore formalisation. The definitions need to be in place before the formalisation of type models and instance models are given.
+
+In Ecore, all elements should be identifiable by a name. For this, we define a globally unique set of names $N\!ame$, which type and instance models share. We write down elements of $N\!ame$ in a sans-serif font, such as $\type{aName}$.
+
+\begin{defin}[Name]
+\label{defin:formalisations:ecore_formalisation:definitions:name}
+$Name$ is a globally fixed set of names (shared between instance models and type models). This set
+contains at least the names $\type{boolean}$, $\type{integer}$, $\type{real}$ and $\type{string}$, as well as $\type{true}$, $\type{false}$ and $\type{nil}$.
+\end{defin}
+
+A name is not enough to uniquely identify an element in Ecore. All elements in Ecore belong to a namespace. Within a namespace, all names have to be unique, but names can be shared between different namespaces. The combination of a namespace and a name is referred to as an identifier. An identifier can be used to identify an element within a model uniquely.
+
+Namespaces can be nested, which means that a namespace can contain other namespaces. Therefore namespaces are recursively defined up to the root namespace, which we define as $\perp$. This means all namespaces are part of the root namespace, either directly or via one or more parent namespaces.
+
+\begin{defin}[Identifier/Namespace]
+\label{defin:formalisations:ecore_formalisation:definitions:identifiers_namespaces}
+Identifiers and namespaces are defined as the smallest sets satisfying
+\begin{align*}
+    Id &= Namespace \times N\!ame\\
+    N\!amespace &= Id \cup \{\perp\}
+\end{align*}
+where the set of identifiers is the smallest solution of the given set of equations and $\perp$ denotes the root namespace.
+\isabellelref{Namespace}{Ecore.Model_Namespace}
+\end{defin}
+
+For notation, we will separate namespace from the name using a dot, omitting the root namespace. For example, $\langle\langle\perp, \type{namespace}\rangle, \type{name}\rangle$ becomes $.\type{namespace}.\type{name}$.
+
+To distinguish between the different types of data that may be present in an instance model, we define a set of data types that can be used within the type model. The set of data types gives rise to a set of data values, which a corresponding instance model may use.
+
+\begin{defin}[Data types]
+\label{defin:formalisations:ecore_formalisation:definitions:data_types}
+The set of data types is defined by
+\begin{equation*}
+DataType = \{ \type{boolean}, \type{integer}, \type{real}, \type{string} \}
+\end{equation*}
+\isabellelref{DataType}{Ecore.Type_Model}
+\end{defin}
+
+\begin{defin}[Data type values]
+\label{defin:formalisations:ecore_formalisation:definitions:data_type_values}
+For each of the various data types a single set defines the possible values. The following sets of values are defined:
+\begin{itemize}
+    \item $\mathbb{B} = \{ \type{true}, \type{false} \}$, the set of $\type{boolean}$ values.
+    \item $\mathbb{C}$, the set of all printable characters.
+    \item $\mathbb{R}$, the set of all rational ($\type{real}$) numbers.
+    \item $\mathbb{S}$, defined as the set of all finite subsequences of elements in $\mathbb{C}$, the set of all possible $\type{string}$s.
+    \item $\mathbb{Z}$, the set of all $\type{integer}$ numbers.
+\end{itemize}
+\isabellelref{LiteralValue}{Ecore.Instance_Model}
+\end{defin}
+
+Ecore also supports the notion of assigning a $\type{nil}$ value, indicating there is no actual reference to any element in an instance model.
+
+\begin{defin}[Nil value]
+\label{defin:formalisations:ecore_formalisation:definitions:nil}
+$\type{nil}$ defines the unassigned value for nullable types in the type model.
+\isabellelref{ClassValue}{Ecore.Instance_Model}
+\end{defin}
+
+\cref{defin:formalisations:ecore_formalisation:type_models:types} and \cref{defin:formalisations:ecore_formalisation:instance_models:valid_type_values} specify in what context this value can be used.

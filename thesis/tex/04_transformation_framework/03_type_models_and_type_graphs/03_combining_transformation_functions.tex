@@ -1,0 +1,291 @@
+\subsection{Combining transformation functions}
+\label{subsec:transformation_framework:type_models_and_type_graphs:combining_transformation_functions}
+
+The previous sections discussed the combination of type models and type graphs. In this section, the combination of transformation functions between type models and type graphs is discussed. This combination is the last key element shown in \cref{fig:transformation_framework:type_models_and_type_graphs:structure_type_models_graphs}. If it is possible to combine $f_A$ and $f_B$ into $f_{A} \sqcup f_{B}$, then it is possible to build transformation functions between type models and type graphs iteratively.
+
+Before it is possible to define a definition for the combination of two transformation functions, it is essential to define what functions are considered to be transformation functions.
+
+\begin{defin}[Transformation function from a type model to a type graph]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}
+Let $f$ be a function from type models to type graphs, $Tm$ be a type model and $TG$ the corresponding type graph. $f$ is a transformation function iff:
+\begin{itemize}
+    \item $f$ projects $Tm$ onto $TG$: $f(Tm) = TG$;
+    \item After combination with another type model, $f$ preserves the node types:\\$\forall Tm_x\!: NT_{f(Tm)} \subseteq NT_{f(\mathrm{combine}(Tm, Tm_x))}$;
+    \item After combination with another type model, $f$ preserves the edge types:\\$\forall Tm_x\!: ET_{f(Tm)} \subseteq ET_{f(\mathrm{combine}(Tm, Tm_x))}$;
+    \item After combination with another type model, $f$ preserves the inheritance relation:\\$\forall Tm_x\!:\ \sqsubseteq_{f(Tm)}\ \subseteq\ \sqsubseteq_{f(\mathrm{combine}(Tm, Tm_x))}$;
+    \item After combination with another type model, $f$ preserves the abstract node types:\\$\forall Tm_x\!: abs_{f(Tm)} \subseteq abs_{f(\mathrm{combine}(Tm, Tm_x))}$;
+    \item For all edges in the projected type graph, $f$ preserves the multiplicity if the type model is combined with another type model:\\$\forall Tm_x\!: \forall e \in ET_{f(Tm)}\!: \mathrm{mult}_{f(Tm)}(e) = \mathrm{mult}_{f(\mathrm{combine}(Tm, Tm_x))}(e)$;
+    \item After combination with another type model, $f$ preserves the containment edges:\\$\forall Tm_x\!: contains_{f(Tm)} \subseteq contains_{f(\mathrm{combine}(Tm, Tm_x))}$.
+\end{itemize}
+\isabellelref{tg_combine_mapping_function}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+As expected, a transformation must project some type model $Tm$ to its corresponding type graph $TG$. Furthermore, it has to preserve properties of the projection, even after $Tm$ is combined with some other type model. The rationale behind these properties is that after combining $Tm$ with some other type model, there must still be a way to transform the elements that originated from $Tm$. If that is possible, it is possible to use the transformation function as the basis for the combined transformation function, which can transform the combined type model to a combined type graph.
+
+The following definition will describe how two transformation functions from type models to type graphs can be combined into a new transformation function, which projects the combination of two type models onto the combination of the two corresponding type graphs.
+
+\begin{defin}[Combination of transformation functions from a type model to a type graph]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:combination_transformation_function_type_model_type_graph}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. $f_A$ projects a type model $Tm_A$ onto type graph $TG_A$. $f_B$ projects a type model $Tm_B$ onto type graph $TG_B$. Then the combination of $f_A$ and $f_B$ is defined as:
+\begin{align*}
+f_{A} \sqcup f_{B}(Tm) =\ &\langle&
+NT =\ &\{n \mid n \in NT_{f_{A}(Tm)} \land n \in NT_{TG_A} \} \cup \{n \mid n \in NT_{f_{B}(Tm)} \land n \in NT_{TG_B} \} \\&&
+ET =\ &\{e \mid e \in ET_{f_{A}(Tm)} \land e \in ET_{TG_A} \} \cup \{e \mid e \in ET_{f_{B}(Tm)} \land e \in ET_{TG_B} \} \\&&
+\!\!\sqsubseteq\ =\ &(\{i \mid i \in\ \sqsubseteq_{f_{A}(Tm)} \land\ i \in\ \sqsubseteq_{TG_A} \} \cup \{i \mid i \in\ \sqsubseteq_{f_{B}(Tm)} \land\ i \in\ \sqsubseteq_{TG_B} \})^+ \\&&
+abs =\ &(\{n \mid n \in abs_{f_{A}(Tm)} \land n \in abs_{TG_A} \} \setminus \{n \mid n \in NT_{f_{B}(Tm)} \land n \in NT_{TG_B} \})\ \cup\\&&&
+(\{n \mid n \in abs_{f_{B}(Tm)} \land n \in abs_{TG_B} \} \setminus \{n \mid n \in NT_{f_{A}(Tm)} \land n \in NT_{TG_A} \})\ \cup\\&&&
+(\{n \mid n \in abs_{f_{A}(Tm)} \land n \in abs_{TG_A} \} \cap \{n \mid n \in abs_{f_{B}(Tm)} \land n \in abs_{TG_B} \}) \\&&
+\mathrm{mult} =\ &\mathrm{mult\_\!mapping}(f_A, TG_A, f_B, TG_B, Tm) \\&&
+contains =\ &\{e \mid e \in contains_{f_{A}(Tm)} \land e \in contains_{TG_A} \}\ \cup\\&&&
+\{e \mid e \in contains_{f_{B}(Tm)} \land e \in contains_{TG_B} \} \\&
+\rangle
+\end{align*}
+In which $\mathrm{mult\_\!mapping}$ is given as part of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:mult_mapping}.
+\isabellelref{tg_combine_mapping}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+The definitions for the combination of transformation functions from a type model to a type graph looks quite complex, but a careful reader will find that this definition is an alternation of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine}. Intuitively, this is what is expected from this definition, as the combination of the transformation functions should be able to transform the combination of two type models to the combination of the two corresponding type graphs, as visually represented in \cref{fig:transformation_framework:type_models_and_type_graphs:structure_type_models_graphs}.
+
+Unsurprisingly, the definition of the multiplicity function of $f_{A} \sqcup f_{B}$ is very similar to \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:mult_combine}.
+
+\begin{defin}[Combination of the multiplicity function for two transformation functions]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:mult_mapping}
+$\mathrm{mult\_\!mapping}(f_A, TG_A, f_B, TG_B, Tm)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $TG_A$ and $TG_B$ and a type model $Tm$ which returns a new function \\$ET_{f(Tm)} \Rightarrow (\mathbb{M} \times \mathbb{M})$. It is defined as follows:
+\begin{multline*}
+    \mathrm{mult\_\!mapping}(f_A, TG_A, f_B, TG_B, Tm, e) = \\
+        \begin{cases}
+        m & \mathrm{if }\ e \in \{e \mid e \in ET_{f_{A}(Tm)} \land e \in ET_{TG_A} \} \cap \{e \mid e \in ET_{f_{B}(Tm)} \land e \in ET_{TG_B} \} \\
+        \mathrm{mult}_{f_A(Tm)}(e) & \mathrm{if }\ e \in \{e \mid e \in ET_{f_{A}(Tm)} \land e \in ET_{TG_A} \} \setminus \{e \mid e \in ET_{f_{B}(Tm)} \land e \in ET_{TG_B} \} \\
+        \mathrm{mult}_{f_B(Tm)}(e) & \mathrm{if }\ e \in \{e \mid e \in ET_{f_{B}(Tm)} \land e \in ET_{TG_B} \} \setminus \{e \mid e \in ET_{f_{A}(Tm)} \land e \in ET_{TG_A} \}
+    \end{cases}
+\end{multline*}
+where
+\begin{equation*}
+    m = ( \max(l_{in}^A, l_{in}^B)..\min(u_{in}^A, u_{in}^B), \max(l_{out}^A, l_{out}^B)..\min(u_{out}^A, u_{out}^B) )
+\end{equation*}
+and
+\begin{align*}
+    l_{in}^A .. u_{in}^A &= \mathrm{in}(\mathrm{mult}_{f_A(Tm)}(e)) &
+    l_{out}^A .. u_{out}^A &= \mathrm{out}(\mathrm{mult}_{f_A(Tm)}(e)) \\
+    l_{in}^B .. u_{in}^B &= \mathrm{in}(\mathrm{mult}_{f_B(Tm)}(e)) &
+    l_{out}^B .. u_{out}^B &= \mathrm{out}(\mathrm{mult}_{f_B(Tm)}(e))
+\end{align*}
+\end{defin}
+
+With these definitions in place, it is possible to provide the necessary theorems for the correctness of the combined function $f_{A} \sqcup f_{B}$.
+
+\begin{thm}[The projection of a combined transformation function from a type model to a type graph]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tg_combine_mapping_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. $f_A$ projects a type model $Tm_A$ onto type graph $TG_A$. $f_B$ projects a type model $Tm_B$ onto type graph $TG_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ projects $\mathrm{combine}(Tm_A, Tm_B)$ onto $\mathrm{combine}(TG_A, TG_B)$, so:
+\begin{equation*}
+    f_{A} \sqcup f_{B}(\mathrm{combine}(Tm_A, Tm_B)) = \mathrm{combine}(TG_A, TG_B)
+\end{equation*}
+\isabellelref{tg_combine_mapping_correct}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+The corresponding proof follows directly from \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:combination_transformation_function_type_model_type_graph} as well as \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their type graphs when the type model is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ is equal to the definition of $\mathrm{combine}(TG_A, TG_B)$. Therefore, $f_{A} \sqcup f_{B}(\mathrm{combine}(Tm_A, Tm_B)) = \mathrm{combine}(TG_A, TG_B)$.
+\end{proof}
+
+Although the presented theorem is a large step towards being able to build transformation functions from type models to type graphs iteratively, there is still one key element missing. It should be formally argued that $f_{A} \sqcup f_{B}$ is once again an transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. If this is formally argued, it becomes possible to easily combine $f_{A} \sqcup f_{B}$ with yet another transformation function. The following theorem states this property.
+
+\begin{thm}[A combined transformation function from a type model to a type graph is a transformation function]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tg_combine_mapping_function_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. $f_A$ projects a type model $Tm_A$ onto type graph $TG_A$. $f_B$ projects a type model $Tm_B$ onto type graph $TG_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ is again a transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph} which projects $\mathrm{combine}(Tm_A, Tm_B)$ onto $\mathrm{combine}(TG_A, TG_B)$.
+\isabellelref{tg_combine_mapping_function_correct}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their type graphs when the type model is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ will also preserve these elements. This can be shown using the commutativity and associativity of the combination of type models, see \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:tmod_combine_commute} and \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:tmod_combine_assoc} respectively.
+\end{proof}
+
+This last theorem completes the recursive behaviour of combining transformation functions and therefore allows for building transformation functions from type models to type graphs iteratively.
+
+The definitions and theorems that are presented so far only work in one direction: for transforming type models into type graphs. As visually shown in \cref{fig:transformation_framework:type_models_and_type_graphs:structure_type_models_graphs}, it must also be possible to transform type graphs back into type models. The definitions and theorems needed for this transformation are similar and will be presented in the remaining part of this section.
+
+\begin{defin}[Transformation function from a type graph to a type model]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}
+Let $f$ be a function from type graphs to type models, $TG$ be a type graph and $Tm$ the corresponding type model. $f$ is a transformation function iff:
+\begin{itemize}
+    \item $f$ projects $TG$ onto $Tm$: $f(TG) = Tm$;
+    \item After combination with another type graph, $f$ preserves the classes:\\$\forall TG_x\!: Class_{f(TG)} \subseteq Class_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item After combination with another type graph, $f$ preserves the enumerations:\\$\forall TG_x\!: Enum_{f(TG)} \subseteq Enum_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item After combination with another type graph, $f$ preserves the user-defined data types:\\$\forall TG_x\!: UserDataType_{f(TG)} \subseteq UserDataType_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item After combination with another type graph, $f$ preserves the fields:\\$\forall TG_x\!: Field_{f(TG)} \subseteq Field_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item For all fields in the projected type model, $f$ preserves the field signature if the type graph is combined with another type graph:\\$\forall TG_x\!: \forall s \in Field_{f(Tm)}\!: \mathrm{FieldSig}_{f(TG)}(s) = \mathrm{FieldSig}_{f(\mathrm{combine}(TG, TG_x))}(s)$;
+    \item After combination with another type graph, $f$ preserves the enumeration values:\\$\forall TG_x\!: EnumValue_{f(TG)} \subseteq EnumValue_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item After combination with another type graph, $f$ preserves the inheritance relation:\\$\forall TG_x\!: Inh_{f(TG)} \subseteq Inh_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item After combination with another type graph, $f$ preserves the model properties:\\$\forall TG_x\!: Prop_{f(TG)} \subseteq Prop_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item After combination with another type graph, $f$ preserves the constants:\\$\forall TG_x\!: Constant_{f(TG)} \subseteq Constant_{f(\mathrm{combine}(TG, TG_x))}$;
+    \item For all constants in the projected type model, $f$ preserves the constant types if the type graph is combined with another type graph:\\$\forall TG_x\!: \forall c \in Constant_{f(Tm)}\!: \mathrm{ConstType}_{f(TG)}(c) = \mathrm{ConstType}_{f(\mathrm{combine}(TG, TG_x))}(c)$.
+\end{itemize}
+\isabellelref{tmod_combine_mapping_function}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+Just like \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_model_type_graph}, the definition of transformation functions from a type graph to a type model preserves all elements if the type graph is combined with another type graph. This will once more be the key to having the property of iterative building of transformation functions.
+
+The following definition will describe how two transformation functions from type graphs to type models can be combined into a new transformation function, which projects the combination of two type graphs onto the combination of the two corresponding type models.
+
+\begin{defin}[Combination of transformation functions from a type graph to a type model]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:combination_transformation_function_type_graph_type_model}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}. $f_A$ projects a type graph $TG_A$ onto type model $Tm_A$. $f_B$ projects a type graph $TG_B$ onto type model $Tm_B$. Then the combination of $f_A$ and $f_B$ is defined as:
+\begin{align*}
+f_{A} \sqcup f_{B}(TG) =\ &\langle&
+Class =\ &\{c \mid c \in Class_{f_{A}(TG)} \land c \in Class_{Tm_A} \}\ \cup\\&&&
+\{c \mid c \in Class_{f_{B}(TG)} \land c \in Class_{Tm_B} \} \\&&
+Enum =\ &\{e \mid e \in Enum_{f_{A}(TG)} \land e \in Enum_{Tm_A} \}\ \cup\\&&&
+\{e \mid e \in Enum_{f_{B}(TG)} \land e \in Enum_{Tm_B} \} \\&&
+UserDataType =\ &\{u \mid u \in UserDataType_{f_{A}(TG)} \land u \in UserDataType_{Tm_A} \}\ \cup\\&&&
+\{u \mid u \in UserDataType_{f_{B}(TG)} \land u \in UserDataType_{Tm_B} \} \\&&
+Field =\ &\{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}\ \cup\\&&&
+\{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \} \\&&
+\mathrm{FieldSig} =\ &\mathrm{fieldsig\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG) \\&&
+EnumValue =\ &\{v \mid v \in EnumValue_{f_{A}(TG)} \land v \in EnumValue_{Tm_A} \}\ \cup\\&&&
+\{v \mid v \in EnumValue_{f_{B}(TG)} \land v \in EnumValue_{Tm_B} \} \\&&
+Inh =\ &\{i \mid i \in Inh_{f_{A}(TG)} \land i \in Inh_{Tm_A} \}\ \cup\\&&&
+\{i \mid i \in Inh_{f_{B}(TG)} \land i \in Inh_{Tm_B} \} \\&&
+Prop =\ &\mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG) \\&&
+Constant =\ &\{c \mid c \in Constant_{f_{A}(TG)} \land c \in Constant_{Tm_A} \}\ \cup\\&&&
+\{c \mid c \in Constant_{f_{B}(TG)} \land c \in Constant_{Tm_B} \} \\&&
+\mathrm{ConstType} =\ &\mathrm{consttype\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG) \\&
+\rangle
+\end{align*}
+In which $\mathrm{fieldsig\_\!mapping}$ is given as part of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:fieldsig_mapping}, $\mathrm{prop\_\!mapping}$ as part of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:prop_mapping}, and $\mathrm{consttype\_\!mapping}$ as part of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:consttype_mapping}.
+\isabellelref{tmod_combine_mapping}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+As expected, the definition for the combination of transformation functions from a type graph to a type model is an alternation of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:combine}. This alternation will once more allow the combined transformation function to project the combination of the type graphs to the combination of the corresponding type models.
+
+The following two definitions will provide the remaining functions, which will closely follow their counterparts from \cref{subsec:transformation_framework:type_models_and_type_graphs:combining_type_models}.
+
+\begin{defin}[Combination of the field signature function for two transformation functions]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:fieldsig_mapping}
+$\mathrm{fieldsig\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $Tm_A$ and $Tm_B$ and a type model $TG$ which returns a new function $Field_{f_{A} \sqcup f_{B}(TG)} \Rightarrow (Type_{f_{A} \sqcup f_{B}(TG)} \times \mathbb{M})$. It is defined as follows:
+\begin{multline*}
+    \mathrm{fieldsig\_\!combine}(f_A, Tm_A, f_B, Tm_B, TG, d) = \\
+        \begin{cases}
+        s & \mathrm{if }\ d \in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}\ \cap\\&\quad\{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \} \land\\&\quad\mathrm{type}_{f_{A}(TG)}(d) = \mathrm{type}_{f_{B}(TG)}(d) \\
+        \mathrm{FieldSig}_{f_{A}(TG)}(d) & \mathrm{if }\ d \in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}\ \setminus\\&\quad\{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \} \\
+        \mathrm{FieldSig}_{f_{B}(TG)}(d) & \mathrm{if }\ d \in \{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \}\ \setminus\\&\quad\{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}
+    \end{cases}
+\end{multline*}
+where
+\begin{equation*}
+\begin{split}
+    s = \bigg(\mathrm{type}_{f_{A}(TG)}(d), \Big(\max\left(\mathrm{lower}(\mathrm{FieldSig}_{f_{A}(TG)}(d)), \mathrm{lower}(\mathrm{FieldSig}_{f_{B}(TG)}(d))\right) ..\\ \min\left(\mathrm{upper}(\mathrm{FieldSig}_{f_{A}(TG)}(d)), \mathrm{upper}(\mathrm{FieldSig}_{f_{B}(TG)}(d))\right)\Big)\bigg)
+\end{split}
+\end{equation*}
+\isabellelref{tmod_combine_fieldsig_mapping}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+\begin{defin}[Combination of the constant type function for two transformation functions]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:consttype_mapping}
+$\mathrm{consttype\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $Tm_A$ and $Tm_B$ and a type model $TG$ which returns a new function $Constant_{f_{A} \sqcup f_{B}(TG)} \Rightarrow Type_{f_{A} \sqcup f_{B}(TG)}$. It is defined as follows:
+\begin{multline*}
+    \mathrm{consttype\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG, c) = \\
+    \begin{cases}
+        \mathrm{ConstType}_{f_{A}(TG)}(c) & \mathrm{if}\ c \in \{c \mid c \in Constant_{f_{A}(TG)} \land c \in Constant_{Tm_A} \}\ \cap\\&\quad\{c \mid c \in Constant_{f_{B}(TG)} \land c \in Constant_{Tm_B} \}\ \land\\&\quad \mathrm{ConstType}_{f_{A}(TG)}(c) = \mathrm{ConstType}_{f_{B}(TG)}(c) \\
+        \mathrm{ConstType}_{f_{A}(TG)}(c) & \mathrm{if}\ c \in \{c \mid c \in Constant_{f_{A}(TG)} \land c \in Constant_{Tm_A} \}\ \setminus\\&\quad \{c \mid c \in Constant_{f_{B}(TG)} \land c \in Constant_{Tm_B} \} \\
+        \mathrm{ConstType}_{f_{B}(TG)}(c) & \mathrm{if}\ c \in \{c \mid c \in Constant_{f_{B}(TG)} \land c \in Constant_{Tm_B} \}\ \setminus\\&\quad \{c \mid c \in Constant_{f_{A}(TG)} \land c \in Constant_{Tm_A} \}
+    \end{cases}
+\end{multline*}
+\isabellelref{tmod_combine_const_type_mapping}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+Now that the definitions for the field signature function and the constant type function are defined, the only remaining definition is that of the combination of properties, which is given in the next definition.
+
+\begin{defin}[Combination of model properties when combining two transformation functions]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:prop_mapping}
+$\mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)$ is a set depending on two transformation functions $f_A$ and $f_B$, their corresponding projections $Tm_A$ and $Tm_B$ and a type model $TG$. The set is defined as a subset of $Prop_{Tm_A} \cup Prop_{Tm_B}$. The contents of the set are then defined as follows:
+
+For $\type{abstract}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{abstract}, c ] \in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ c \not\in \{c \mid c \in Class_{f_{B}(TG)} \land c \in Class_{Tm_B} \}}{[ \type{abstract}, c ] \in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{abstract}, c ] \in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \} \\ c \not\in \{c \mid c \in Class_{f_{A}(TG)} \land c \in Class_{Tm_A} \}}{[ \type{abstract}, c ] \in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{abstract}, c ] \in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ [ \type{abstract}, c ] \in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{abstract}, c ] \in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+
+For $\type{containment}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{containment}, r ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \}}{[ \type{containment}, r ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{containment}, r ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{containment}, r ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+
+For $\type{defaultValue}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{defaultValue}, f, v ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ f \not\in \{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \}}{[ \type{defaultValue}, f, v ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{defaultValue}, f, v ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \} \\ f \not\in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}}{[ \type{defaultValue}, f, v ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{defaultValue}, f, v ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ [ \type{defaultValue}, f, v ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{defaultValue}, f, v ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+
+For $\type{identity}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{identity}, c, A ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ c \not\in \{c \mid c \in Class_{f_{B}(TG)} \land c \in Class_{Tm_B} \}}{[ \type{identity}, c, A ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{identity}, c, A ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \} \\ c \not\in \{c \mid c \in Class_{f_{A}(TG)} \land c \in Class_{Tm_A} \}}{[ \type{identity}, c, A ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{identity}, c, A ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ [ \type{identity}, c, A ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{identity}, c, A ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+
+For $\type{keyset}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{keyset}, r, A ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ r \not\in \{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \}}{[ \type{keyset}, r, A ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{keyset}, r, A ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \} \\ r \not\in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}}{[ \type{keyset}, r, A ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{keyset}, r, A ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ [ \type{keyset}, r, A ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{keyset}, r, A ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+
+For $\type{opposite}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{opposite}, r1, r2 ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ r1 \not\in \{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \} \\ r2 \not\in \{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \}}{[ \type{opposite}, r1, r2 ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{opposite}, r1, r2 ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \} \\ r1 \not\in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \} \\ r2 \not\in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}}{[ \type{opposite}, r1, r2 ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{opposite}, r1, r2 ]\in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ [ \type{opposite}, r1, r2 ]\in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{opposite}, r1, r2 ]\in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+
+For $\type{readonly}$ properties:
+\begin{mathpar}
+    \inferrule{[ \type{readonly}, f ] \in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ f \not\in \{d \mid d \in Field_{f_{B}(TG)} \land d \in Field_{Tm_B} \}}{[ \type{readonly}, f ] \in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{readonly}, f ] \in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \} \\ f \not\in \{d \mid d \in Field_{f_{A}(TG)} \land d \in Field_{Tm_A} \}}{[ \type{readonly}, f ] \in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+    \and
+    \inferrule{[ \type{readonly}, f ] \in \{p \mid p \in Prop_{f_{A}(TG)} \land p \in Prop_{Tm_A} \} \\ [ \type{readonly}, f ] \in \{p \mid p \in Prop_{f_{B}(TG)} \land p \in Prop_{Tm_B} \}}{[ \type{readonly}, f ] \in \mathrm{prop\_\!mapping}(f_A, Tm_A, f_B, Tm_B, TG)}
+\end{mathpar}
+\isabellelref{tmod_combine_prop_mapping}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{defin}
+
+As expected, the definition for the properties within the combination is an alternation of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:prop_combine}.
+
+With these definitions in place, it is possible to provide the necessary theorems for the correctness of the combined function $f_{A} \sqcup f_{B}$.
+
+\begin{thm}[The projection of a combined transformation function from a type graph to a type model]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tmod_combine_mapping_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}. $f_A$ projects a type graph $TG_A$ onto type model $Tm_A$. $f_B$ projects a type graph $TG_B$ onto type model $Tm_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ projects $\mathrm{combine}(TG_A, TG_B)$ onto $\mathrm{combine}(Tm_A, Tm_B)$, so:
+\begin{equation*}
+    f_{A} \sqcup f_{B}(\mathrm{combine}(TG_A, TG_B)) = \mathrm{combine}(Tm_A, Tm_B)
+\end{equation*}
+\isabellelref{tmod_combine_mapping_correct}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+The corresponding proof follows directly from \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:combination_transformation_function_type_graph_type_model} as well as \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their type models when the type graph is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ is equal to the definition of $\mathrm{combine}(Tm_A, Tm_B)$. Therefore, $f_{A} \sqcup f_{B}(\mathrm{combine}(TG_A, TG_B)) = \mathrm{combine}(Tm_A, Tm_B)$.
+\end{proof}
+
+Like the combined transformation function from type models to type graphs, the combined transformation function from type graphs to type models is also a transformation function, but in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}. This is stated in the following theorem.
+
+\begin{thm}[A combined transformation function from a type graph to a type model is a transformation function]
+\label{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tmod_combine_mapping_function_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}. $f_A$ projects a type graph $TG_A$ onto type model $Tm_A$. $f_B$ projects a type graph $TG_B$ onto type model $Tm_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ is again a transformation function in the sense of \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model} which projects $\mathrm{combine}(TG_A, TG_B)$ onto $\mathrm{combine}(Tm_A, Tm_B)$.
+\isabellelref{tmod_combine_mapping_function_correct}{Ecore-GROOVE-Mapping.Type_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:transformation_function_type_graph_type_model}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their type models when the type graph is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ will also preserve these elements. This can be shown using the commutativity and associativity of the combination of type graphs, see \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_commute} and \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_assoc} respectively.
+\end{proof}

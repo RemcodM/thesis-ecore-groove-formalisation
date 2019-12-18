@@ -1,0 +1,58 @@
+\section{Type models and type graphs}
+\label{sec:transformation_framework:type_models_and_type_graphs}
+
+In this section, the proposed framework structure is applied to type models and type graphs. First, the general structure and its requirements are discussed. Then the required definitions and theorems are given.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture} 
+    \path
+    (-3,4) node[circle,draw,minimum size=10mm,inner sep=0pt](ME) {$T$}
+    (-4.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](MA) {$Tm_A$}
+    (-1.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](MB) {$Tm_B$}
+    (-3,0) node[circle,draw,minimum size=10mm,inner sep=0pt](MAB) {$Tm_{AB}$}
+    
+    (3,4) node[circle,draw,minimum size=10mm,inner sep=0pt](GN) {$N$}
+    (1.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](GA) {$TG_A$}
+    (4.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](GB) {$TG_B$}
+    (3,0) node[circle,draw,minimum size=10mm,inner sep=0pt](GAB) {$TG_{AB}$};
+    
+    \path[]		
+    (ME) [-, black, out=240, in=90] edge node[above] {} (MA)
+    (ME) [-, black, out=300, in=90] edge node[above] {} (MB)
+    
+    (MA) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (MAB)
+    (MB) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (MAB)
+    
+    (GN) [-, black, out=240, in=90] edge node[above] {} (GA)
+    (GN) [-, black, out=300, in=90] edge node[above] {} (GB)
+    
+    (GA) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (GAB)
+    (GB) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (GAB)
+    
+    (ME) [-{Latex[width=5]}, black, out=25, in=155] edge node[above] {$f$} (GN)
+    (GN) [-{Latex[width=5]}, black, out=165, in=15] edge node[above] {} (ME)
+    
+    (MA) [-{Latex[width=5]}, black, out=35, in=145] edge node[above] {$f_A$} (GA)
+    (GA) [-{Latex[width=5]}, black, out=155, in=25] edge node[above] {} (MA)
+    
+    (MB) [-{Latex[width=5]}, black, out=35, in=145] edge node[above] {$f_B$} (GB)
+    (GB) [-{Latex[width=5]}, black, out=155, in=25] edge node[above] {} (MB)
+    
+    (MAB) [-{Latex[width=5]}, black, out=25, in=155] edge node[above] {$f_{A} \sqcup f_{B}$} (GAB)
+    (GAB) [-{Latex[width=5]}, black, out=165, in=15] edge node[above] {} (MAB)
+    ;
+    \end{tikzpicture}
+    \caption{Structure for transforming between type models and type graphs}
+    \label{fig:transformation_framework:type_models_and_type_graphs:structure_type_models_graphs}
+\end{figure}
+
+\cref{fig:transformation_framework:type_models_and_type_graphs:structure_type_models_graphs} shows an alternation of the structure proposed in \cref{sec:transformation_framework:structure} applied to type models and type graphs. As before, type model $Tm_A$ represents the partially build model which corresponds to type graph $TG_A$ under the transformation function $f_A$. Type model $Tm_B$ represents the next building block to add to this model. It corresponds to type graph $TG_B$ under the bijective transformation function $f_B$.
+
+Type models $Tm_A$ and $Tm_B$ are entirely distinct except for a set types $T$, which means $T \subseteq Type_{Tm_A} \land T \subseteq Type_{Tm_B}$. In a similar way, type graphs $TG_A$ and $TG_B$ are entirely distinct except for a set of node types $N$, so $N \subseteq NT_{TG_A} \land N \subseteq NT_{TG_B}$.
+
+Type models $Tm_A$ and $Tm_B$ are combined into type model $Tm_{AB}$ using \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:combine}. In a similar way type graphs $TG_A$ and $TG_B$ are combined into type graph $TG_{AB}$ using \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine}. \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_models:tmod_combine_merge_correct} and \cref{defin:transformation_framework:type_models_and_type_graphs:combining_type_graphs:tg_combine_merge_correct} respectively show that $Tm_{AB}$ and $TG_{AB}$ are valid. Then \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:combination_transformation_function_type_model_type_graph} and \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:combination_transformation_function_type_graph_type_model} can be used to merge the transformation functions $f_A$ and $f_B$ into $f_{A} \sqcup f_{B}$, where \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tg_combine_mapping_correct} and \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tg_combine_mapping_function_correct} show that $f_{A} \sqcup f_{B}$ is again a valid transformation function transforming $Tm_{AB}$ to $TG_{AB}$. Similarly, \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tmod_combine_mapping_correct} and \cref{defin:transformation_framework:type_models_and_type_graphs:combining_transformation_functions:tmod_combine_mapping_function_correct} show that the inverse function of $f_{A} \sqcup f_{B}$ is again a valid transformation function transforming $TG_{AB}$ to $Tm_{AB}$.
+
+\input{tex/04_transformation_framework/03_type_models_and_type_graphs/01_combining_type_models.tex}
+\input{tex/04_transformation_framework/03_type_models_and_type_graphs/02_combining_type_graphs.tex}
+\input{tex/04_transformation_framework/03_type_models_and_type_graphs/03_combining_transformation_functions.tex}

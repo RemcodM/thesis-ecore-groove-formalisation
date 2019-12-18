@@ -1,0 +1,13 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=test-]
+\node[abstract_node] (n1) at (3.160, -0.665) {\ml{\textit{\textbf{Example}}}};
+\node[type_node] (n0) at (1.550, -1.875) {\ml{\textbf{Example\$OPTION\_A}}};
+\node[type_node] (n2) at (3.160, -1.875) {\ml{\textbf{Example\$OPTION\_B}}};
+\node[type_node] (n3) at (4.760, -1.875) {\ml{\textbf{Example\$OPTION\_C}}};
+
+\path[subtype_edge] (n0)  --  (n1) ;
+\path[subtype_edge](n2.north -| 3.160, -0.665) --  (n1) ;
+\path[subtype_edge] (n3)  --  (n1) ;
+\end{tikzpicture}

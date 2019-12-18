@@ -1,0 +1,9 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=1.4,every node/.style={scale=0.7},name prefix=step6-]
+\node[type_node] (n0) at (1.430, -0.640) {\ml{\textbf{Contact}\\name: \textbf{string}}};
+\node[type_node] (n1) at (1.440, -1.770) {\ml{\textbf{Address}\\line: \textbf{string}\\postcode: \textbf{string}}};
+
+\path[basic_edge](n0.south -| 1.440, -1.770) -- node[lab] {\ml{address}} (n1) ;
+\end{tikzpicture}

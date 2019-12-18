@@ -1,0 +1,15 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=test-]
+\node[type_node] (n0) at (3.125, -0.945) {\ml{\textbf{Example}}};
+\node[type_node] (n2) at (5.570, -0.970) {\ml{\textit{\textbf{ExistingEnum}}}};
+\node[type_node] (n3) at (2.970, -0.170) {\ml{\textbf{ExistingEnum\$OPTION\_A}}};
+\node[type_node] (n4) at (5.570, -0.170) {\ml{\textbf{ExistingEnum\$OPTION\_B}}};
+\node[type_node] (n5) at (8.170, -0.170) {\ml{\textbf{ExistingEnum\$OPTION\_C}}};
+
+\path[subtype_edge] (n3)  --  (n2) ;
+\path[subtype_edge](n4.south -| 5.570, -0.970) --  (n2) ;
+\path[subtype_edge] (n5)  --  (n2) ;
+\path[basic_edge](n0.east |- 5.570, -0.970) -- node[lab] {\ml{field}} (n2) ;
+\end{tikzpicture}

@@ -1,0 +1,251 @@
+\section{Application}
+
+\begin{frame}{Example application}
+    Combine the transformation framework and library of transformations to compose model transformations between Ecore and GROOVE.
+    \begin{itemize}
+        \item Small contact application, only names and addresses
+    \end{itemize}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain that we will see an example of how the transformation framework can be applied.
+	    \item The library of transformation is used as the building blocks.
+	    \item A small contacts application, only containing names and addresses is discussed.
+	\end{itemize}
+}
+
+\begin{frame}{Example application}
+    \centering
+    \begin{tikzpicture} 
+    \path
+    (-3,4) node[circle,draw,minimum size=10mm,inner sep=0pt](ME) {$E$}
+    (-4.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](MA) {$M_A$}
+    (-1.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](MB) {$M_B$}
+    (-3,0) node[circle,draw,minimum size=10mm,inner sep=0pt](MAB) {$M_{AB}$}
+    
+    (3,4) node[circle,draw,minimum size=10mm,inner sep=0pt](GN) {$N$}
+    (1.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](GA) {$G_A$}
+    (4.5,2) node[circle,draw,minimum size=10mm,inner sep=0pt](GB) {$G_B$}
+    (3,0) node[circle,draw,minimum size=10mm,inner sep=0pt](GAB) {$G_{AB}$};
+    
+    \path[]		
+    (ME) [-, black, out=240, in=90] edge node[above] {} (MA)
+    (ME) [-, black, out=300, in=90] edge node[above] {} (MB)
+    
+    (MA) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (MAB)
+    (MB) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (MAB)
+    
+    (GN) [-, black, out=240, in=90] edge node[above] {} (GA)
+    (GN) [-, black, out=300, in=90] edge node[above] {} (GB)
+    
+    (GA) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (GAB)
+    (GB) [-{Latex[width=5]}, black, out=270, in=90] edge node[above] {} (GAB)
+    
+    (ME) [-{Latex[width=5]}, black, out=25, in=155] edge node[above] {$f$} (GN)
+    (GN) [-{Latex[width=5]}, black, out=165, in=15] edge node[above] {} (ME)
+    
+    (MA) [-{Latex[width=5]}, black, out=35, in=145] edge node[above] {$f_A$} (GA)
+    (GA) [-{Latex[width=5]}, black, out=155, in=25] edge node[above] {} (MA)
+    
+    (MB) [-{Latex[width=5]}, black, out=35, in=145] edge node[above] {$f_B$} (GB)
+    (GB) [-{Latex[width=5]}, black, out=155, in=25] edge node[above] {} (MB)
+    
+    (MAB) [-{Latex[width=5]}, black, out=25, in=155] edge node[above] {$f_{A} \sqcup f_{B}$} (GAB)
+    (GAB) [-{Latex[width=5]}, black, out=165, in=15] edge node[above] {} (MAB)
+    ;
+    \end{tikzpicture}
+\end{frame}
+
+\note{
+	\begin{itemize}
+	    \item Explain how the steps will be repeated.
+	\end{itemize}
+}
+
+\newcommand\typeframe[3]{
+\begin{frame}{Step #3/6: Type level}
+    \vspace{-0.55cm}
+    \begin{columns}[c]
+        \begin{column}{0.06\textwidth}
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \includegraphics[width=0.66\textwidth]{images/05_application/type_model/step#1.pdf}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            +
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \includegraphics[width=0.66\textwidth]{images/05_application/type_model/step#2.pdf}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            =
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \includegraphics[width=0.66\textwidth]{images/05_application/type_model/step#3.pdf}
+        \end{column}
+    \end{columns}
+    \begin{columns}[c]
+        \begin{column}{0.06\textwidth}
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \rotatebox{90}{$\leftrightarrow$}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            $\sqcup$
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \rotatebox{90}{$\leftrightarrow$}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            =
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \rotatebox{90}{$\leftrightarrow$}
+        \end{column}
+    \end{columns} 
+    \begin{columns}[c]
+        \begin{column}{0.06\textwidth}
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \input{images/05_application/type_graph/step#1.tikz}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            +
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \input{images/05_application/type_graph/step#2.tikz}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            =
+        \end{column}\begin{column}{0.3\textwidth}
+            \centering
+            \input{images/05_application/type_graph/step#3.tikz}
+        \end{column}
+    \end{columns} 
+\end{frame}
+}
+
+\newcommand\instanceframe[3]{
+\begin{frame}{Step #3/6: Instance level}
+    \vspace{-0.55cm}
+    \begin{columns}[c]
+        \begin{column}{0.06\textwidth}
+        \end{column}\begin{column}{0.2\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/05_application/instance_model/step#1.pdf}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            +
+        \end{column}\begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/05_application/instance_model/step#2.pdf}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            =
+        \end{column}\begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/05_application/instance_model/step#3.pdf}
+        \end{column}
+    \end{columns}
+    \begin{columns}[c]
+        \begin{column}{0.06\textwidth}
+        \end{column}\begin{column}{0.2\textwidth}
+            \centering
+            \rotatebox{90}{$\leftrightarrow$}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            $\sqcup$
+        \end{column}\begin{column}{0.35\textwidth}
+            \centering
+            \rotatebox{90}{$\leftrightarrow$}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            =
+        \end{column}\begin{column}{0.35\textwidth}
+            \centering
+            \rotatebox{90}{$\leftrightarrow$}
+        \end{column}
+    \end{columns} 
+    \begin{columns}[c]
+        \begin{column}{0.06\textwidth}
+        \end{column}\begin{column}{0.2\textwidth}
+            \centering
+            \input{images/05_application/instance_graph/step#1_small.tikz}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            +
+        \end{column}\begin{column}{0.35\textwidth}
+            \centering
+            \input{images/05_application/instance_graph/step#2.tikz}
+        \end{column}\begin{column}{0.015\textwidth}
+            \centering
+            =
+        \end{column}\begin{column}{0.35\textwidth}
+            \centering
+            \input{images/05_application/instance_graph/step#3.tikz}
+        \end{column}
+    \end{columns} 
+\end{frame}
+}
+
+\typeframe{0}{0to1}{1}
+\instanceframe{0}{0to1}{1}
+
+\note{
+	\begin{itemize}
+	    \item Explain how we start with the empty model/graph.
+	    \item We add an simple type \textit{Contact}.
+	    \item On the instance level, all instances of \textit{Contact} are immediately instantiated.
+	\end{itemize}
+}
+
+\typeframe{1}{1to2}{2}
+\instanceframe{1}{1to2}{2}
+
+\note{
+	\begin{itemize}
+	    \item An contact is enriched with a name field.
+	    \item On the instance level, the field needs to be instantiated for all \textit{Contact}s within the same transformation step.
+	\end{itemize}
+}
+
+\typeframe{2}{2to3}{3}
+\instanceframe{2}{2to3}{3}
+
+\note{
+	\begin{itemize}
+	    \item Now add a type for \textit{Address}es.
+	    \item On the instance level, instantiate once more all instances of \textit{Address}.
+	\end{itemize}
+}
+
+\typeframe{3}{3to4}{4}
+\instanceframe{3}{3to4}{4}
+
+\note{
+	\begin{itemize}
+	    \item An \textit{Address} is enriched with an address line.
+	    \item Like the previous example, all \textit{Address} lines need to be instantiated directly.
+	\end{itemize}
+}
+
+\typeframe{4}{4to5}{5}
+\instanceframe{4}{4to5}{5}
+
+\note{
+	\begin{itemize}
+	    \item Repeat the previous step with a different field name to add a second field to \textit{Address}, which represented the postal code.
+	    \item Like the previous example, all \textit{Address} lines need to be instantiated directly.
+	\end{itemize}
+}
+
+\typeframe{5}{5to6}{6}
+\instanceframe{5}{5to6}{6}
+
+\note{
+	\begin{itemize}
+	    \item Finally, add a relation between \textit{Contact} and \textit{Address} by referencing the existing types and add a field relation between them.
+	    \item On the instance level, the relation needs to be instantiated directly.
+	\end{itemize}
+}

@@ -1,0 +1,17 @@
+\section{Instance level transformations}
+\label{sec:library_of_transformations:instance_level_transformations}
+
+The previous section has presented a set of model transformations between type models and type graphs. In this section, these transformations are used to define model transformations between instance model and instance graphs. Therefore, this section provides the second set of model transformations introduced within the introduction of this chapter. 
+
+Throughout this section, small transformations between instance models and instance graphs will be defined. In order for these transformations useful in the context of the transformation framework of \cref{chapter:transformation_framework}, some properties must hold for each of them. For each transformation, the corresponding instance model and instance graph must be valid in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity} and \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity} respectively. Furthermore, the instance model corresponding to the transformation must be compatible with its counterpart in the transformation framework. In the same way, the corresponding instance graph must be compatible with its counterpart in the transformation framework. Moreover, it will be shown that the transformation function $f$ that transforms the corresponding instance model into an instance graph is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. Finally, it will also be shown that the reverse transformation is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}.
+
+\input{tex/05_library_of_transformations/03_instance_level_transformations/01_plain_objects.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/02_abstact_classes.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/03_objects_of_subtype.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/04_enumeration_values.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/05_user_defined_data_types.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/06_data_field_values.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/07_enum_field_values.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/08_nullable_class_field_values.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/09_proper_class_sequence_field_values.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations/10_contained_class_set_field_values.tex}

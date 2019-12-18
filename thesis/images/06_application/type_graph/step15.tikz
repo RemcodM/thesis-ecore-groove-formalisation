@@ -1,0 +1,21 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=step15-]
+\node[type_node] (n0) at (0.740, -0.400) {\ml{\textbf{House}\\living\_room: \textbf{bool}\\name: \textbf{string}}};
+\node[type_node] (n1) at (0.730, -1.585) {\ml{\textbf{Room}\\room\_id: \textbf{string}}};
+\node[type_node] (n2) at (2.380, -0.560) {\ml{\textbf{RoomSize}\\\textit{LARGE}\\\textit{MEDIUM}\\\textit{SMALL}}};
+\node[type_node] (n3) at (2.500, -1.590) {\ml{\textbf{Tenant}\\age: \textbf{int}\\name: \textbf{string}}};
+\node[abstract_node] (n4) at (4.710, -0.980) {\ml{\textit{\textbf{TenantType}}}};
+\node[type_node] (n5) at (3.810, -0.320) {\ml{\textbf{TenantType\$REGULAR}}};
+\node[type_node] (n6) at (5.680, -0.320) {\ml{\textbf{TenantType\$SUBTENANT}}};
+
+\path[basic_edge, composite](n0.south -| 0.730, -1.585) -- node[lab] {\ml{rooms}} (n1) ;
+\path[basic_edge] (n1)  -- node[lab] {\ml{room\_size}} (n2) ;
+\path[basic_edge] (n3)  -- node[lab] {\ml{type}} (n4) ;
+\path[basic_edge](n1.east |- 2.500, -1.590) -- node[lab] {\ml{tenant}} (n3) ;
+\path[basic_edge] (n3)  -- (3.430, -2.140) --  (n3) 
+node[lab] at (3.430, -2.140) {\ml{subtenant}};
+\path[subtype_edge] (n6)  --  (n4) ;
+\path[subtype_edge] (n5)  --  (n4) ;
+\end{tikzpicture}

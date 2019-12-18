@@ -1,0 +1,327 @@
+%
+\begin{isabellebody}%
+\setisabellecontext{Multiplicity}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\isatagtheory
+\isacommand{theory}\isamarkupfalse%
+\ Multiplicity\isanewline
+\ \ \isakeyword{imports}\ Main\isanewline
+\isakeyword{begin}%
+\endisatagtheory
+{\isafoldtheory}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Linear order of natural numbers including unbounded%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+\isacommand{datatype}\isamarkupfalse%
+\ {\isasymM}\ {\isacharequal}\ Star\ {\isacharbar}\ Nr\ nat\isanewline
+\isanewline
+\isacommand{notation}\isamarkupfalse%
+\isanewline
+\ \ Star\ {\isacharparenleft}{\isachardoublequoteopen}{\isacharparenleft}\isactrlemph {\isacharparenright}{\isachardoublequoteclose}\ {\isadigit{1}}{\isadigit{0}}{\isadigit{0}}{\isadigit{0}}{\isacharparenright}\ \isakeyword{and}\isanewline
+\ \ Nr\ {\isacharparenleft}{\isachardoublequoteopen}{\isacharparenleft}\isactrlbold {\isacharunderscore}{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isadigit{0}}{\isadigit{0}}{\isacharbrackright}\ {\isadigit{1}}{\isadigit{0}}{\isadigit{0}}{\isadigit{0}}{\isacharparenright}\isanewline
+\isanewline
+\isacommand{instantiation}\isamarkupfalse%
+\ {\isasymM}\ {\isacharcolon}{\isacharcolon}\ linorder\isanewline
+\isakeyword{begin}\isanewline
+\isanewline
+\isacommand{fun}\isamarkupfalse%
+\ less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymRightarrow}\ {\isasymM}\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharunderscore}\ \isactrlemph \ {\isacharequal}\ True{\isachardoublequoteclose}\ {\isacharbar}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharparenleft}\isactrlbold a{\isacharparenright}\ {\isacharparenleft}\isactrlbold b{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}a\ {\isasymle}\ b{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbar}\ \isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharunderscore}\ {\isacharunderscore}\ {\isacharequal}\ False{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{fun}\isamarkupfalse%
+\ less{\isacharunderscore}{\isasymM}\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymRightarrow}\ {\isasymM}\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}{\isasymM}\ {\isacharparenleft}\isactrlbold {\isacharunderscore}{\isacharparenright}\ \isactrlemph \ {\isacharequal}\ True{\isachardoublequoteclose}\ {\isacharbar}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}{\isasymM}\ {\isacharparenleft}\isactrlbold a{\isacharparenright}\ {\isacharparenleft}\isactrlbold b{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}a\ {\isacharless}\ b{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbar}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}{\isasymM}\ {\isacharunderscore}\ {\isacharunderscore}\ {\isacharequal}\ False{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{instance}\isamarkupfalse%
+%
+\isadelimproof
+\ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ x\ y\ z\ {\isacharcolon}{\isacharcolon}\ {\isasymM}\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}x\ {\isacharless}\ y{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}x\ {\isasymle}\ y\ {\isasymand}\ {\isasymnot}\ y\ {\isasymle}\ x{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ auto\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ x{\isachardoublequoteclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ y\ {\isasymLongrightarrow}\ y\ {\isasymle}\ x\ {\isasymLongrightarrow}\ x\ {\isacharequal}\ y{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ y\ {\isasymLongrightarrow}\ y\ {\isasymle}\ z\ {\isasymLongrightarrow}\ x\ {\isasymle}\ z{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y\ z{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\isanewline
+\ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ y\ arbitrary{\isacharcolon}\ z{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ z{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ z{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ y\ {\isasymor}\ y\ {\isasymle}\ x{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ simp\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ auto\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+\isanewline
+\isanewline
+\isacommand{end}\isamarkupfalse%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Definition of multiplicity%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+\isacommand{type{\isacharunderscore}synonym}\isamarkupfalse%
+\ multiplicity\ {\isacharequal}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymtimes}\ {\isasymM}{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{definition}\isamarkupfalse%
+\ lower\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}multiplicity\ {\isasymRightarrow}\ {\isasymM}{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}lower\ m\ {\isasymequiv}\ fst\ m{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{declare}\isamarkupfalse%
+\ lower{\isacharunderscore}def{\isacharbrackleft}simp\ add{\isacharbrackright}\isanewline
+\isanewline
+\isacommand{definition}\isamarkupfalse%
+\ upper\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}multiplicity\ {\isasymRightarrow}\ {\isasymM}{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}upper\ m\ {\isasymequiv}\ snd\ m{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{declare}\isamarkupfalse%
+\ upper{\isacharunderscore}def{\isacharbrackleft}simp\ add{\isacharbrackright}\isanewline
+\isanewline
+\isacommand{locale}\isamarkupfalse%
+\ multiplicity\ {\isacharequal}\ \isakeyword{fixes}\ mult\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}multiplicity{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{assumes}\ lower{\isacharunderscore}bound{\isacharunderscore}valid{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}lower\ mult\ {\isasymnoteq}\ \isactrlemph {\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{assumes}\ upper{\isacharunderscore}bound{\isacharunderscore}valid{\isacharcolon}\ {\isachardoublequoteopen}upper\ mult\ {\isasymnoteq}\ \isactrlbold {\isadigit{0}}{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{assumes}\ properly{\isacharunderscore}bounded{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}lower\ mult\ {\isasymle}\ upper\ mult{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{context}\isamarkupfalse%
+\ multiplicity\isanewline
+\isakeyword{begin}\isanewline
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ upper{\isacharunderscore}bound{\isacharunderscore}valid{\isacharunderscore}alt{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}upper\ mult\ {\isasymge}\ \isactrlbold {\isadigit{1}}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{using}\isamarkupfalse%
+\ less{\isacharunderscore}{\isasymM}{\isachardot}elims\ not{\isacharunderscore}less\ upper{\isacharunderscore}bound{\isacharunderscore}valid\ \isacommand{by}\isamarkupfalse%
+\ fastforce%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{end}\isamarkupfalse%
+\isanewline
+\isanewline
+\isacommand{abbreviation}\isamarkupfalse%
+\ multiplicity{\isacharunderscore}notation\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymRightarrow}\ {\isasymM}\ {\isasymRightarrow}\ multiplicity{\isachardoublequoteclose}\ {\isacharparenleft}{\isachardoublequoteopen}{\isacharparenleft}{\isacharunderscore}{\isacharslash}{\isachardot}{\isachardot}{\isacharunderscore}{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbrackleft}{\isadigit{5}}{\isadigit{2}}{\isacharcomma}\ {\isadigit{5}}{\isadigit{2}}{\isacharbrackright}\ {\isadigit{5}}{\isadigit{1}}{\isacharparenright}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}l{\isachardot}{\isachardot}u\ {\isasymequiv}\ {\isacharparenleft}l{\isacharcomma}u{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{definition}\isamarkupfalse%
+\ within{\isacharunderscore}multiplicity\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}nat\ {\isasymRightarrow}\ multiplicity\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ {\isacharparenleft}\isakeyword{infixl}\ {\isachardoublequoteopen}in{\isachardoublequoteclose}\ {\isadigit{5}}{\isadigit{0}}{\isacharparenright}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}n\ in\ m\ {\isasymequiv}\ lower\ m\ {\isasymle}\ \isactrlbold n\ {\isasymand}\ \isactrlbold n\ {\isasymle}\ upper\ m{\isachardoublequoteclose}\isanewline
+\isanewline
+\isacommand{theorem}\isamarkupfalse%
+\ mult{\isacharunderscore}zero{\isacharunderscore}unbounded{\isacharunderscore}valid{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}n\ in\ \isactrlbold {\isadigit{0}}{\isachardot}{\isachardot}\isactrlemph {\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ within{\isacharunderscore}multiplicity{\isacharunderscore}def\isanewline
+\ \ \isacommand{by}\isamarkupfalse%
+\ simp%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{theorem}\isamarkupfalse%
+\ mult{\isacharunderscore}single{\isacharunderscore}value{\isacharunderscore}bound{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}n\ in\ \isactrlbold m{\isachardot}{\isachardot}\isactrlbold m\ {\isasymLongrightarrow}\ n\ {\isacharequal}\ m{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ within{\isacharunderscore}multiplicity{\isacharunderscore}def\isanewline
+\ \ \isacommand{by}\isamarkupfalse%
+\ auto%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+%
+\isadelimtheory
+\isanewline
+%
+\endisadelimtheory
+%
+\isatagtheory
+\isacommand{end}\isamarkupfalse%
+%
+\endisatagtheory
+{\isafoldtheory}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\end{isabellebody}%
+\endinput

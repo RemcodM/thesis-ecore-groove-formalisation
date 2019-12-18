@@ -1,0 +1,10 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=1.2,every node/.style={scale=0.6},name prefix=step5-]
+\node[basic_node] (n0) at (1.185, -0.245) {\ml{\uline{\textit{Jane}} : \textbf{Contact}\\name = "Jane Doe"}};
+\node[basic_node] (n3) at (3.225, -0.245) {\ml{\uline{\textit{John}} : \textbf{Contact}\\name = "John Doe"}};
+\node[basic_node] (n4) at (1.185, -1.235) {\ml{\uline{\textit{Addr1}} : \textbf{Address}\\line = "Some Str. 55"\\postcode = "4084LH"}};
+\node[basic_node] (n5) at (3.225, -1.235) {\ml{\uline{\textit{Addr2}} : \textbf{Address}\\line = "Another Str. 1"\\postcode = "4088LH"}};
+
+\end{tikzpicture}

@@ -1,0 +1,38 @@
+\section{GROOVE}
+\label{sec:background:groove}
+
+GROOVE \cite{groove} is an open source tool which uses graphs for modelling object-oriented software and for performing verification on these graphs. GROOVE is based on graph theory and makes uses the concept of graph grammars to relate the different kind of graphs. The graphs created within a graph grammar can be further analysed using LTL and CTL properties to verify if specific properties hold on the specified graphs. When the graphs represent the design-time, compile-time, or run-time structure of a software system, the results of this analysis can be used to verify which properties hold for the software system.
+
+GROOVE defines multiple graph types, including (but not limited to) \textit{type graphs}, \textit{instance graphs} and \textit{rule graphs}. These different graph types are used to achieve the grammar structure. Type graphs define the structure of instance graphs and rule graphs, while rule graphs describe a translation rule of an instance graph to another instance graph while maintaining the structure enforced by the type graph.
+
+GROOVE is specially created for verification of software and uses proven techniques from logic and graph theory to verify properties on the graphs created within the tool. Although GROOVE provides excellent tools for performing verification on its graphs, there are no tools to achieve other goals, such as code generation.
+
+This thesis will focus solely on type graphs and instance graphs. Although rule graphs might be useful in the context of model transformations and their formalisations, they are out of the scope of this thesis.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/01_introduction/type_graph_intro.tikz}
+        \caption{Type graph}
+        \label{fig:introduction:groove:type_graph}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/01_introduction/instance_graph_intro.tikz}
+        \caption{Instance graph}
+        \label{fig:introduction:groove:instance_graph}
+    \end{subfigure}
+    \caption{Examples of different graphs in GROOVE}
+    \label{fig:introduction:groove:graphs}
+\end{figure}
+
+\subsection{Type graphs}
+\label{subsec:introduction:groove:type_graphs}
+As explained before, a type graph defines the structure of instance graphs and rule graphs. It is a graph type which supports concepts as inheritance, abstractness of nodes and multiplicities of edges. \cref{fig:introduction:groove:type_graph} shows the visual notation of a type graph in GROOVE its own notation. It consists of 4 nodes types, $\type{A}$, $\type{B}$, $\type{X}$ and $\type{Y}$, with 2 relations. The first relation is the $\type{xs}$ relation between $\type{A}$ and $\type{X}$ and the second relation is the $\type{ys}$ relation between $\type{A}$ and $\type{Y}$. Finally, we also see the concept of inheritance, with a subtype relation between node type $\type{B}$ and $\type{A}$.
+
+\subsection{Instance graphs}
+\label{subsec:introduction:groove:instance_graphs}
+An instance graph is a graph that describes actual instances of the types defined by a type graph. The description of these instances consists of the instance itself, optional identifiers and the relation to other instances. \cref{fig:introduction:groove:instance_graph} shows the visual notation of an instance graph in GROOVE its own notation. This instance graph is based on the type graph of \cref{fig:introduction:groove:type_graph} and shows one instance of every type. The $\type{A}$-typed instance has a relation of type $\type{xs}$ to the $\type{X}$-typed instance. Furthermore, it has a relation of type $\type{ys}$ to the $\type{Y}$-typed instance. Finally, the $\type{B}$-typed instance also has a relation of type $\type{ys}$ to the same $\type{Y}$-typed instance.
+
+It should also be noted that the $\type{X}$-typed and $\type{Y}$-typed instances have identifiers. For the $\type{X}$-typed instance, this identifier is $theFirst$, while for the $\type{Y}$-typed instance, the identifier is $theSecond$.

@@ -1,0 +1,252 @@
+\subsection{Instance graphs}
+\label{subsec:formalisations:groove_formalisation:instance_graphs}
+Before giving a formal definition of instance graphs, the set $Node$ for a grammar needs to be defined. $Node$ is the set of possible nodes that can be part of an instance graph.
+
+\begin{defin}[Node]
+\label{defin:formalisations:groove_formalisation:instance_graphs:node}
+We define a set $Node$ containing all possible instance nodes. $Node$ can be subdivided into two disjoint and covering sets
+\begin{itemize}
+    \item $Node_t$ is the set of typed nodes for every label in $Lab_t$
+    \item $Node_v$ is the set of typed nodes for every label in $Lab_{prim}$
+\end{itemize}
+
+By definition, there exists a mapping for each element in $Node_t$ to an element in $Lab_t$ and a mapping for each element in $Node_v$ to $Lab_{prim}$. We call the mapping $\mathrm{nodeType}$:
+\begin{equation*}
+    \mathrm{nodeType}: (Node_t \Rightarrow Lab_t) \cup (Node_v \Rightarrow Lab_{prim})
+\end{equation*}
+
+Furthermore, the set $Node_v$ can also be mapped to actual data values in GROOVE by the function $value$.
+\begin{equation*}
+    \mathrm{value}: Node_v \bij \mathbb{B} \cup \mathbb{Z} \cup \mathbb{R} \cup \mathbb{S}
+\end{equation*}
+
+\isabellelref{Node}{GROOVE.Instance_Graph}
+\end{defin}
+
+Besides the set of nodes, GROOVE also has a set $Id$, which is a set of identifiers that can be used to assign each node a unique identifier.
+
+\begin{defin}[Identifiers]
+\label{defin:formalisations:groove_formalisation:instance_graphs:identifiers}
+Define a global set $Id$ which consists of unique identifiers.
+\end{defin}
+
+With these definitions, it is possible to define an instance graph in GROOVE.
+
+\begin{defin}[Instance graph]
+\label{defin:formalisations:groove_formalisation:instance_graphs:instance_graph}
+An instance graph corresponding to a type graph $TG$ is modeled as tuple $IG$:
+\begin{equation}
+    IG = \langle N, E, ident \rangle
+\end{equation}
+where
+\begin{itemize}
+    \item $N \subseteq Node_t \cup Node_v$ is the set of nodes in the instance graph.
+    
+    \item $E \subseteq N \times ET_{TG} \times N$ is the set of edges in the instance graph. They consist of a source and target node from $N$ and are typed by an edge from the corresponding type graph.
+    
+    \item $ident: Id \Rightarrow (N \cap Node_t)$ is a partial injective function which maps selected identifiers from the set $Id$ to a node from $N$ typed by a label in $Lab_t$.
+\end{itemize}
+
+\isabellelref{instance_graph}{GROOVE.Instance_Graph}
+\end{defin}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/instance_graph_example.tikz}
+        \caption{Instance graph in GROOVEs visual notation}
+    \end{subfigure}
+    
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{align*}
+            N_{IG} =\ & \{ 
+                house,
+                payintervalmonth,
+                renter1,
+                renter2,
+                room1,
+                room2,
+                room3,\\&
+                1,
+                2,
+                3,
+                23,
+                24,
+                \text{``J.A.''},
+                \text{``M.S.''},
+                \text{``Small House''}
+            \}\\
+            type_n =\ & \big\{
+                ( house, \type{House} ),
+                ( payintervalmonth, \type{PaymentInterval\$MONTH} ),\\&
+                ( renter1, \type{Renter} ),
+                ( renter2, \type{Renter} ),
+                ( room1, \type{Room} ),
+                ( room2, \type{Room} ),
+                ( room3, \type{Room} ),\\&
+                ( 1, \type{int} ),
+                ( 2, \type{int} ),
+                ( 3, \type{int} ),
+                ( 23, \type{int} ),
+                ( 24, \type{int} ),
+                ( \text{``J.A.''}, \type{string} ),
+                ( \text{``M.S.''}, \type{string} ),
+                ( \text{``Small House''}, \type{string} )
+            \big\}\\
+            E_{IG} =\ & \big\{ 
+                \big( house, ( \type{House}, \type{name}, \type{string} ), \text{``Small House''} \big),
+                \big( house, ( \type{House}, \type{rooms}, \type{Room} ), room1 \big),\\&
+                \big( house, ( \type{House}, \type{rooms}, \type{Room} ), room2 \big),
+                \big( house, ( \type{House}, \type{rooms}, \type{Room} ), room3 \big),\\&
+                \big( renter1, ( \type{Person}, \type{age}, \type{int} ), 24 \big),
+                \big( renter2, ( \type{Person}, \type{age}, \type{int} ), 23 \big),\\&
+                \big( renter1, ( \type{Person}, \type{name}, \type{string} ), \text{``J.A.''} \big),
+                \big( renter2, ( \type{Person}, \type{name}, \type{string} ), \text{``M.S.''} \big),\\&
+                \big( renter1, ( \type{Renter}, \type{payment\_interval}, \type{PaymentInterval} ), payintervalmonth \big),\\&
+                \big( renter2, ( \type{Renter}, \type{payment\_interval}, \type{PaymentInterval} ), payintervalmonth \big),\\&
+                \big( renter1, ( \type{Renter}, \type{rents}, \type{Room} ), room1 \big),
+                \big( renter1, ( \type{Renter}, \type{rents}, \type{Room} ), room2 \big),\\&
+                \big( renter2, ( \type{Renter}, \type{rents}, \type{Room} ), room3 \big),
+                \big( room1, ( \type{Room}, \type{number}, \type{int} ), 1 \big),\\&
+                \big( room2, ( \type{Room}, \type{number}, \type{int} ), 2 \big),
+                \big( room3, ( \type{Room}, \type{number}, \type{int} ), 3 \big),\\&
+                \big( room1, ( \type{Room}, \type{renter}, \type{Renter} ), renter1 \big),
+                \big( room2, ( \type{Room}, \type{renter}, \type{Renter} ), renter1 \big),\\&
+                \big( room3, ( \type{Room}, \type{renter}, \type{Renter} ), renter2 \big)
+            \big\}\\
+            ident_{IG} =\ & \{ 
+                ( \text{TwoRem}, house ),
+                ( \text{Renter1}, renter1 ),
+                ( \text{Renter2}, renter2 ),\\&
+                ( \text{Longhorn}, room1 ),
+                ( \text{Shorthorn}, room2 ),
+                ( \text{onghornLay}, room3 )
+            \}
+        \end{align*}
+        \caption{Formal definition of the instance graph}
+    \end{subfigure}
+    \caption{Example of an instance graph corresponding with \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph}}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:instance_graph_example}
+\end{figure}
+
+An example of an instance graph is given in \cref{fig:formalisations:groove_formalisation:instance_graphs:instance_graph_example}. This instance graph is typed by the type graph in the example in \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}. As we can see, there is one node typed $\type{House}$, three nodes typed $\type{Room}$ and two nodes typed $\type{Renter}$. The node typed $\type{House}$ is identified by identifier `TwoRem' and is named ``Small House'' and contains all the three room nodes. The first two nodes that are typed room $\type{Room}$ have identifiers `Longhorn' and `Shorthorn' and are rented by the first $\type{Renter}$ identified as `Renter1', as is visible from the $\type{rents}$ and $\type{renter}$ edges. The last node typed $\type{Room}$ has identifier `onghornLay' and is rented by the second $\type{Renter}$ identified as `Renter2'. Please note how the instance graph only has one instance of $\type{PaymentInterval\$MONTH}$ which is reused by both $\type{Renter}$ nodes. Also, notice how there is no instance of $\type{PaymentInterval\$QUARTER}$ since there is no $\type{Renter}$ referencing it. Also notice how the $\type{Renter}$ typed objects now have an $\type{age}$ and $\type{name}$ edge, which are inherited from the $\type{Person}$ node type.
+
+As we have seen in the example, all nodes and edges in the instance graph are typed based on the types defined in its type graph. We define two functions for mapping nodes and edges to their type in the type graph. The nodes in the instance graph can be mapped to their type in the type graph using the function $\mathrm{type}_n$, while edges in the instance graph can be mapped to their type in the type graph using the function $\mathrm{type}_e$.
+
+\begin{defin}[Types]
+\label{defin:formalisations:groove_formalisation:instance_graphs:types}
+The type of a node in the instance graph can be determined using $\mathrm{type}_n$
+\begin{equation*}
+    \mathrm{type}_n: N_{IG} \Rightarrow Lab_t \cup Lab_{prim}
+\end{equation*}
+for which holds that $\forall n \in N_{IG}: \mathrm{type}_n(n) = nodeType(n)$.
+
+The type of an edge in the instance graph can be determined using $\mathrm{type}_e$
+\begin{equation*}
+    \mathrm{type}_e: E_{IG} \Rightarrow ET_{TG}
+\end{equation*}
+for which holds that $\forall e = (src, etype, tgt) \in E_{IG}: \mathrm{type}_e(e) = etype$
+\end{defin}
+
+Since instance graphs are typed by a corresponding type graph, the type graph imposes some constraints on the instance graph to ensure that the instance graph is valid. If any of these constraints are violated, the instance graph is considered invalid.
+
+\begin{defin}[Instance graph validity]
+\label{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}
+An instance graph is valid if the following constraints hold:
+\begin{enumerate}
+    \item The nodes must be properly typed: $\forall n \in N_{IG}\!: \mathrm{type}_n(n) \in NT_{TG}$.
+    \item The source of each edge must be properly typed: $\forall e \in E_{IG}\!: \mathrm{type}_n \big(\mathrm{src}(e)\big) \sqsubseteq_{TG} \mathrm{src} \big(\mathrm{type}_e(e)\big)$.
+    \item The target of each edge must be properly typed: $\forall e \in E_{IG}\!: \mathrm{type}_n \big(\mathrm{tgt}(e)\big) \sqsubseteq_{TG} \mathrm{tgt} \big(\mathrm{type}_e(e)\big)$.
+    \item Abstract types cannot have instances: $\forall n \in N_{IG}\!: \mathrm{type}_n(n) \not\in abs_{TG}$.
+    \item The outgoing multiplicity of each edge type must be adhered to: $\forall et \in ET_{TG}\!: \forall n \in N_{IG}\!: \mathrm{type}_n(n) \sqsubseteq_{TG} \mathrm{src}(et) \Longrightarrow |\{e \in E_{IG} \mid \mathrm{src}(e) = n \land \mathrm{type}_e(e) = et\}| \in \mathrm{out}(\mathrm{mult}_{TG}(et))$.
+    \item The incoming multiplicity of each edge type must be adhered to: $\forall et \in ET_{TG}\!: \forall n \in N_{IG}\!: \mathrm{type}_n(n) \sqsubseteq_{TG} \mathrm{tgt}(et) \Longrightarrow |\{e \in E_{IG} \mid \mathrm{tgt}(e) = n \land \mathrm{type}_e(e) = et\}| \in \mathrm{in}(\mathrm{mult}_{TG}(et))$.
+    \item Nodes must be contained by at most one other node: $\forall n \in N_{IG}\!: |\{e \in E_{IG} \mid \mathrm{tgt}(e) = n\,\land\,\mathrm{type}_e(e) \in contains_{TG}\}| \leq 1$.
+    \item There may be no cycle between the containment edges in $E_{IG}$.
+\end{enumerate}
+
+\isabellelref{instance_graph}{GROOVE.Instance_Graph}
+\end{defin}
+
+\begin{figure}[p]
+    \centering
+    \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop1_violated.tikz}
+    \caption{Invalid instance graph with improper node types}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:property_1_violated}
+\end{figure}
+
+The first property just ensures that all nodes in an instance graph are typed by the corresponding type graph. \cref{fig:formalisations:groove_formalisation:instance_graphs:property_1_violated} shows an example of an invalid instance graph typed by the type graph of \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}. The instance graph is invalid, since the type $\type{Kitchen}$ is not defined within the type graph. Changing the type of this node to $\type{Room}$ would make the instance graph valid.
+
+\begin{figure}[p]
+    \centering
+    \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop3_violated.tikz}
+    \caption{Invalid instance graph with improper type for the target of edge $number$}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:property_3_violated}
+\end{figure}
+
+The second and third property ensure that the source and target nodes of edges are correctly typed. \cref{fig:formalisations:groove_formalisation:instance_graphs:property_3_violated} shows an example of an invalid instance graph typed by the type graph of \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}. In this example, the $\type{Room}$-typed node has a $\type{number}$ edge connected to a boolean value. Since the target type of the $( \type{Room}, \type{number}, \type{int} )$ is an integer, the third property is violated. Therefore, the instance graph is invalid. Changing the boolean node to any integer node would make the example valid.
+
+\begin{figure}[p]
+    \centering
+    \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop4_violated.tikz}
+    \caption{Invalid instance graph with node of type $\type{Person}$}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:property_4_violated}
+\end{figure}
+
+The fourth property ensures that an instance graph cannot instantiate abstract node types. \cref{fig:formalisations:groove_formalisation:instance_graphs:property_4_violated} shows an example of an invalid instance graph typed by the type graph of \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}. In the example, the only node in the graph is typed by the $\type{Person}$ type. However, the $\type{Person}$ type is abstract within the type graph. Therefore, the fourth property is violated, and the instance graph is invalid. Changing the type of the node to $\type{Renter}$ would make the instance graph valid.
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop5_violated.tikz}
+        \caption{Outgoing multiplicity violated}
+        \label{fig:formalisations:groove_formalisation:instance_graphs:property_5_violated}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop6_violated.tikz}
+        \caption{Incoming multiplicity violated}
+        \label{fig:formalisations:groove_formalisation:instance_graphs:property_6_violated}
+    \end{subfigure}
+    \caption{Invalid instance graphs with their multiplicity constraints violated}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:properties_56_violated}
+\end{figure}
+
+The fifth and sixth property ensure the correctness of multiplicities within an instance graph. The fifth property ensures that the outgoing multiplicity is not violated. The sixth property ensures that the incoming multiplicity is not violated. \cref{fig:formalisations:groove_formalisation:instance_graphs:properties_56_violated} shows two instance graphs that are once more typed by type graph \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example} but are both invalid. \cref{fig:formalisations:groove_formalisation:instance_graphs:property_5_violated} violates the fifth property, since the node typed by type $\type{House}$ needs to have at least one outgoing edge labelled $\type{rooms}$ to a node of type $\type{Room}$. \cref{fig:formalisations:groove_formalisation:instance_graphs:property_6_violated} violates the sixth property, since the node typed by type $\type{Room}$ needs to have at least one incoming edge labelled $\type{rooms}$ from a node of type $\type{House}$. Merging these two instance graphs and adding an edge labelled $\type{rooms}$ from the $\type{House}$-typed node to the $\type{Room}$-typed node would result in a valid instance graph.
+
+\begin{figure}[p]
+    \centering
+    \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop7_violated.tikz}
+    \caption{Invalid instance graph with multiple containments for the $\type{Room}$-typed node}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:property_7_violated}
+\end{figure}
+
+The seventh property ensures that nodes can only be contained by one other node. \cref{fig:formalisations:groove_formalisation:instance_graphs:property_7_violated} shows an example of an instance graph that is typed by type graph \cref{fig:formalisations:groove_formalisation:type_graphs:type_graph_example}, but for this example we assume that $\type{Hotel}$ is a defined type similar to $\type{House}$, with the same outgoing edge types and properties. In this case, the incoming multiplicity property (the sixth property) will not be violated, as $( \type{House}, \type{rooms}, \type{Room} )$ and $( \type{Hotel}, \type{rooms}, \type{Room} )$ are different edge types with their own incoming multiplicity. However, the example is still invalid. $( \type{House}, \type{rooms}, \type{Room} )$ and $( \type{Hotel}, \type{rooms}, \type{Room} )$ are both containment edges, which means that the $\type{Room}$-typed node now has 2 incoming containment edges. The seventh property prohibits this, and therefore the example is invalid.
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop8_violated_type_graph.tikz}
+        \caption{Type graph}
+        \label{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated:type_graph}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop8_violated_instance_correct.tikz}
+        \caption{Correct use: No cycles}
+        \label{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated:correct_instance_graph}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/03_formalisations/03_groove_formalisation/instance_graph_prop8_violated_instance_incorrect.tikz}
+        \caption{Incorrect use: Cycle present}
+        \label{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated:invalid_instance_graph}
+    \end{subfigure}
+    \caption{Example of correct and incorrect use of containment edges}
+    \label{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated}
+\end{figure}
+
+The eighth and final property ensures that there are no cycles in the containment edges of an instance graph. Consider the instance graph shown in \cref{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated:correct_instance_graph} with is typed by type graph \cref{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated:type_graph}. This instance graph is valid, as there is no cycle in the containment edges. However, the instance graph shown in \cref{fig:formalisations:groove_formalisation:instance_graphs:property_8_violated:invalid_instance_graph} is invalid, because it has a cycle in the containment edges. This violates the eighth property and is therefore invalid.

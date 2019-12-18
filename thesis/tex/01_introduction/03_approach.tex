@@ -1,0 +1,10 @@
+\section{Approach and composability}
+\label{sec:introduction:approach}
+
+As explained in the previous sections, this thesis will provide a formalisation for the model transformations between Ecore and GROOVE and also prove the correctness of the transformations. Although this a noble goal, it comes with many complexities.
+
+First of all, Ecore and GROOVE both have a very different nature. Ecore is mostly based on a subset of UML, as discussed in \cref{sec:background:eclipse_modeling_framework}. On the other hand, GROOVE is based around graph grammars and therefore mathematical graph theory. As a consequence, the set of features is very different. Ecore has elements that are not directly expressable in GROOVE and vice versa. When providing the formalisation for the transformations, the different features within both languages should be taken into account.
+
+Furthermore, Ecore and GROOVE have a lot of different elements within their models and grammars. When transforming these models and grammars, all these elements need to be transformed. Transforming all these elements at once is a very complex problem, as these different elements can be used in infinitely many combinations, each requiring a different transformation. Not only must the formalisation be able to express all these different combinations, but each of these combinations must also be proven correct.
+
+In order to overcome the problems that are raised by these complexities, the divide and conquer-principle will be applied. This thesis will provide a framework in which model transformations and their proofs can be composed out of smaller transformations and their proofs. This composability allows for proving only small parts of the problem, which then can be composed to express the countless combinations of model transformations.

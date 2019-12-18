@@ -1,0 +1,210 @@
+\subsection{Combining transformation functions}
+\label{subsec:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions}
+
+The previous sections discussed the combination of instance models and instance graphs. In this section, the combination of transformation functions between instance models and instance graphs is discussed. This combination is the last key element shown in \cref{fig:transformation_framework:instance_models_and_instance_graphs:structure_instance_models_graphs}. If it is possible to combine $f_A$ and $f_B$ into $f_{A} \sqcup f_{B}$, then it is possible to build transformation functions between instance models and instance graphs iteratively.
+
+Before it is possible to define a definition for the combination of two transformation functions, it is essential to define what functions are considered to be transformation functions.
+
+\begin{defin}[Transformation function from an instance model to an instance graph]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}
+Let $f$ be a function from instance models to instance graphs, $Im$ be an instance model and $IG$ the corresponding instance graph. $f$ is a transformation function iff:
+\begin{itemize}
+    \item $f$ projects $Im$ onto $IG$: $f(Im) = IG$;
+    \item After combination with another instance model, $f$ preserves the type graph;
+    \item After combination with another instance model, $f$ preserves the nodes:\\$\forall Im_x\!: N_{f(Im)} \subseteq N_{f(\mathrm{combine}(Im, Im_x))}$;
+    \item After combination with another instance model, $f$ preserves the edges:\\$\forall Im_x\!: E_{f(Im)} \subseteq E_{f(\mathrm{combine}(Im, Im_x))}$;
+    \item For all identities in the projected instance graph, $f$ preserves the value of the identity if the instance model is combined with another instance model:\\$\forall Im_x\!: \forall i \in \mathrm{dom}\ \mathrm{ident}_{f(Tm)}\!: \mathrm{ident}_{f(Im)}(i) = \mathrm{ident}_{f(\mathrm{combine}(Im, Im_x))}(i)$.
+\end{itemize}
+\isabellelref{ig_combine_mapping_function}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+As expected, a transformation must project some instance model $Im$ to its corresponding instance graph $IG$. Furthermore, it has to preserve properties of the projection, even after $Im$ is combined with some other instance model. The rationale behind these properties is that after combining $Im$ with some other instance model, there must still be a way to transform the elements that originated from $Im$. If that is possible, it is possible to use the transformation function as the basis for the combined transformation function, which can transform the combined instance model to a combined instance graph.
+
+The following definition will describe how two transformation functions from instance models to instance graphs can be combined into a new transformation function, which projects the combination of two instance models onto the combination of the two corresponding instance graphs.
+
+\begin{defin}[Combination of transformation functions from an instance model to an instance graph]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_model_instance_graph}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. $f_A$ projects an instance model $Im_A$ onto instance graph $IG_A$. $f_B$ projects an instance model $Im_B$ onto instance graph $IG_B$. Then the combination of $f_A$ and $f_B$ is defined as:
+\begin{align*}
+f_{A} \sqcup f_{B}(Im) =\ &\langle&
+N =\ &\{n \mid n \in N_{f_{A}(Im)} \land n \in N_{IG_A} \} \cup \{n \mid n \in N_{f_{B}(Im)} \land n \in N_{IG_B} \} \\&&
+E =\ &\{e \mid e \in E_{f_{A}(Im)} \land e \in E_{IG_A} \} \cup \{e \mid e \in E_{f_{B}(Im)} \land e \in E_{IG_B} \} \\&&
+\mathrm{ident} =\ &\mathrm{ident\_\!mapping}(f_A, IG_A, f_B, IG_B, Im)
+\rangle
+\end{align*}
+In which $\mathrm{ident\_\!mapping}$ is given as part of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:ident_mapping}
+\isabellelref{ig_combine_mapping}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+Like the combination of transformations functions from a type model to a type graph, the combination of transformations functions from an instance model to an instance graph follows the combination of instance graphs closely. The definition is an alternation of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine}. As shown for type models and type graphs, this is the desired behaviour, as the combination of the transformation functions should be able to transform the combination of two instance models to the combination of the two corresponding instance graphs.
+
+Unsurprisingly, the definition of the identity function of $f_{A} \sqcup f_{B}$ is very similar to \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ident_combine}.
+
+\begin{defin}[Combination of the identity function for two transformation functions]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:ident_mapping}
+$\mathrm{ident\_\!mapping}(f_A, IG_A, f_B, IG_B, Im)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $IG_A$ and $IG_B$ and an instance model $Im$ which returns a new function \\$Id \Rightarrow (N_{f_{A} \sqcup f_{B}(Im)} \cap Node_t)$. It is defined as follows:
+\begin{multline*}
+    \mathrm{ident\_\!combine}(f_A, IG_A, f_B, IG_B, Im, i) = \\
+    \begin{cases}
+        \mathrm{ident}_{f_A(Im)}(i) & \mathrm{if }\ i \in \{i \mid i \in \mathrm{dom}\ \mathrm{ident}_{f_{A}(Im)} \land i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \}\ \cap\\&\quad \{i \mid i \in \mathrm{dom}\ \mathrm{ident}_{f_{A}(Im)} \land i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \} \land \mathrm{ident}_{f_A(Im)}(i) = \mathrm{ident}_{IG_B}(i) \\
+        \mathrm{ident}_{f_A(Im)}(i) & \mathrm{if }\ i \in \{i \mid i \in \mathrm{dom}\ \mathrm{ident}_{f_{A}(Im)} \land i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \}\ \setminus\\&\quad\{i \mid i \in \mathrm{dom}\ \mathrm{ident}_{f_{A}(Im)} \land i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \} \\
+        \mathrm{ident}_{f_B(Im)}(i) & \mathrm{if }\ i \in \{i \mid i \in \mathrm{dom}\ \mathrm{ident}_{f_{A}(Im)} \land i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \}\ \setminus\\&\quad\{i \mid i \in \mathrm{dom}\ \mathrm{ident}_{f_{A}(Im)} \land i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \}
+    \end{cases}
+\end{multline*}
+\end{defin}
+
+With these definitions in place, it is possible to provide the necessary theorems for the correctness of the combined function $f_{A} \sqcup f_{B}$.
+
+\begin{thm}[The projection of a combined transformation function from an instance model to an instance graph]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:ig_combine_mapping_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. $f_A$ projects an instance model $Im_A$ onto instance graph $IG_A$. $f_B$ projects an instance model $Im_B$ onto instance graph $IG_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ projects $\mathrm{combine}(Im_A, Im_B)$ onto $\mathrm{combine}(IG_A, IG_B)$, so:
+\begin{equation*}
+    f_{A} \sqcup f_{B}(\mathrm{combine}(Im_A, Im_B)) = \mathrm{combine}(IG_A, IG_B)
+\end{equation*}
+\isabellelref{ig_combine_mapping_correct}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+The corresponding proof follows directly from \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_model_instance_graph} as well as \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their instance graphs when the instance model is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ is equal to the definition of $\mathrm{combine}(IG_A, IG_B)$. Therefore, $f_{A} \sqcup f_{B}(\mathrm{combine}(Im_A, Im_B)) = \mathrm{combine}(IG_A, IG_B)$.
+\end{proof}
+
+Although the presented theorem is a large step towards being able to build transformation functions from instance models to instance graphs iteratively, there is still one key element missing. It should be formally argued that $f_{A} \sqcup f_{B}$ is once again an transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. If this is formally argued, it becomes possible to easily combine $f_{A} \sqcup f_{B}$ with yet another transformation function. The following theorem states this property.
+
+\begin{thm}[A combined transformation function from an instance model to an instance graph is a transformation function]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:ig_combine_mapping_function_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. $f_A$ projects an instance model $Im_A$ onto instance graph $IG_A$. $f_B$ projects an instance model $Im_B$ onto instance graph $IG_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ is again a transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} which projects $\mathrm{combine}(Im_A, Im_B)$ onto $\mathrm{combine}(IG_A, IG_B)$.
+\isabellelref{ig_combine_mapping_function_correct}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their instance graphs when the instance model is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ will also preserve these elements. This can be shown using the commutativity and associativity of the combination of instance models, see \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_commute} and \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_assoc} respectively.
+\end{proof}
+
+This last theorem completes the recursive behaviour of combining transformation functions and therefore allows for building transformation functions from instance models to instance graphs iteratively.
+
+The definitions and theorems that are presented so far only work in one direction: for transforming instance models into instance graphs. As visually shown in \cref{fig:transformation_framework:instance_models_and_instance_graphs:structure_instance_models_graphs}, it must also be possible to transform instance graphs back into instance models. The definitions and theorems needed for this transformation are similar and will be presented in the remaining part of this section.
+
+\begin{defin}[Transformation function from an instance graph to an instance model]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}
+Let $f$ be a function from instance graphs to instance models, $IG$ be an instance graph and $Im$ the corresponding instance model. $f$ is a transformation function iff:
+\begin{itemize}
+    \item $f$ projects $IG$ onto $Im$: $f(IG) = Im$;
+    \item After combination with another instance graph, $f$ preserves the type model;
+    \item After combination with another instance graph, $f$ preserves the objects:\\$\forall IG_x\!: Object_{f(IG)} \subseteq Object_{f(\mathrm{combine}(IG, IG_x))}$;
+    \item For all objects in the projected instance model, $f$ preserves the object class if the instance graph is combined with another instance graph:\\$\forall IG_x\!: \forall o \in Object_{f(IG)}\!: \mathrm{ObjectClass}_{f(IG)}(o) = \mathrm{ObjectClass}_{f(\mathrm{combine}(IG, IG_x))}(o)$;
+    \item For all objects in the projected instance model, $f$ preserves the object identifier if the instance graph is combined with another instance graph:\\$\forall IG_x\!: \forall o \in Object_{f(IG)}\!: \mathrm{ObjectId}_{f(IG)}(o) = \mathrm{ObjectId}_{f(\mathrm{combine}(IG, IG_x))}(o)$;
+    \item For all objects in the projected instance model and all fields in the type model corresponding to the projected instance model, $f$ preserves the field value if the instance graph is combined with another instance graph:\\$\forall IG_x\!: \forall o \in Object_{f(IG)}\!: \forall d \in Field_{Tm_{f(IG)}}\!:$\\$ \mathrm{FieldValue}_{f(IG)}(( o, d )) = \mathrm{FieldValue}_{f(\mathrm{combine}(IG, IG_x))}(( o, d ))$;
+    \item For all constants in the type model corresponding to the projected instance model, $f$ preserves the default value if the instance graph is combined with another instance graph:\\$\forall IG_x\!: \forall c \in Constant_{Tm_{f(IG)}}\!: \mathrm{DefaultValue}_{f(IG)}(c) = \mathrm{DefaultValue}_{f(\mathrm{combine}(IG, IG_x))}(c)$;
+\end{itemize}
+\isabellelref{imod_combine_mapping_function}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+Just like \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph}, the definition of transformation functions from an instance graph to an instance model preserves all elements if the instance graph is combined with another instance graph. This will once more be the key to having the property of iterative building of transformation functions.
+
+The following definition will describe how two transformation functions from instance graphs to instance models can be combined into a new transformation function, which projects the combination of two instance graphs onto the combination of the two corresponding instance models.
+
+\begin{defin}[Combination of transformation functions from an instance graph to an instance model]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_graph_instance_model}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}. $f_A$ projects an instance graph $IG_A$ onto instance model $Im_A$. $f_B$ projects an instance graph $IG_B$ onto instance model $Im_B$. Then the combination of $f_A$ and $f_B$ is defined as:
+\begin{align*}
+f_{A} \sqcup f_{B}(IG) =\ &\langle&
+Object =\ &\{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \cup\\&&&
+\{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \} \\&&
+\mathrm{ObjectClass} =\ &\mathrm{objectclass\_\!mapping}(f_A, Im_A, f_B, Im_B, IG) \\&&
+\mathrm{ObjectId} =\ &\mathrm{objectid\_\!mapping}(f_A, Im_A, f_B, Im_B, IG) \\&&
+\mathrm{FieldValue} =\ &\mathrm{fieldvalue\_\!mapping}(f_A, Im_A, f_B, Im_B, IG) \\&&
+\mathrm{ConstType} =\ &\mathrm{consttype\_\!mapping}(f_A, Im_A, f_B, Im_B, IG) \\&
+\rangle
+\end{align*}
+In which $\mathrm{objectclass\_\!mapping}$ is given as part of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:objectclass_mapping}, $\mathrm{objectid\_\!mapping}$ as part of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:objectid_mapping}, $\mathrm{fieldvalue\_\!mapping}$ as part of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:fieldvalue_mapping} and $\mathrm{defaultvalue\_\!mapping}$ as part of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:defaultvalue_mapping}.
+\isabellelref{imod_combine_mapping}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+As expected, the definition for the combination of transformation functions from an instance graph to an instance model is an alternation of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:combine}. This alternation will once more allow the combined transformation function to project the combination of the instance graphs to the combination of the corresponding instance models.
+
+The following four definitions will provide the remaining functions, which will closely follow their counterparts from \cref{subsec:transformation_framework:instance_models_and_instance_graphs:combining_instance_models}.
+
+\begin{defin}[Combination of the object class function for two transformation functions]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:objectclass_mapping}
+$\mathrm{objectclass\_\!mapping}(f_A, Im_A, f_B, Im_B, IG)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $Im_A$ and $Im_B$ and an instance model $IG$ which returns a new function $Object_{f_{A} \sqcup f_{B}(IG)} \Rightarrow Class_{Tm_{f_{A} \sqcup f_{B}(IG)}}$. It is defined as follows:
+\begin{multline*}
+    \mathrm{objectclass\_\!mapping}(f_A, Im_A, f_B, Im_B, IG, o) = \\
+    \begin{cases}
+        \mathrm{ObjectClass}_{f_{A}(IG)}(o) & \mathrm{if }\ o \in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \cap \\&\qquad\{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \land \\&\quad \mathrm{ObjectClass}_{f_{A}(IG)}(o) = \mathrm{ObjectClass}_{f_{B}(IG)}(o) \\
+        \mathrm{ObjectClass}_{f_{A}(IG)}(o) & \mathrm{if }\ o \in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \setminus \\&\qquad\{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \} \\
+        \mathrm{ObjectClass}_{f_{B}(IG)}(o) & \mathrm{if }\ o \in \{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \setminus \\&\qquad\{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}
+    \end{cases}
+\end{multline*}
+\isabellelref{imod_combine_object_class_mapping}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+\begin{defin}[Combination of the object identifier function for two transformation functions]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:objectid_mapping}
+$\mathrm{objectid\_\!mapping}(f_A, Im_A, f_B, Im_B, IG)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $Im_A$ and $Im_B$ and an instance model $IG$ which returns a new function $Object_{f_{A} \sqcup f_{B}(IG)} \Rightarrow Name$. It is defined as follows:
+\begin{multline*}
+    \mathrm{objectid\_\!mapping}(f_A, Im_A, f_B, Im_B, IG, o) = \\
+    \begin{cases}
+        \mathrm{ObjectId}_{f_{A}(IG)}(o) & \mathrm{if }\ o \in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \cap \\&\qquad\{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \land \\&\quad \mathrm{ObjectId}_{f_{A}(IG)}(o) = \mathrm{ObjectId}_{f_{B}(IG)}(o) \\
+        \mathrm{ObjectId}_{f_{A}(IG)}(o) & \mathrm{if }\ o \in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \setminus \\&\qquad\{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \} \\
+        \mathrm{ObjectId}_{f_{B}(IG)}(o) & \mathrm{if }\ o \in \{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \setminus \\&\qquad\{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}
+    \end{cases}
+\end{multline*}
+\isabellelref{imod_combine_object_id_mapping}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+\begin{defin}[Combination of the default value function for two transformation functions]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:defaultvalue_mapping}
+$\mathrm{defaultvalue\_\!mapping}(f_A, Im_A, f_B, Im_B, IG)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $Im_A$ and $Im_B$ and an instance model $IG$ which returns a new function $Constant_{Tm_{f_{A} \sqcup f_{B}(IG)}} \Rightarrow Value_{f_{A} \sqcup f_{B}(IG)}$. It is defined as follows:
+\begin{multline*}
+    \mathrm{defaultvalue\_\!mapping}(f_A, Im_A, f_B, Im_B, IG, c) = \\
+    \begin{cases}
+        \mathrm{DefaultValue}_{f_{A}(IG)}(c) & \mathrm{if }\ c \in \{c \mid c \in Constant_{Tm_{f_{A}(IG)}} \land c \in Constant_{Tm_A} \}\ \cap \\&\qquad \{c \mid c \in Constant_{Tm_{f_{B}(IG)}} \land c \in Constant_{Tm_B} \}\ \land\\&\quad \mathrm{DefaultValue}_{f_{A}(IG)}(c) = \mathrm{DefaultValue}_{f_{B}(IG)}(c) \\
+        \mathrm{DefaultValue}_{f_{A}(IG)}(c) & \mathrm{if }\ c \in \{c \mid c \in Constant_{Tm_{f_{A}(IG)}} \land c \in Constant_{Tm_A} \}\ \setminus \\&\qquad \{c \mid c \in Constant_{Tm_{f_{B}(IG)}} \land c \in Constant_{Tm_B} \} \\
+        \mathrm{DefaultValue}_{f_{B}(IG)}(c) & \mathrm{if }\ c \in \{c \mid c \in Constant_{Tm_{f_{B}(IG)}} \land c \in Constant_{Tm_B} \}\ \setminus \\&\qquad \{c \mid c \in Constant_{Tm_{f_{A}(IG)}} \land c \in Constant_{Tm_A} \}
+    \end{cases}
+\end{multline*}
+\isabellelref{imod_combine_default_value_mapping}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+\begin{defin}[Combination of the field value function for two transformation functions]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:fieldvalue_mapping}
+$\mathrm{fieldvalue\_\!mapping}(f_A, Im_A, f_B, Im_B, IG)$ is a partial function on two transformation functions $f_A$ and $f_B$, their corresponding projections $Im_A$ and $Im_B$ and an instance model $IG$ which returns a new function $(Object_{f_{A} \sqcup f_{B}(IG)} \times Field_{Tm_{f_{A} \sqcup f_{B}(IG)}}) \Rightarrow Value_{f_{A} \sqcup f_{B}(IG)}$. It is defined as follows:
+\begin{multline*}
+    \mathrm{fieldvalue\_\!mapping}(f_A, Im_A, f_B, Im_B, IG, ( o, d )) = \\
+    \begin{cases}
+        \mathrm{FieldValue}_{f_{A}(IG)}(( o, d )) & \mathrm{if}\ o \in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \cap \\&\qquad\{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \land\\&\quad d \in \{d \mid d \in \mathrm{fields}_{Tm_{f_{A}(IG)}}(\mathrm{ObjectClass}_{f_{A}(IG)}(o))\ \land \\&\qquad\quad d \in \mathrm{fields}_{Tm_A}(\mathrm{ObjectClass}_{f_{A}(IG)}(o)) \}\ \land\\&\quad d \in \{d \mid d \in \mathrm{fields}_{Tm_{f_{B}(IG)}}(\mathrm{ObjectClass}_{f_{B}(IG)}(o))\ \land \\&\qquad\quad d \in \mathrm{fields}_{Tm_B}(\mathrm{ObjectClass}_{f_{B}(IG)}(o)) \}\ \land\\&\quad \mathrm{FieldValue}_{f_{A}(IG)}(( o, d )) = \mathrm{FieldValue}_{f_{B}(IG)}(( o, d )) \\
+        \mathrm{FieldValue}_{f_{A}(IG)}(( o, d )) & \mathrm{if}\ o \in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \land \\&\quad d \in \{d \mid d \in \mathrm{fields}_{Tm_{f_{A}(IG)}}(\mathrm{ObjectClass}_{f_{A}(IG)}(o))\ \land \\&\qquad\quad d \in \mathrm{fields}_{Tm_A}(\mathrm{ObjectClass}_{f_{A}(IG)}(o)) \}\ \land\\&\quad (o \not\in \{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \lor \\&\quad d \not\in \{d \mid d \in \mathrm{fields}_{Tm_{f_{B}(IG)}}(\mathrm{ObjectClass}_{f_{B}(IG)}(o))\ \land \\&\qquad\quad d \in \mathrm{fields}_{Tm_B}(\mathrm{ObjectClass}_{f_{B}(IG)}(o)) \} \\
+        \mathrm{FieldValue}_{f_{B}(IG)}(( o, d )) & \mathrm{if}\ o \in \{o \mid o \in Object_{f_{B}(IG)} \land o \in Object_{Im_B} \}\ \land \\&\quad d \in \{d \mid d \in \mathrm{fields}_{Tm_{f_{B}(IG)}}(\mathrm{ObjectClass}_{f_{B}(IG)}(o))\ \land \\&\qquad\quad d \in \mathrm{fields}_{Tm_B}(\mathrm{ObjectClass}_{f_{B}(IG)}(o)) \}\ \land\\&\quad (o \not\in \{o \mid o \in Object_{f_{A}(IG)} \land o \in Object_{Im_A} \}\ \lor \\&\quad d \not\in \{d \mid d \in \mathrm{fields}_{Tm_{f_{A}(IG)}}(\mathrm{ObjectClass}_{f_{A}(IG)}(o))\ \land \\&\qquad\quad d \in \mathrm{fields}_{Tm_A}(\mathrm{ObjectClass}_{f_{A}(IG)}(o)) \}
+    \end{cases}
+\end{multline*}
+\isabellelref{imod_combine_field_value_mapping}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{defin}
+
+The definitions of most of these combination functions are straightforward. Only the $\mathrm{fieldvalue\_\!mapping}$ seems significantly more complicated. However, a careful ready will still be able to see that the definition is an alternation of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:fieldvalue_combine}. The definition seems more complicated because of the combination of objects and fields in the domain of the function.
+
+With these definitions in place, it is possible to provide the necessary theorems for the correctness of the combined function $f_{A} \sqcup f_{B}$.
+
+\begin{thm}[The projection of a combined transformation function from an instance graph to an instance model]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:imod_combine_mapping_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}. $f_A$ projects an instance graph $IG_A$ onto instance model $Im_A$. $f_B$ projects an instance model $IG_B$ onto instance graph $Im_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ projects $\mathrm{combine}(IG_A, IG_B)$ onto $\mathrm{combine}(Im_A, Im_B)$, so:
+\begin{equation*}
+    f_{A} \sqcup f_{B}(\mathrm{combine}(IG_A, IG_B)) = \mathrm{combine}(Im_A, Im_B)
+\end{equation*}
+\isabellelref{imod_combine_mapping_correct}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+The corresponding proof follows directly from \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:combination_transformation_function_instance_graph_instance_model} as well as \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their instance models when the instance graph is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ is equal to the definition of $\mathrm{combine}(Im_A, Im_B)$. Therefore, $f_{A} \sqcup f_{B}(\mathrm{combine}(IG_A, IG_B)) = \mathrm{combine}(Im_A, Im_B)$.
+\end{proof}
+
+Like the combined transformation function from instance models to instance graphs, the combined transformation function from instance graphs to instance models is also a transformation function, but in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}. This is stated in the following theorem.
+
+\begin{thm}[A combined transformation function from an instance graph to an instance model is a transformation function]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:imod_combine_mapping_function_correct}
+Let $f_A$ and $f_B$ be a transformation functions in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}. $f_A$ projects an instance graph $IG_A$ onto instance model $Im_A$. $f_B$ projects an instance graph $IG_B$ onto instance model $Im_B$. Then the combination of $f_A$ and $f_B$, $f_{A} \sqcup f_{B}$ is again a transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} which projects $\mathrm{combine}(IG_A, IG_B)$ onto $\mathrm{combine}(Im_A, Im_B)$.
+\isabellelref{imod_combine_mapping_function_correct}{Ecore-GROOVE-Mapping.Instance_Model_Graph_Mapping}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model}. Since the individual transformation functions $f_A$ and $f_B$ preserve the elements of their instance models when the instance graph is combined with another one, we can establish that the definition of $f_{A} \sqcup f_{B}$ will also preserve these elements. This can be shown using the commutativity and associativity of the combination of instance graphs, see \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_commute} and \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_assoc} respectively.
+\end{proof}

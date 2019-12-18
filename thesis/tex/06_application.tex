@@ -1,0 +1,9 @@
+\chapter{Application}
+\label{chapter:application}
+
+This chapter will provide the necessary steps to apply the work presented in this thesis. So far, the thesis has introduced formalisations of Ecore and GROOVE, discussed in \cref{sec:formalisations:ecore_formalisation} and \cref{sec:formalisations:groove_formalisation} respectively. Furthermore, an transformation framework for reasoning about composable model transformations has been introduced as part of \cref{chapter:transformation_framework}. Finally, the previous chapter introduced some small transformations that represent the `building blocks' to use within the framework. In this chapter, the transformation framework is applied by building an example model from scratch, showing the necessary steps to apply the framework. Building the model will be done using the `building blocks' of the library of transformations. Furthermore, each of the steps is described formally using the formalisations presented earlier.
+
+Contrary to the previous chapters, no distinction will be made between the type level and instance level. This distinction is unneeded because the different levels are ultimately tied to each other. When building an instance model or instance graph iteratively, a corresponding type model or type graph is build as well. Therefore, within this chapter, an instance model will be built. For each step in building the instance model, the corresponding step on the level of a type model will be discussed as well. Therefore, the steps for building both models are presented in a mixed fashion.
+
+\input{tex/06_application/01_the_model.tex}
+\input{tex/06_application/02_building_the_model.tex}

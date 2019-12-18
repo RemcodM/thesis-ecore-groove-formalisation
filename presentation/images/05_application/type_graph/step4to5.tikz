@@ -1,0 +1,7 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=1.4,every node/.style={scale=0.7},name prefix=step4to5-]
+\node[type_node] (n1) at (1.440, -1.765) {\ml{\textbf{Address}\\postcode: \textbf{string}}};
+
+\end{tikzpicture}

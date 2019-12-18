@@ -1,0 +1,40 @@
+\subsection{Definitions}
+\label{subsec:formalisations:groove_formalisation:definitions}
+This section discusses some definitions specific to the GROOVE formalisation. The definitions need to be in place before the formalisations of the different GROOVE graphs are given.
+
+GROOVE internally uses a set of labels $Lab$ for each defined grammar. These labels are used by multiple graph types of GROOVE, including (but not limited to) type graphs and instance graphs.
+
+\begin{defin}[Labels]
+\label{defin:formalisations:groove_formalisation:definitions:labels}
+$Lab$ is the set of labels used by GROOVE graphs. It can be subdivided into three sets:
+\begin{itemize}
+    \item The set of type labels $Lab_t \subseteq Lab$
+    \item The set of edge labels $Lab_e \subseteq Lab$
+    \item The set of flag labels $Lab_f \subseteq Lab$
+\end{itemize}
+
+The intersection of each of the sets $Lab_t$, $Lab_f$ and $Lab_e$ has to be empty:
+\begin{equation*}
+    Lab_t \cap Lab_f = \emptyset \land Lab_t \cap Lab_e = \emptyset \land Lab_f \cap Lab_e = \emptyset
+\end{equation*}
+
+\isabellelref{Lab}{GROOVE.Type_Graph}
+\end{defin}
+
+The set $Lab_t$ will be used to denote the types of nodes in the graph, while the $Lab_e$ set will be used to distinguish between different edges. The $Lab_f$ set are labels for particular kind of edges which always have an identical source and target node. These are used as flags on nodes to indicate that a specific property holds for a node.
+
+Although the intersection of each of the sets $Lab_t$, $Lab_f$ and $Lab_e$ has to be empty, the sets do not necessarily form a partition of $Lab$, as one or more of the subsets can be empty. Furthermore, $Lab$ itself can be empty if the GROOVE grammar does not define any types, flags or edge labels.
+
+Besides $Lab$ that belongs to a grammar, GROOVE uses a set of reserved primitive type labels $Lab_{prim}$ that can never be part of the label set of a grammar.
+
+\begin{defin}[Primitive type labels]
+\label{defin:formalisations:groove_formalisation:definitions:primitive_type_labels}
+GROOVE has a set of reserved primitive type labels $Lab_{prim}$:
+\begin{equation*}
+    Lab_{prim} = \{ \type{bool}, \type{int}, \type{real}, \type{string} \}
+\end{equation*}
+
+It should hold that $Lab \cap Lab_{prim} = \emptyset$ since the primitive type labels are reserved.
+\end{defin}
+
+The primitive type labels allow the use of primitive types as attributes and values. The label $\type{bool}$ represents the type for boolean values $\mathbb{B}$, $\type{int}$ represents the type for integer values $\mathbb{Z}$, $\type{real}$ represents the type for real numbers $\mathbb{R}$ and finally $\type{string}$ represents the type for string values $\mathbb{S}$.

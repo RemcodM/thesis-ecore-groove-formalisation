@@ -1,0 +1,13 @@
+\addtocontents{toc}{\protect\pagebreak}
+\chapter{Library of transformations}
+\label{chapter:library_of_transformations}
+
+The previous chapter introduced a framework to reason about composable model transformations formally. This framework does allow one to create models from scratch by iteratively adding different elements. Although the previous chapter did introduce the needed definitions and theorems to explain this framework, it did not discuss how to apply the framework in practice. In order to apply the framework, the framework needs two essential ingredients. First of all, the framework needs a set of proven model transformations that can be used to build models iteratively. Finally, these proven model transformations must be applied within the framework to create some larger model.
+
+In this chapter, a set of small model transformations between GROOVE and Ecore is introduced. These model transformations can be used within the framework as `building blocks', which are used to create larger models. The goal of this chapter is to show possible model transformations that can be applied with the framework from the previous chapter, in order to validate the framework using an application of these transformations. Therefore, the set of model transformations presented in this chapter will be non-exhaustive. It will only include transformations that are necessary for the application, as well as some transformations that show the potential of the framework.
+
+This chapter is split into two parts. Within the first part, a set of model transformations between type models and type graphs is introduced. This set is used within the second part, where a set of model transformations between instance models and instance graphs is introduced. However, before any of these sets is discussed, some definitions used throughout this chapter are introduced.
+
+\input{tex/05_library_of_transformations/01_definitions.tex}
+\input{tex/05_library_of_transformations/02_type_level_transformations.tex}
+\input{tex/05_library_of_transformations/03_instance_level_transformations.tex}

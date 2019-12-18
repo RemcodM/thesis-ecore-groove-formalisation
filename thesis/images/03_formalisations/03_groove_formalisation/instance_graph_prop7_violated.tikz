@@ -1,0 +1,11 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=invalid7-]
+\node[basic_node] (n0) at (1.000, -1.465) {\ml{\textbf{Room}\\number = 1}};
+\node[basic_node] (n1) at (1.020, -0.435) {\ml{\textbf{House}\\name = "Other house"}};
+\node[basic_node] (n4) at (2.940, -0.430) {\ml{\textbf{Hotel}\\name = "Some fancy Hotel"}};
+
+\path[basic_edge](n1.south -| 1.000, -1.465) -- node[lab] {\ml{rooms}} (n0) ;
+\path[basic_edge] (n4)  -- node[lab] {\ml{rooms}} (n0) ;
+\end{tikzpicture}

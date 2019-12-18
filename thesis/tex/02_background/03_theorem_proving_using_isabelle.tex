@@ -1,0 +1,371 @@
+\section{Theorem proving using Isabelle}
+\label{sec:background:theorem_proving_using_isabelle}
+
+As mentioned before in \cref{sec:introduction:validation} all formal proofs within this paper are verified within a theorem prover, sometimes also called a proof assistant. A theorem prover is a software solution to assist with the task of proving mathematical theorems. It achieves this goal by using automated reasoning and mathematical logic to provide the user with information on the correctness of the written proof. Furthermore, a theorem prover might have tools to prove simple theorems automatically.
+
+In this thesis, the Isabelle proof assistant is used to prove the relevant theorems. Isabelle was chosen as theorem prover for several reasons:
+\begin{itemize}
+    \item Isabelle stays close to mathematical definitions while still maintaining much automation in the process, which is different from other theorem provers. A comparison of theorem provers has shown that most other theorem provers which stay close to the mathematical definition do not have much automation, and vice versa \cite{wiedijk_comparing-provers}.
+    \item Isabelle provides a plug-in to jEdit, a text editor, which deeply integrated Isabelle into the jEdit editor. This integration allows for interactively creating theories and checking proofs without the need to use the command-line application for this purpose.
+    \item Isabelle has its own proof language Isar, which makes proofs more readable to the human reader, without giving up on automation and functionality for delivering proofs.
+    \item One of the supervisors of this thesis has experience with Isabelle, meaning that there is local expertise available in case of problems.
+\end{itemize}
+
+The remaining part of this section will discuss different parts of Isabelle and its proof language Isar, to provide some background on theorem proofing in Isabelle.
+
+\subsection{About Isabelle}
+\label{subsec:background:theorem_proving_using_isabelle:about_isabelle}
+Isabelle \cite{isabelle_2019} is a generic theorem prover written in \textsc{ML}. It was originally developed at the University of Cambridge and Technische Universität München, but now includes numerous contributions from institutions and individuals worldwide. It has been designed to be able to support reasoning in several object-logics, which include but are not limited to:
+\begin{itemize}
+    \item first-order logic, constructive and classical versions (Isabelle/FOL)
+    \item higher-order logic (Isabelle/HOL)
+    \item Zermelo-Fraenkel set theory (Isabelle/ZF)
+\end{itemize}
+Isabelle is distributed for free under a mix of open-source licenses, but the main code-base is subject to BSD-style regulations. More specifically, the binary distributions of Isabelle come with the 3-Clause BSD License \cite{bsd3clause}.
+
+Isabelle has quite a large user base and a well-maintained community. Besides a mailing list for users, there is also a wiki \cite{isabelle_wiki} and active support on StackOverflow, when questions are tagged under `isabelle' \cite{isabelle_stack_overflow}.
+
+The first release of Isabelle is published in 1986. Nowadays, it receives yearly releases with new updates. At the time of writing, Isabelle 2019 is the newest release, which is also the release used to prove the theorems in this thesis.
+
+\subsection{Basics}
+\label{subsec:background:theorem_proving_using_isabelle:basics}
+This section will discuss some basics on Isabelle that are relevant for this thesis. The constructs mentioned here will not be discussed in much detail, as that would be a thesis on its own. The documentation provided with Isabelle does a decent job explaining all constructs in as much detail as possible.
+
+\subsubsection{Theories}
+Each document in Isabelle is a \textit{theory}, which can define a set of definitions, theorems and proofs. A theory can import other theories in order to reuse its definitions, theorems and proofs. An example of a theory is given in \cref{appendix:example_isabelle_theory}. This theory is the actual formalisation of \cref{defin:formalisations:global_definitions:multiplicity} in Isabelle used for this thesis. It will be used as an example throughout the remaining parts of this section.
+
+\subsubsection{Datatypes}
+Within an Isabelle theory, it is possible to define inductive datatypes. Inductive datatypes are the most used way to define new types in Isabelle. Famous data structures, such as lists, can be defined using datatypes.
+
+The example provided in \cref{appendix:example_isabelle_theory} defines a new datatype for the set $\mathbb{N} \cup {\mstar}$. The definition is specified within the theory as:
+\vspace{1em}\begin{isabellebody}
+\isacommand{datatype}\isamarkupfalse%
+\ {\isasymM}\ {\isacharequal}\ Star\ {\isacharbar}\ Nr\ nat\isanewline
+\end{isabellebody}
+
+This example defines a datatype called \isasymM{}, which can have two values: $Star$ and $Nr$. $Star$ and $Nr$ are called datatype constructors and can get arguments of different types. For example, the $Nr$ value gets an additional type, $nat$, which is Isabelle's type for representing natural numbers. On the other hand, the $Star$ constructor gets no additional arguments and is just a value for \isasymM{} on itself.
+
+The formalisation achieved here should be straightforward. $Star$ is used to denote $\mstar$, the unbounded value, while $Nr\ nat$ is used to denote a bounded value for a multiplicity.
+
+\subsubsection{Record types}
+Another way of defining new types within Isabelle is by using record types. A record can be defined using the \textbf{record} keyword. The concept of a record is borrowed from programming languages, but it provides a way to define a named \textit{n}-tuple. Effectively, a record type is a type consisting of multiple named fields that can each have a different type. Each field of a record can be accessed using its name.
+
+Within this thesis, records are actively used to introduce types for type models, type graphs, instance models and instance graphs. These are all named-tuples which are easiest defined using records. Sadly, the example provided in \cref{appendix:example_isabelle_theory} does not define such a record, therefore, we provide the record of an instance model (\cref{defin:formalisations:ecore_formalisation:instance_models:instance_model}) here:
+
+\vspace{1em}\begin{isabellebody}
+\isacommand{record}\isamarkupfalse%
+\ {\isacharparenleft}{\isacharprime}o{\isacharcomma}\ {\isacharprime}nt{\isacharparenright}\ instance{\isacharunderscore}model\ {\isacharequal}\isanewline
+\ \ Tm\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharparenleft}{\isacharprime}nt{\isacharparenright}\ type{\isacharunderscore}model{\isachardoublequoteclose}\isanewline
+\ \ Object\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharprime}o\ set{\isachardoublequoteclose}\isanewline
+\ \ ObjectClass\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharprime}o\ {\isasymRightarrow}\ {\isacharprime}nt\ Id{\isachardoublequoteclose}\isanewline
+\ \ ObjectId\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharprime}o\ {\isasymRightarrow}\ {\isacharprime}nt{\isachardoublequoteclose}\isanewline
+\ \ FieldValue\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharparenleft}{\isacharprime}o\ {\isasymtimes}\ {\isacharparenleft}{\isacharprime}nt\ Id\ {\isasymtimes}\ {\isacharprime}nt{\isacharparenright}{\isacharparenright}\ {\isasymRightarrow}\ {\isacharparenleft}{\isacharprime}o{\isacharcomma}\ {\isacharprime}nt{\isacharparenright}\ ValueDef{\isachardoublequoteclose}\isanewline
+\ \ DefaultValue\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharprime}nt\ Id\ {\isasymRightarrow}\ {\isacharparenleft}{\isacharprime}o{\isacharcomma}\ {\isacharprime}nt{\isacharparenright}\ ValueDef{\isachardoublequoteclose}%
+\end{isabellebody}
+
+The record of an instance model directly shows the structure. It has 6 named fields, the corresponding type model and the 5 elements defined in \cref{defin:formalisations:ecore_formalisation:instance_models:instance_model}. Each of these fields has a corresponding type, corresponding to the type described within the definition of an instance model. This way, we have a direct formalisation of an instance graph in Isabelle.
+
+\subsubsection{Type synonyms}
+Isabelle can form new types out of existing types by using generic types. For example, \textit{list}s in Isabelle use this functionality. A list was created using a generic type that can be replaced with any concrete type on usage. For example `$nat\ list$' would represent a list of natural numbers, and `\isasymM$\ list$' a list of elements of datatype \isasymM.
+
+To make it more convenient to use these types, it is possible to define these composed types as a type synonym. An example of such a type synonym is given in \cref{appendix:example_isabelle_theory}:
+
+\vspace{1em}\begin{isabellebody}
+\isacommand{type{\isacharunderscore}synonym}\isamarkupfalse%
+\ multiplicity\ {\isacharequal}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymtimes}\ {\isasymM}{\isachardoublequoteclose}
+\end{isabellebody}
+
+This type synonym defines the multiplicity type, effectively the formalisation of $\mathbb{M}$ from \cref{defin:formalisations:global_definitions:multiplicity}. It is a tuple of two elements of datatype \isasymM, thus a tuple $\mathbb{N} \cup \{\mstar\} \times \mathbb{N} \cup \{\mstar\}$. Using this type synonym, it is now possible to refer to the multiplicity type as `multiplicity'.
+
+\subsubsection{Definitions and functions}
+In an Isabelle theory, multiple definitions can be provided. The most basic definition can be created using the \textbf{definition} keyword. Effectively, a \textbf{definition} is simply an abbreviation, i.e. a new name for an existing construction.
+
+An example of such a definition is the $upper$ definition in \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isacommand{definition}\isamarkupfalse%
+\ upper\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}multiplicity\ {\isasymRightarrow}\ {\isasymM}{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}upper\ m\ {\isasymequiv}\ snd\ m{\isachardoublequoteclose}
+\end{isabellebody}
+
+As can be seen, the upper definition receives one argument $m$ of type `multiplicity', a multiplicity-tuple. It returns the upper bound of the multiplicity. In other words, it returns the second element of the tuple. This behaviour matches what the definition tells us, as $snd$ is the Isabelle function to return the second element of a tuple.
+
+Besides the \textbf{definition} keyword, it is possible to give recursive function definitions using the \textbf{fun} and \textbf{function} keywords. An example of this is given as part of the linear order of \isasymM{} in \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isacommand{fun}\isamarkupfalse%
+\ less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymRightarrow}\ {\isasymM}\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharunderscore}\ \isactrlemph \ {\isacharequal}\ True{\isachardoublequoteclose}\ {\isacharbar}\isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharparenleft}\isactrlbold a{\isacharparenright}\ {\isacharparenleft}\isactrlbold b{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}a\ {\isasymle}\ b{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbar}\ \isanewline
+{\isachardoublequoteopen}less{\isacharunderscore}eq{\isacharunderscore}{\isasymM}\ {\isacharunderscore}\ {\isacharunderscore}\ {\isacharequal}\ False{\isachardoublequoteclose}
+\end{isabellebody}
+
+The function defined here, `less-eq-\isasymM', defines the less than or equal to ($\leq$) relation for \isasymM. Effectively, the function describes that any value is always smaller or equal to $\mstar$ and that two numbers (two instances of $Nr$) are only less or equal when the first number is less or equal to the second number.
+
+The same function could also have been defined using the \textbf{function} keyword, with the only difference that for the \textbf{function} keyword, a proof for termination of the function must be provided manually. Using the \textbf{fun} keyword, Isabelle will try to automatically proof termination of the function by using the specification. This automation is very powerful and works in a variety of functions (in fact, for all functions defined in this thesis, termination is proven automatically using \textbf{fun}).
+
+\subsubsection{Abbreviations and notation}
+As can be seen from the `less-eq-\isasymM' function in \cref{appendix:example_isabelle_theory}, the $Nr$ and $Star$ constructors for \isasymM{} are not used directly. Instead, numbers and a star symbol (\isactrlemph) are used to respectively represent a value of $Nr$ and the $Star$ constructor. The use of these symbols has been achieved using the \textbf{notation} keyword:
+\vspace{1em}\begin{isabellebody}
+\isacommand{notation}\isamarkupfalse%
+\isanewline
+\ \ Star\ {\isacharparenleft}{\isachardoublequoteopen}{\isacharparenleft}\isactrlemph {\isacharparenright}{\isachardoublequoteclose}\ {\isadigit{1}}{\isadigit{0}}{\isadigit{0}}{\isadigit{0}}{\isacharparenright}\ \isakeyword{and}\isanewline
+\ \ Nr\ {\isacharparenleft}{\isachardoublequoteopen}{\isacharparenleft}\isactrlbold {\isacharunderscore}{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isadigit{0}}{\isadigit{0}}{\isacharbrackright}\ {\isadigit{1}}{\isadigit{0}}{\isadigit{0}}{\isadigit{0}}{\isacharparenright}
+\end{isabellebody}
+
+The notation keyword allows us to introduce a new notation for many different constructs, in this case, the $Star$ and $Nr$ constructors of \isasymM. Custom notations are very powerful, as Isabelle automatically rewrites $Star$ and $Nr$ constructors back to this notation, so introducing this notation works in two ways. It can help to make theorems and proofs more readable, as can also be seen from the example in \cref{appendix:example_isabelle_theory}.
+
+Besides the introduction of an alternative notation for existing constructs, it is also possible to introduce a new notation with the corresponding definition of what the notation means. Such a notation is achieved using the \textbf{abbreviation} keyword. It has the same properties as the \textbf{notation} keyword, but then for a newly defined definition. An example of this is given in \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isacommand{abbreviation}\isamarkupfalse%
+\ multiplicity{\isacharunderscore}notation\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymM}\ {\isasymRightarrow}\ {\isasymM}\ {\isasymRightarrow}\ multiplicity{\isachardoublequoteclose}\ {\isacharparenleft}{\isachardoublequoteopen}{\isacharparenleft}{\isacharunderscore}{\isacharslash}{\isachardot}{\isachardot}{\isacharunderscore}{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbrackleft}{\isadigit{5}}{\isadigit{2}}{\isacharcomma}\ {\isadigit{5}}{\isadigit{2}}{\isacharbrackright}\ {\isadigit{5}}{\isadigit{1}}{\isacharparenright}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}l{\isachardot}{\isachardot}u\ {\isasymequiv}\ {\isacharparenleft}l{\isacharcomma}u{\isacharparenright}{\isachardoublequoteclose}
+\end{isabellebody}
+
+This example introduces a new notation for writing down a multiplicity tuple. It does so by writing the newly introduced notation on the left-hand side and writing the corresponding definition on the right-hand side. Although an \textbf{abbreviation} looks the same as a \textbf{definition}, they are different in the sense that \textbf{abbreviation} only introduces a notation. To Isabelle, it is syntactic sugar, as internally, the notation does not exist. It is only used when representing constructs to the user. This behaviour is different from \textbf{definition}, as definitions exist internally and are used by the proof reasoners.
+
+It should be noted that there are shortcuts possible to introduce notations while defining a definition. An example of this is the `within{\isacharunderscore}multiplicity' definition in \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isacommand{definition}\isamarkupfalse%
+\ within{\isacharunderscore}multiplicity\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}nat\ {\isasymRightarrow}\ multiplicity\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ {\isacharparenleft}\isakeyword{infixl}\ {\isachardoublequoteopen}in{\isachardoublequoteclose}\ {\isadigit{5}}{\isadigit{0}}{\isacharparenright}\ \isakeyword{where}\isanewline
+\ \ {\isachardoublequoteopen}n\ in\ m\ {\isasymequiv}\ lower\ m\ {\isasymle}\ \isactrlbold n\ {\isasymand}\ \isactrlbold n\ {\isasymle}\ upper\ m{\isachardoublequoteclose}\isanewline
+\end{isabellebody}
+
+This function uses the infix-left (\textbf{infixl}) construction to define an infix notation for the definition. Just like the \textbf{abbreviation} command, it is possible to use this definition on the left-hand side of the definition, for readability.
+
+\subsubsection{Locales}
+When defining new types, there is no way to constrain the values for any of its elements. For example, for the `multiplicity' type, there is no way to prevent the second value of the tuple to be 0, since the natural numbers include 0. In Isabelle, functions and types are always total, and there is no way to exclude specific values of a type.
+
+A way to work around this is by using \textbf{locale}s. Locales are Isabelle's approach for dealing with parametric theories. With locales, it is possible to define a context in which specific assumptions hold. An example of a locale is given in \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isacommand{locale}\isamarkupfalse%
+\ multiplicity\ {\isacharequal}\ \isakeyword{fixes}\ mult\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}multiplicity{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{assumes}\ lower{\isacharunderscore}bound{\isacharunderscore}valid{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}lower\ mult\ {\isasymnoteq}\ \isactrlemph {\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{assumes}\ upper{\isacharunderscore}bound{\isacharunderscore}valid{\isacharcolon}\ {\isachardoublequoteopen}upper\ mult\ {\isasymnoteq}\ \isactrlbold {\isadigit{0}}{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{assumes}\ properly{\isacharunderscore}bounded{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}lower\ mult\ {\isasymle}\ upper\ mult{\isachardoublequoteclose}
+\end{isabellebody}
+
+This example introduces the multiplicity locale. Within this locale, we introduce a named-construct `mult', which is a multiplicity. Then we make some assumptions which hold in the context of a multiplicity. In this case,  there are three assumptions. First of all, there are assumptions on the lower and upper bound, excluding specific (but invalid) values. The final assumption captures that the lower bound is always smaller or equal to the upper bound.
+
+With this locale in place, it is possible to prove theorems and lemmas within the context of a multiplicity. That means that when proving theorems and lemmas within the multiplicity context, all introduced assumptions for `mult' hold:
+\vspace{1em}\begin{isabellebody}
+\isacommand{context}\isamarkupfalse%
+\ multiplicity\isanewline
+\isakeyword{begin}\isanewline
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ upper{\isacharunderscore}bound{\isacharunderscore}valid{\isacharunderscore}alt{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}upper\ mult\ {\isasymge}\ \isactrlbold {\isadigit{1}}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{using}\isamarkupfalse%
+\ less{\isacharunderscore}{\isasymM}{\isachardot}elims\ not{\isacharunderscore}less\ upper{\isacharunderscore}bound{\isacharunderscore}valid\ \isacommand{by}\isamarkupfalse%
+\ fastforce%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{end}\isamarkupfalse%
+\end{isabellebody}
+
+In above example, it is possible to prove that `$upper\ mult \geq 1$ because the assumptions ensure that `$upper\ mult \not= 0$'. Since natural numbers cannot be negative, we have that `$upper\ mult \geq 1$. This theorem can only be proven within the multiplicity context, as otherwise, the assumptions do not hold, and `$upper\ mult$' might be $0$.
+
+Within this thesis, \textbf{locale}s are mostly used to denote valid constructs, such as a valid type graph, type model, instance graph or instance model. These locales limit the respective \textbf{record} types for these constructs by assuming the validity constraints presented in their respective sections.
+
+\subsubsection{Theorems and proofs}
+Theorems (also called lemmas) are statements that can be proven correct. For this thesis, all theorems are either defined using the \textbf{theorem} or \textbf{lemma} keywords in Isabelle. A theorem can be defined to be only valid under certain assumptions or can be defined to be true without any assumptions.
+
+An example of a simple \textbf{theorem} can be found in \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isacommand{theorem}\isamarkupfalse%
+\ mult{\isacharunderscore}zero{\isacharunderscore}unbounded{\isacharunderscore}valid{\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}n\ in\ \isactrlbold {\isadigit{0}}{\isachardot}{\isachardot}\isactrlemph {\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ within{\isacharunderscore}multiplicity{\isacharunderscore}def\isanewline
+\ \ \isacommand{by}\isamarkupfalse%
+\ simp%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\end{isabellebody}
+
+This theorem states that for a multiplicity $0..\mstar$, any natural number is within bounds (any $n$ is in $0..\mstar$). It can easily be proven using the definition of a natural number within a multiplicity.
+
+A proof for a theorem is written directly after the statement. It can either be a short proof using apply-scripts, or a proof within Isabelle's proof language Isar. In the example above, it is a short proof using apply-scripts. In this case, the proof is done within one step: by simplification of the definition.
+
+Once lemmas or theorems are proven, they can be used in the proof of other lemmas and statements. Reusing them is done by referring to them manually, or by adding them to a set of lemmas and theorems that Isabelle will try by default. Adding theorems to a set of default rules is done by adding a specific keyword. For example, add $[simp]$ to add the theorem to the set of simplification rules, or add $[intro]$ or $[elim]$, to specify the theorem to be an introduction rule or elimination rule. Introduction and elimination rules will not be further specified here; more information on these can be found in the Isabelle documentation.
+
+\subsubsection{Isar}
+\textit{Isar} stands for \textit{Intelligible semi-automated reasoning}, and is an interpreted language environment for structured formal proof documents. It allows to write down mostly humanly readable proofs in Isabelle while still getting the advantage of semi-automated reasoning. Isar is built on the principle of writing down multiple steps of the proof, doing less automation, in favour of readability. As a consequence, writing Isar proofs is more work for the writer of the proof but eventually results in better humanly readable proofs that also have value without the automated reasoning of a theorem prover.
+
+This section will not discuss the full Isar environment in detail. The Isabelle/Isar Reference Manual \cite{wenzel-isabelle_isar}, included with each copy of Isabelle, already contains a very detailed explanation of all features that Isar has to offer. Instead, we consider a small example of a proof written in Isar, picked directly from \cref{appendix:example_isabelle_theory}:
+\vspace{1em}\begin{isabellebody}
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ x\ y\ z\ {\isacharcolon}{\isacharcolon}\ {\isasymM}\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}x\ {\isacharless}\ y{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}x\ {\isasymle}\ y\ {\isasymand}\ {\isasymnot}\ y\ {\isasymle}\ x{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ auto\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ x{\isachardoublequoteclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ y\ {\isasymLongrightarrow}\ y\ {\isasymle}\ x\ {\isasymLongrightarrow}\ x\ {\isacharequal}\ y{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ y\ {\isasymLongrightarrow}\ y\ {\isasymle}\ z\ {\isasymLongrightarrow}\ x\ {\isasymle}\ z{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y\ z{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\isanewline
+\ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ y\ arbitrary{\isacharcolon}\ z{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ z{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ z{\isacharparenright}\ simp{\isacharunderscore}all\isanewline
+\ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}x\ {\isasymle}\ y\ {\isasymor}\ y\ {\isasymle}\ x{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}induction\ x\ arbitrary{\isacharcolon}\ y{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ Star\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ simp\isanewline
+\ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{case}\isamarkupfalse%
+\ {\isacharparenleft}Nr\ x{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{show}\isamarkupfalse%
+\ {\isacharquery}case\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}cases\ y{\isacharparenright}\ auto\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+\end{isabellebody}
+
+In this example, we see the proof that proves that type \isasymM{} is an instantiation of a linear order. In order to show that type \isasymM{} gives rise to a linear order, we have to proof multiple subgoals, which are:
+\begin{itemize}
+    \item Correctness of $<$: $(x < y) = (x \leq y \land \lnot y \leq x)$
+    \item Reflexivity of $\leq$: $(x \leq x)$
+    \item Transitivity of $\leq$: $x \leq y \land y \leq z \implies x \leq z$
+    \item Correctness of the linear order: $x \leq y \lor y \leq x$
+\end{itemize}
+Each of these subgoals is proven separately within the Isar proof. The proof of each subgoal is defined by the \textbf{show} keyword. Important to see from the example above is that each subgoal is proven using a nested subproof. Such subproofs can be written as apply-scripts, or using a nested Isar proof, as we see in the example above.
+
+\subsubsection{Proof tactics}
+In order to deliver proofs, we make use of automated reasoning. Essential aspects of automated reasoning are the different proof tactics in Isabelle. Proof tactics can be applied to a proof goal to either solve the proof goal entirely or to somehow make the goal simpler to solve.
+
+A vital proof tactic shown in the example above is `induction'. This tactic applies mathematical induction to the proof goal, splitting the goal into new subgoals that follow the structure of mathematical induction. 
+
+The following proof tactics are extensively used within this thesis:
+\begin{itemize}
+    \item `induction' (also called `induct'): Applies mathematical induction to the proof goal. Splits the subgoal into two or more subgoals that follow the structure of mathematical induction.
+    \item `cases': Applies a case distinction to the proof goal. It will split the proof goal into multiple subgoals, one for each applicable case. This proof tactic works especially well for inductive definitions and datatypes with a finite set of possible values.
+    \item `intro': Splits a proof goal and introduces new subgoals based on an introduction rule. An important example of an introduction rule is $conjI$, which splits a proof goal of $A \land B$ into the two subgoals $A$ and $B$.
+    \item `elim': Splits a proof goal by eliminating operations and relations and providing smaller subgoals instead of those. For example, the elimination rule $disjE$ splits a proof goal of the form $A \lor B \implies C$ into two subgoals, $A \implies C$ and $B \implies C$.
+    \item `simp' (and `simp\_all'): Apply simplification to a proof goal in order to solve the problem completely. It uses simplification rules to rewrite the statement until it arrives at `True', finishing the proof.
+    \item `fastforce': Solves the proof goal by using a tactic similar to brute force. It tries all possible outcomes but tries to be smart by excluding similar cases.
+    \item `fast': A classical solver which solves the proof goal by structurally checking cases based on a depth-first search algorithm. Not frequently used within this thesis.
+    \item `auto': A combination of `simp' and `fastforce', which can also use introduction rules and elimination rules when rewriting. In general, this proof tactic more powerful than `simp' and `fastforce'.
+    \item `blast': Solves the proof goal by using a semantic tableau. Frequently used for solving logic problems.
+    \item `metis': Solves the proof goal by using resolution. Frequently used for more complex logic problems that cannot be solved by `blast'.
+\end{itemize}
+
+Isabelle is not limited to the above-discussed proof tactics, but these tactics are the most important ones for this thesis. Other tactics are not used either because they apply to a different kind of problem (number arithmetic instead of logic, for example) or because they are not transparent in solving their problem. For example, the `smt' proof tactic solves a problem by using an external SMT solver. Although these proof tactics can solve many problems, it is not transparent to the reader what steps the SMT solver has taken to solve the problem, as opposed to the proof tactics described above. Therefore these tactics have been excluded.
+
+\subsection{Archive of Formal Proofs}
+Isabelle has an Archive of Formal Proofs (AFP), which is a collection of proof libraries, examples, and larger scientific developments, mechanically checked in the theorem prover Isabelle. All theories within this archive are organised in the way of a scientific journal such that they can be referred to by new theories.
+
+\subsubsection{Graph Theory}
+The Isabelle AFP submission Graph Theory \cite{noschinski-graph_theory} is used as part of this thesis. This submission to the Isabelle AFP is a formalization of directed graphs, supporting labelled multi-edges and infinite graphs. Theorems proven for these graphs include, but are not limited to, walks, cyclicity, connectedness and some properties of isomorphisms. All the theorems proven as part of this submission are discussed in \cite{bang-jensen_gutin_2010}.
+
+Within this thesis, the submission is used as part of the GROOVE formalisation within Isabelle. Within the GROOVE formalisation, GROOVE type graphs and instance graphs are extensions of the directed graph introduced by the Graph Theory submission. This allows Isabelle to apply theorems proven for graphs within this submission to GROOVE graphs presented in the theories of this thesis.
+
+Within this thesis, only a small selected set of theorems from the submission is used. This set mostly includes theorems related to walks and cyclicity of graphs. These theorems are used to show the acyclicity of the containment relation for instance graphs.

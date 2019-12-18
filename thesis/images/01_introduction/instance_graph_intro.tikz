@@ -1,0 +1,13 @@
+% To use this figure in your LaTeX document
+% import the package groove/resources/groove2tikz.sty
+%
+\begin{tikzpicture}[scale=\tikzscale,name prefix=instance-]
+\node[basic_node] (n0) at (0.850, -0.895) {\ml{\uline{\textit{theFirst}} : \textbf{X}}};
+\node[basic_node] (n1) at (2.450, -0.895) {\ml{\uline{\textit{theSecond}} : \textbf{Y}}};
+\node[basic_node] (n2) at (1.700, -0.165) {\ml{\textbf{A}}};
+\node[basic_node] (n3) at (2.600, -0.165) {\ml{\textbf{B}}};
+
+\path[basic_edge] (n2)  -- node[lab] {\ml{xs}} (n0) ;
+\path[basic_edge] (n3)  -- node[lab] {\ml{ys}}(n1.north -| 2.600, -0.165);
+\path[basic_edge] (n2)  -- node[lab] {\ml{ys}} (n1) ;
+\end{tikzpicture}

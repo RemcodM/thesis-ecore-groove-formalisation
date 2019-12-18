@@ -1,0 +1,174 @@
+\subsection{Plain objects typed by a subclass}
+\label{subsec:library_of_transformations:instance_level_transformations:objects_of_subtype}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics{images/05_library_of_transformations/03_instance_level_transformations/03_objects_of_subtype/subclass_instance.pdf}
+        \caption{$Im_{Subclass}$ with one object identified as $x$}
+        \label{fig:library_of_transformations:instance_level_transformations:objects_of_subtype:visualisation:ecore}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/05_library_of_transformations/03_instance_level_transformations/03_objects_of_subtype/subclass_as_node_type_instance.tikz}
+        \caption{$IG_{Subclass}$ with one node identified as $x$}
+        \label{fig:library_of_transformations:instance_level_transformations:objects_of_subtype:visualisation:groove}
+    \end{subfigure}
+    \caption{Visualisation of the transformation of objects typed by a subclass}
+    \label{fig:library_of_transformations:instance_level_transformations:objects_of_subtype:visualisation}
+\end{figure}
+
+In this section, the transformation of plain objects typed by a regular subclass is discussed. The corresponding type level transformation can be found in \cref{subsec:library_of_transformations:type_level_transformations:regular_subclasses}. This transformation is very similar to the the transformation of plain objects discussed in \cref{subsec:library_of_transformations:instance_level_transformations:plain_objects}. Like that transformation, it is possible to introduce an arbitrary amount of instances of the subclass introduced on the type level. First, the definition of the corresponding instance model is given.
+
+\begin{defin}[Instance model $Im_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass}
+Let $Im_{Subclass}$ be the instance model containing a set of objects $objects$ which are all typed by subclass $name$, which extends class $supertype$. Furthermore, an injective function $fid$ is defined which maps every object in the set to its corresponding identifier. $Im_{Subclass}$ is typed by $Tm_{Subclass}$ (\cref{defin:library_of_transformations:type_level_transformations:regular_subclasses:tmod_subclass}) and is defined as:
+\begin{align*}
+Object =\ &objects \\
+\mathrm{ObjectClass} =\ & \begin{cases}
+    (ob, name) & \mathrm{if }\ ob \in objects
+\end{cases}\\
+\mathrm{ObjectId} =\ & \begin{cases}
+    (ob, fid(ob)) & \mathrm{if }\ ob \in objects
+\end{cases}\\
+\mathrm{FieldValue} =\ & \{\} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{align*}
+\isabellelref{imod_subclass}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $Im_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass_correct}
+$Im_{Subclass}$ (\cref{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass}) is a valid instance model in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\isabellelref{imod_subclass_correct}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{thm}
+
+A visual representation of $Im_{Subclass}$ with $objects = \{ob\}$ and $fid(ob) = x$ can be seen in \cref{fig:library_of_transformations:instance_level_transformations:objects_of_subtype:visualisation:ecore}. Although this visualisation only shows one object, it is possible to have an arbitrary amount of objects in $Im_{Subclass}$, as long as they are all typed by the corresponding class introduced on the type level. In the visualisation, the identifier $.\type{NewType}$ is used for the class, in correspondence with \cref{fig:library_of_transformations:type_level_transformations:regular_subclasses:visualisation:ecore} The correctness proof of $Im_{Subclass}$ is trivial, and therefore not included here. The proof can be found as part of the Isabelle validated proofs.
+
+In order to make composing transformation functions possible, $Im_{Subclass}$ should be compatible with the instance model it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(Im, Im_{Subclass})$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass_combine_correct}
+Assume an instance model $Im$ that is valid in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}. Then $Im$ is compatible with $Im_{Subclass}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:regular_subclasses:tmod_subclass_combine_correct} are met, to ensure the combination of the corresponding type models is valid;
+    \item All the objects in $Im_{Subclass}$ have an (internal and explicit) identity that is not yet used in $Im$;
+    \item $Im$ is not typed by a type model that defines any fields for the $supertype$ class.
+\end{itemize}
+\isabellelref{imod_subclass_combine_correct}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(Im, Im_{Subclass})$ is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\end{proof}
+
+Please note that in this case, it has been made explicit that the new objects introduced do not have any fields defined. This is by ensuring the supertype does not define any fields. The new subclass does not have fields itself, as it cannot have existed in the combined type model.
+
+The definitions and theorems for introducing plain objects of regular subclasses within Ecore are now complete. 
+
+\subsubsection{Encoding as nodes}
+
+As was the case with plain objects of regular classes, a possible encoding for plain objects of subclasses in Ecore is using nodes in GROOVE. Each node is typed by the node type that was introduced in $TG_{Subclass}$, and copies the identifiers set of the objects to the corresponding nodes. The encoding corresponding to $Im_{Subclass}$ can then be represented as $IG_{Subclass}$, defined in the following definition:
+
+\begin{defin}[Instance graph $IG_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type}
+Let $IG_{Subclass}$ be the instance graph with as nodes the converted $objects$ of $Im_{Subclass}$ (\cref{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass}). Furthermore, reuse the injective function $fid$ that maps every object to its identifier. Finally, use the node type $name$ introduced in $TG_{Subclass}$, that extends the $supertype$ node type. (\cref{defin:library_of_transformations:type_level_transformations:regular_classes:tg_class_as_node_type}). $IG_{Subclass}$ is defined typed by $TG_{Subclass}$ and is defined as:
+\begin{align*}
+N =\ & objects \\
+E =\ & \{\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (fid(ob), ob) & \mathrm{if }\ ob \in objects
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (ob, \mathrm{ns\_\!to\_\!list}(name)) & \mathrm{if }\ ob \in objects
+\end{cases}
+\end{align*}
+\isabellelref{ig_subclass_as_node_type}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $IG_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type_correct}
+$IG_{Subclass}$ (\cref{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type}) is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_subclass_as_node_type_correct}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{thm}
+
+A visual representation of $IG_{Subclass}$ with $objects = \{ob\}$ and $fid(ob) = x$ can be seen in \cref{fig:library_of_transformations:instance_level_transformations:objects_of_subtype:visualisation:groove}. Like the previous example for the Ecore instance model, only one node is shown here, but multiple nodes can be introduced at once if there are more objects in the $objects$ set. As shown in the definition, the node type identified by $\type{NewType}$ is used to type all the nodes, in correspondence with \cref{fig:library_of_transformations:type_level_transformations:regular_subclasses:visualisation:groove}. The correctness proof of $IG_{Subclass}$ is trivial, and therefore not included here. The proof can be found as part of the Isabelle validated proofs.
+
+In order to make composing transformation functions possible, $IG_{Subclass}$ should be compatible with the instance graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(IG, IG_{Subclass})$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type_combine_correct}
+Assume an instance graph $IG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG$ is compatible with $IG_{Subclass}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:regular_subclasses:tg_subclass_as_node_type_combine_correct} are met, to ensure the combination of the corresponding type graphs is valid;
+    \item All the nodes in $IG_{Subclass}$ have an (internal and explicit) identity that is not yet used in $IG$;
+    \item There are no edge types from or to the $supertype$ node type, this includes edges from and to types that $supertype$ inherits from.
+\end{itemize}
+\isabellelref{ig_subclass_as_node_type_combine_correct}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(IG, IG_{Subclass})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{proof}
+
+Like the correctness for the Ecore instance model, validity is guaranteed here by assuming there exist no edge types from and to the $supertype$ node type.
+
+The next definitions define the transformation function from $Im_{Subclass}$ to $IG_{Subclass}$:
+
+\begin{defin}[Transformation function $f_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass_to_ig_subclass_as_node_type}
+The transformation function $f_{Subclass}(Im)$ is defined as:
+\begin{align*}
+N =\ & Object_{Im} \\
+E =\ & \{\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (fid(ob), ob) & \mathrm{if }\ ob \in Object_{Im}
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (ob, \mathrm{ns\_\!to\_\!list}(name)) & \mathrm{if }\ ob \in Object_{Im}
+\end{cases}
+\end{align*}
+\isabellelref{imod_subclass_to_ig_subclass_as_node_type}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass_to_ig_subclass_as_node_type_func}
+$f_{Subclass}(Im)$ (\cref{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:imod_subclass_to_ig_subclass_as_node_type}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} transforming $Im_{Subclass}$ into $IG_{Subclass}$.
+\isabellelref{imod_subclass_to_ig_subclass_as_node_type_func}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{thm}
+
+The proof of the correctness of $f_{Subclass}$ will not be included here. Instead, it can be found in the validated Isabelle theories. The proof is quite trivial, as extending $Im$ can only add extra objects, but not remove the existing ones.
+
+Finally, to complete the transformation, the transformation function that transforms $IG_{Subclass}$ into $Im_{Subclass}$ is defined:
+
+\begin{defin}[Transformation function $f'_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type_to_imod_subclass}
+The transformation function $f'_{Subclass}(IG)$ is defined as:
+\begin{align*}
+Object =\ &N_{IG} \\
+\mathrm{ObjectClass} =\ & \begin{cases}
+    (ob, name) & \mathrm{if }\ ob \in N_{IG}
+\end{cases}\\
+\mathrm{ObjectId} =\ & \begin{cases}
+    (ob, fid(ob)) & \mathrm{if }\ ob \in N_{IG}
+\end{cases}\\
+\mathrm{FieldValue} =\ & \{\} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{align*}
+\isabellelref{ig_subclass_as_node_type_to_imod_subclass}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{Subclass}$]
+\label{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type_to_imod_subclass_func}
+$f'_{Subclass}(IG)$ (\cref{defin:library_of_transformations:instance_level_transformations:objects_of_subtype:ig_subclass_as_node_type_to_imod_subclass}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} transforming $IG_{Subclass}$ into $Im_{Subclass}$.
+\isabellelref{ig_subclass_as_node_type_to_imod_subclass_func}{Ecore-GROOVE-Mapping-Library.SubclassInstance}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.

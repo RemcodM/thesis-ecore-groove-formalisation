@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:chati="https://git.tworem.nl/masterthesis/chapter3/combine_example_instances" xsi:schemaLocation="https://git.tworem.nl/masterthesis/chapter3/combine_example_instances Chat_instances.ecore">
+  <chati:Chat>
+    <contact name="Broodkast"/>
+    <thread id="Thread42" contact="/0/@contact.0">
+      <messages href="#/1"/>
+      <messages href="#/2"/>
+    </thread>
+  </chati:Chat>
+  <chati:Message text="Message4084"/>
+  <chati:Message text="Message4093"/>
+</xmi:XMI>

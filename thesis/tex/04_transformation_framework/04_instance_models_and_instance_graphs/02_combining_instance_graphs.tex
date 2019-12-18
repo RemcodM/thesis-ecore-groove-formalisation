@@ -1,0 +1,322 @@
+\subsection{Combining instance graphs}
+\label{subsec:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs}
+
+The structure of \cref{fig:transformation_framework:instance_models_and_instance_graphs:structure_instance_models_graphs} shows that the instance graphs $IG_A$ and $IG_B$ are combined into one instance graph $IG_{AB}$. This section provides the definition of this combination and its corresponding theorems. Please note that the definitions presented here, just like the previous section, are as generic as possible, and do not actively take into account that $IG_{A}$ and $IG_{B}$ are mostly distinct. This bit of information is added later as part of a theorem and proof.
+
+\begin{defin}[Combination function on instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine}
+$\mathrm{combine}$ is a binary function on two instance graphs which combines two instance graphs into one instance graph. Assume $IG_A$ is an instance graph typed by type graph $TG_A$ and $IG_B$ is an instance graph typed by type graph $TG_B$, then $\mathrm{combine}(IG_A, IG_B)$ is typed by $\mathrm{combine}(TG_A, TG_B)$ and is defined as follows:
+\begin{align*}
+\mathrm{combine}(IG_A, IG_B) = \langle&
+N = N_{IG_A} \cup N_{IG_B} \\&
+E = E_{IG_A} \cup E_{IG_B} \\&
+\mathrm{ident} = \mathrm{ident\_\!combine}(IG_A, IG_B) \rangle
+\end{align*}
+
+In which $\mathrm{ident\_\!combine}$ is given as part of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ident_combine}.
+\isabellelref{ig_combine}{GROOVE.Instance_Graph_Combination}
+\end{defin}
+
+The definition of the combination of instance graphs is the easiest combination function to understand. Essentially, it does nothing more than combining the nodes and edges of the graph. The only thing that is done extra is the combination of the identification function, of which the definition is presented within the next definition.
+
+\begin{defin}[Combination function for identities of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ident_combine}
+$\mathrm{ident\_\!combine}(IG_A, IG_B)$ is a partial function on two type graphs which returns a new function \\$Id \Rightarrow (N_{IG_{AB}} \cap Node_t)$. It is defined as follows:
+\begin{multline*}
+    \mathrm{ident\_\!combine}(IG_{A}, IG_{B}, i) = \\
+    \begin{cases}
+        \mathrm{ident}_{IG_A}(i) & \mathrm{if }\ i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \cap \mathrm{dom}\ \mathrm{ident}_{IG_B} \land \mathrm{ident}_{IG_A}(i) = \mathrm{ident}_{IG_B}(i) \\
+        \mathrm{ident}_{IG_A}(i) & \mathrm{if }\ i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \setminus \mathrm{dom}\ \mathrm{ident}_{IG_B} \\
+        \mathrm{ident}_{IG_B}(i) & \mathrm{if }\ i \in \mathrm{dom}\ \mathrm{ident}_{IG_B} \setminus \mathrm{dom}\ \mathrm{ident}_{IG_A}
+    \end{cases}
+\end{multline*}
+\isabellelref{ig_combine_ident}{GROOVE.Instance_Graph_Combination}
+\end{defin}
+
+The combination function for identifiers of the instance graphs is not very difficult either. If an identifier is only valid in one of the instance graphs, the identifier value is copied from that graph. Furthermore, if an identifier is valid in both instance graphs, it should be the case that the identifiers project on the same node. If this is the case, then the identifier is set for the combination.
+
+Like the combination function of object identifiers of instance models (\cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:objectid_combine}), the behaviour of this function might seem strange. Theoretically, it might give rise to nodes with two identities, which is undesired. As will be shown later, the combination function and theorems assume that the identities of the graphs are already distinct. This assumption is fair, as it is possible to redefine two instance graphs to have distinct identities, without loss of significance.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/instance_graphs_combination/contact_instance_partial1.tikz}
+        \caption{Contacts model $IG_{Contact}$}
+        \label{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example_ig1}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \input{images/04_transformation_framework/instance_graphs_combination/contact_instance_partial2.tikz}
+        \caption{Address extension $IG_{Ext}$}
+        \label{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example_ig2}
+    \end{subfigure}
+    \begin{subfigure}{0.35\textwidth}
+        \centering
+        \input{images/04_transformation_framework/instance_graphs_combination/contact_instance_combined.tikz}
+        \caption{Combined model $IG_{ContactExt}$}
+        \label{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example_ig12}
+    \end{subfigure}
+    \caption{Example of the combination of instance graphs}
+    \label{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example}
+\end{figure}
+
+With all definitions in place, it is possible to provide an example. Let us return to the contacts list example introduced in \cref{fig:transformation_framework:type_models_and_type_graphs:combining_type_graphs:combine_example} of \cref{subsec:transformation_framework:type_models_and_type_graphs:combining_type_graphs}. Suppose a simple instance of $TG_{Contact}$, which has one instance with a name and e-mail address. This could be formally defined as follows:
+
+\begin{align*}
+IG_{Contact} =\ &\langle&
+N =\ &\{ Contact_1, \text{``Netwerkprofessort''}, \text{``networks@example.com''} \} \\&&
+\mathrm{type_{n}} =\ &\{
+( Contact_1, \type{Contact} ),
+( \text{``networks@example.com''}, \type{string} ),\\&&&
+( \text{``Netwerkprofessort''}, \type{string} )
+\} \\&&
+E =\ &\big\{
+\big( Contact_1, ( \type{Contact}, \type{email}, \type{string} ), \text{``networks@example.com''} \big),\\&&&
+\big( Contact_1, ( \type{Contact}, \type{firstName}, \type{string} ), \text{``Netwerkprofessort''} \big)
+\big\} \\&&
+\mathrm{ident} =\ &\{
+( Example, Contact_1 )
+\}
+\\&\rangle
+\end{align*}
+
+A visual representation of this model is included in \cref{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example_ig1}. Now suppose that we want to extent this contact with an address. An instance of $Tm_{Ext}$ represents this address, and is defined as follows:
+
+\begin{align*}
+IG_{Ext} =\ &\langle&
+N =\ &\{ Contact_1, Address_1, \text{``November Str. 15''}, \text{``NL''} \} \\&&
+\mathrm{type_{n}} =\ &\{
+( Contact_1, \type{Contact} ),
+( Address_1, \type{Address} ),\\&&&
+( \text{``November Str. 15''}, \type{string} ),
+( \text{``NL''} , \type{string} )
+\} \\&&
+E =\ &\big\{
+\big( Contact_1, ( \type{Contact}, \type{fav}, \type{Contact} ), Contact_1 \big),\\&&&
+\big( Contact_1, ( \type{Contact}, \type{addresses}, \type{Address} ), Address_1 \big),\\&&&
+\big( Address_1, ( \type{Address}, \type{addressLine}, \type{string} ), \text{``November Str. 15''} \big),\\&&&
+\big( Address_1, ( \type{Address}, \type{country}, \type{string} ), \text{``NL''} \big)
+\big\} \\&&
+\mathrm{ident} =\ &\{
+( Example, Contact_1 )
+\}
+\\&\rangle
+\end{align*}
+
+The visual representation of $IG_{Ext}$ is included in \cref{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example_ig2}. With these instance models formally defined, it is possible to combine them using \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine}. This will yield the following model:
+
+\begin{align*}
+IG_{ChatExt} =\ &\langle&
+N =\ &\{ Contact_1, Address_1, \text{``November Str. 15''}, \text{``NL''} \} \\&&
+\mathrm{type_{n}} =\ &\{
+( Contact_1, \type{Contact} ),
+( Address_1, \type{Address} ),\\&&&
+( \text{``networks@example.com''}, \type{string} ),
+( \text{``Netwerkprofessort''}, \type{string} ),\\&&&
+( \text{``November Str. 15''}, \type{string} ),
+( \text{``NL''} , \type{string} )
+\} \\&&
+E =\ &\big\{
+\big( Contact_1, ( \type{Contact}, \type{email}, \type{string} ), \text{``networks@example.com''} \big),\\&&&
+\big( Contact_1, ( \type{Contact}, \type{firstName}, \type{string} ), \text{``Netwerkprofessort''} \big),\\&&&
+\big( Contact_1, ( \type{Contact}, \type{fav}, \type{Contact} ), Contact_1 \big),\\&&&
+\big( Contact_1, ( \type{Contact}, \type{addresses}, \type{Address} ), Address_1 \big),\\&&&
+\big( Address_1, ( \type{Address}, \type{addressLine}, \type{string} ), \text{``November Str. 15''} \big),\\&&&
+\big( Address_1, ( \type{Address}, \type{country}, \type{string} ), \text{``NL''} \big)
+\big\} \\&&
+\mathrm{ident} =\ &\{
+( Example, Contact_1 )
+\}
+\\&\rangle
+\end{align*}
+
+A visual representation of this combined model is included as \cref{fig:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine_example_ig12}. Like the example for the combination of type graphs, this example shows that the definition of the combination of instance graphs is useful. It allows to build larger graphs out of smaller building blocks. Furthermore, the example shows that the combination of the two instance graphs is typed by the combination of its corresponding type graphs.
+
+Although the definitions of the combination of instance graphs are given, no mathematical properties or theorems are defined yet. Some mathematical properties hold for the combination of instance graphs, that will be presented in the following theorems.
+
+\begin{thm}[Commutativity of the combination of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_commute}
+Assume that $IG_A$ and $IG_B$ are instance graphs, then the $\mathrm{combine}$ function is commutative:
+\begin{equation*}
+    \mathrm{combine}(IG_A, IG_B) = \mathrm{combine}(IG_B, IG_A)
+\end{equation*}
+\isabellelref{ig_combine_commute}{GROOVE.Instance_Graph_Combination}
+\end{thm}
+
+\begin{thm}[Associativity of the combination of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_assoc}
+Assume that $IG_A$, $IG_B$ and $IG_C$ are instance graphs, then the $\mathrm{combine}$ function is associative:
+\begin{equation*}
+    \mathrm{combine}(\mathrm{combine}(IG_A, IG_B), IG_C) = \mathrm{combine}(IG_A, \mathrm{combine}(IG_B, IG_C))
+\end{equation*}
+\isabellelref{ig_combine_assoc}{GROOVE.Instance_Graph_Combination}
+\end{thm}
+
+\begin{thm}[Idempotence of the combination of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_idemp}
+Assume that $IG_A$ is an instance graph and that it is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then the following property holds:
+\begin{equation*}
+    \mathrm{combine}(IG_A, IG_A) = IG_A
+\end{equation*}
+\isabellelref{ig_combine_idemp_alt}{GROOVE.Instance_Graph_Combination}
+\end{thm}
+
+These properties follow directly from \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:combine}, but the corresponding proofs will not be included here. It should be noted that these properties are indeed proven correct as part of this thesis, and the corresponding proofs are validated within Isabelle.
+
+Besides these properties, the combination of instance graphs also has an identity element. The empty instance graph represents this identity element, but it needs to be defined first:
+
+\begin{defin}[Empty instance graph]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:empty_instance_graph}
+Let $IG_{\epsilon}$ be the empty instance graph. It is typed by the empty type graph $TG_{\epsilon}$. $IG_{\epsilon}$ is defined as:
+\begin{align*}
+IG_{\epsilon} = \langle&
+N = \{\} \\&
+E = \{\} \\&
+\mathrm{ident} = undefined\rangle
+\end{align*}
+\end{defin}
+
+\begin{thm}[Correctness of the empty type model]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_empty_correct}
+The empty instance graph, $IG_{\epsilon}$, is valid with respect to
+\cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_empty_correct}{GROOVE.Instance_Graph}
+\end{thm}
+
+The proof for the correctness of the empty instance graph is trivial. Still, a validated version of this proof can be found within the Isabelle theories of this thesis.
+
+As mentioned earlier, the empty instance graph acts as an identity element when combining two instance graphs. The following theorem specifies this behaviour.
+
+\begin{thm}[Identity of the combination of instance models]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_identity}
+Assume that $IG_A$ is an instance graph and that it is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG_{\epsilon}$ acts as an identity element in the combination function:
+\begin{equation*}
+    \mathrm{combine}(IG_{\epsilon}, IG_A) = IG_A
+\end{equation*}
+\isabellelref{ig_combine_identity_alt}{GROOVE.Instance_Graph_Combination}
+\end{thm}
+
+Once more, the proof of this theorem follows directly from the definition. Therefore, the corresponding proof will not be included here, but a validated version can be found within the Isabelle theories of this thesis.
+
+A final desired property for the combination of instance models is a correctness property. \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_correct} defines the theorem under which the combination of instance models is a valid instance model. Please note that this theorem is a generic theorem, which does not take into account that the instance models are mostly distinct.
+
+\begin{thm}[Validity of the combination of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_correct}
+Assume that $IG_A$ and $IG_B$ are valid instance graphs in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Assume that $IG_A$ is typed by type model $TG_A$. Furthermore, assume that $IG_B$ is typed by type model $TG_B$. $TG_A$ and $TG_B$ are valid by definition. Also assume that $TG_{AB} = \mathrm{combine}(TG_A, TG_B)$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Finally, assume the following properties:
+\begin{itemize}
+    \item For all shared identities, the nodes belonging to the identities must be equal in both instance graphs: $\forall i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \cap \mathrm{dom}\ \mathrm{ident}_{IG_B}\!: \mathrm{ident}_{IG_A}(i) = \mathrm{ident}_{IG_B}(i)$.
+    \item The outgoing multiplicity for edges must be valid: $\forall et \in ET_{TG_A} \cup ET_{TG_B} \land n \in N_{IG_A} \cup N_{IG_B}\!: (\mathrm{type_n}(n), \mathrm{src}(et)) \in\ \sqsubseteq_{TG_{AB}} \implies$\\$|\{e \mid e \in E_{IG_A} \cup E_{IG_B} \land \mathrm{src}(e) = n \land \mathrm{type_e}(e) = et \}| \in \mathrm{out}(\mathrm{mult}_{TG_{AB}}(et))$.
+    \item The incoming multiplicity for edges must be valid: $\forall et \in ET_{TG_A} \cup ET_{TG_B} \land n \in N_{IG_A} \cup N_{IG_B}\!: (\mathrm{type_n}(n), \mathrm{tgt}(et)) \in\ \sqsubseteq_{TG_{AB}} \implies$\\$|\{e \mid e \in E_{IG_A} \cup E_{IG_B} \land \mathrm{tgt}(e) = n \land \mathrm{type_e}(e) = et \}| \in \mathrm{in}(\mathrm{mult}_{TG_{AB}}(et))$.
+    \item Each node may only be contained by one other node: $\forall n \in N_{IG_A} \cup N_{IG_B}\!: |\{e \mid e \in E_{IG_A} \cup E_{IG_B} \land \mathrm{tgt}(e) = n \land \mathrm{type_e}(e) \in contains_{TG_{AB}} \}| \leq 1$.
+    \item There may be no cycle in the containment edges of the combined instance graph: $\{( \mathrm{src}(e), \mathrm{tgt}(e) ) \mid e \in E_{IG_A} \cup E_{IG_B} \land \mathrm{type_e}(e) \in contains_{TG_{AB}} \}$ is acyclic.
+\end{itemize}
+
+Then $\mathrm{combine}(IG_A, IG_B)$ is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_combine_correct}{GROOVE.Instance_Graph_Combination}
+\end{thm}
+
+\begin{proof}
+To proof that $\mathrm{combine}(IG_A, IG_B)$ is a valid instance graph, it needs to be shown that\\ $\mathrm{combine}(IG_A, IG_B)$ gives rise to a valid structure for an instance graph and that \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity} holds. For readability, define $IG_{AB}$ to be $\mathrm{combine}(IG_A, IG_B)$.
+
+\emph{Structural properties}
+\begin{itemize}
+    \item All elements of $N_{IG_{AB}}$ are elements of $Node_t \cup Node_v$.
+    
+    Follows from $N_{IG_{A}} \subseteq Node_t \cup Node_v$ and $N_{IG_{B}} \subseteq Node_t \cup Node_v$.
+    
+    
+    \item All elements of $E_{IG_{AB}}$ are elements of $N_{IG_{AB}} \times ET_{TG_{AB}} \times N_{IG_{AB}}$.
+    
+    Follows from $E_{IG_{A}} \subseteq (N_{IG_{A}} \times ET_{TG_{A}} \times N_{IG_{A}})$ and $E_{IG_{B}} \subseteq (N_{IG_{B}} \times ET_{TG_{B}} \times N_{IG_{B}})$. To complete the proof, use that $ET_{TG_{AB}} = ET_{TG_{A}} \cup ET_{TG_{B}}$ and $N_{IG_{AB}} = N_{IG_{A}} \cup N_{IG_{B}}$.
+    
+    
+    \item For each identity $i \in \mathrm{dom}\ \mathrm{ident}_{IG_{AB}}$, $\mathrm{ident}_{IG_{AB}}(i)$ is an element of $N_{IG_{AB}} \cap Node_t$.
+    
+    First note that $\mathrm{ident}_{IG_{AB}}(i) = \mathrm{ident}_{IG_{A}}(i)$ or $\mathrm{ident}_{IG_{AB}}(i) = \mathrm{ident}_{IG_{B}}(i)$. 
+    
+    If $\mathrm{ident}_{IG_{AB}}(i) = \mathrm{ident}_{IG_{A}}(i)$, then have $\mathrm{ident}_{IG_{A}}(i) \in N_{IG_{A}} \cap Node_t$. Then use $N_{IG_{AB}} = N_{IG_{A}} \cup N_{IG_{B}}$ to have $\mathrm{ident}_{IG_{AB}}(i) \in N_{IG_{AB}} \cap Node_t$.
+    
+    Similarly, if $\mathrm{ident}_{IG_{AB}}(i) = \mathrm{ident}_{IG_{B}}(i)$, then have $\mathrm{ident}_{IG_{B}}(i) \in N_{IG_{B}} \cap Node_t$. Then use $N_{IG_{AB}} = N_{IG_{A}} \cup N_{IG_{B}}$ to have $\mathrm{ident}_{IG_{AB}}(i) \in N_{IG_{AB}} \cap Node_t$.
+\end{itemize}
+
+\emph{Validity properties}
+\begin{itemize}
+    \item $\forall n \in N_{IG_{AB}}\!: \mathrm{type}_n(n) \in NT_{TG_{AB}}$.
+    
+    Have that $\mathrm{type}_n(n) \in NT_{TG_{A}}$ or $\mathrm{type}_n(n) \in NT_{TG_{B}}$. Then have that $\mathrm{type}_n(n) \in NT_{TG_{AB}}$ because $N_{IG_{AB}} = N_{IG_{A}} \cup N_{IG_{B}}$.
+    
+    
+    \item $\forall e \in E_{IG_{AB}}\!: \mathrm{type}_n \big(\mathrm{src}(e)\big) \sqsubseteq_{TG_{AB}} \mathrm{src} \big(\mathrm{type}_e(e)\big)$.
+    
+    Since types of nodes and edges are preserved while merging, $\sqsubseteq_{TG_{A}}\ \subseteq\ \sqsubseteq_{TG_{AB}}$ and $\sqsubseteq_{TG_{B}}\ \subseteq\ \sqsubseteq_{TG_{AB}}$, it follows that $\mathrm{type}_n \big(\mathrm{src}(e)\big) \sqsubseteq_{TG_{AB}} \mathrm{src} \big(\mathrm{type}_e(e)\big)$.
+    
+    
+    \item $\forall e \in E_{IG_{AB}}\!: \mathrm{type}_n \big(\mathrm{tgt}(e)\big) \sqsubseteq_{TG_{AB}} \mathrm{tgt} \big(\mathrm{type}_e(e)\big)$.
+    
+    Since types of nodes and edges are preserved while merging, $\sqsubseteq_{TG_{A}}\ \subseteq\ \sqsubseteq_{TG_{AB}}$ and $\sqsubseteq_{TG_{B}}\ \subseteq\ \sqsubseteq_{TG_{AB}}$, it follows that $\mathrm{type}_n \big(\mathrm{tgt}(e)\big) \sqsubseteq_{TG_{AB}} \mathrm{tgt} \big(\mathrm{type}_e(e)\big)$.
+    
+    
+    \item $\forall n \in N_{IG_{AB}}\!: \mathrm{type}_n(n) \not\in abs_{TG_{AB}}$.
+    
+    Use that $N_{IG_{AB}} = N_{IG_{A}} \cup N_{IG_{B}}$. Then make a case distinction.
+    
+    If $n \in N_{IG_{A}}$, then $\mathrm{type}_n(n) \not\in abs_{TG_{A}}$. Furthermore, $\mathrm{type}_n(n) \not\in abs_{TG_{B}} \setminus NT_{TG_{A}}$. Then we have that $\mathrm{type}_n(n) \not\in abs_{TG_{AB}}$.
+    
+    Similarly, if $n \in N_{IG_{B}}$, then $\mathrm{type}_n(n) \not\in abs_{TG_{B}}$. Furthermore, $\mathrm{type}_n(n) \not\in abs_{TG_{A}} \setminus NT_{TG_{B}}$. Then we have that $\mathrm{type}_n(n) \not\in abs_{TG_{AB}}$.
+    
+    
+    \item $\forall et \in ET_{TG_{AB}}\!: \forall n \in N_{IG_{AB}}\!: \mathrm{type}_n(n) \sqsubseteq_{TG_{AB}} \mathrm{src}(et) \Longrightarrow |\{e \in E_{IG_{AB}} \mid \mathrm{src}(e) = n \land \mathrm{type}_e(e) = et\}| \in \mathrm{out}(\mathrm{mult}_{TG_{AB}}(et))$.
+    
+    This can be solved directly by expanding some definitions and using the assumption for outgoing multiplicities.
+    
+    
+    \item $\forall et \in ET_{TG_{AB}}\!: \forall n \in N_{IG_{AB}}\!: \mathrm{type}_n(n) \sqsubseteq_{TG_{AB}} \mathrm{tgt}(et) \Longrightarrow |\{e \in E_{IG_{AB}} \mid \mathrm{tgt}(e) = n \land \mathrm{type}_e(e) = et\}| \in \mathrm{in}(\mathrm{mult}_{TG_{AB}}(et))$.
+    
+    This can be solved directly by expanding some definitions and using the assumption for incoming multiplicities.
+    
+    
+    \item $\forall n \in N_{IG_{AB}}\!: |\{e \in E_{IG_{AB}} \mid \mathrm{tgt}(e) = n\,\land\,\mathrm{type}_e(e) \in contains_{TG_{AB}}\}| \leq 1$.
+    
+    This can be solved directly by expanding some definitions and using the assumption for the containment of nodes.
+    
+    
+    \item There may be no cycle between the containment edges in $E_{IG_{AB}}$.
+    
+    This is solved by assumption.
+\end{itemize}
+
+The proofs of all these individual properties complete the entire proof.
+\end{proof}
+
+As explained before, \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_correct} does not take into account that the instance graphs are supposed to be distinct except for a set of nodes. Furthermore, it does not take into account that the corresponding type graphs are supposed to be distinct except for a set of node types. The following lemma is an alternation of the previous theorem, which takes these properties into account.
+
+\begin{lem}[Consistency of the combination (mostly) distinct of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}
+Assume that $IG_A$ and $IG_B$ are valid instance graphs in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Assume that $IG_A$ is typed by type model $TG_A$. Furthermore, assume that $IG_B$ is typed by type model $TG_B$. $TG_A$ and $TG_B$ are consistent by definition. Also assume that $TG_{AB} = \mathrm{combine}(TG_A, TG_B)$ is consistent in the sense of \cref{defin:formalisations:groove_formalisation:type_graphs:type_graph_validity}. Moreover, assume that $TG_{A}$ and $TG_{B}$ are entirely distinct except for a set of node types $NT$. Also assume that $IG_{A}$ and $IG_{B}$ are entirely distinct except for a set of nodes $N$. Finally, assume the following properties:
+\begin{itemize}
+    \item For all shared identities, the nodes belonging to the identities must be equal in both instance graphs: $\forall i \in \mathrm{dom}\ \mathrm{ident}_{IG_A} \cap \mathrm{dom}\ \mathrm{ident}_{IG_B}\!: \mathrm{ident}_{IG_A}(i) = \mathrm{ident}_{IG_B}(i)$.
+    \item The outgoing multiplicity for edges in $IG_A$ must be valid: $\forall et \in ET_{TG_A} \land n \in N_{IG_A} \cup N_{IG_B}\!: (\mathrm{type_n}(n), \mathrm{src}(et)) \in\ \sqsubseteq_{TG_{AB}} \implies$\\$|\{e \mid e \in E_{IG_A} \land \mathrm{src}(e) = n \land \mathrm{type_e}(e) = et \}| \in \mathrm{out}(\mathrm{mult}_{TG_{A}}(et))$.
+    \item The incoming multiplicity for edges in $IG_A$ must be valid: $\forall et \in ET_{TG_A} \land n \in N_{IG_A} \cup N_{IG_B}\!: (\mathrm{type_n}(n), \mathrm{tgt}(et)) \in\ \sqsubseteq_{TG_{AB}} \implies$\\$|\{e \mid e \in E_{IG_A} \land \mathrm{tgt}(e) = n \land \mathrm{type_e}(e) = et \}| \in \mathrm{in}(\mathrm{mult}_{TG_{A}}(et))$.
+    \item The outgoing multiplicity for edges in $IG_B$ must be valid: $\forall et \in ET_{TG_B} \land n \in N_{IG_A} \cup N_{IG_B}\!: (\mathrm{type_n}(n), \mathrm{src}(et)) \in\ \sqsubseteq_{TG_{AB}} \implies$\\$|\{e \mid e \in E_{IG_B} \land \mathrm{src}(e) = n \land \mathrm{type_e}(e) = et \}| \in \mathrm{out}(\mathrm{mult}_{TG_{B}}(et))$.
+    \item The incoming multiplicity for edges in $IG_B$ must be valid: $\forall et \in ET_{TG_B} \land n \in N_{IG_A} \cup N_{IG_B}\!: (\mathrm{type_n}(n), \mathrm{tgt}(et)) \in\ \sqsubseteq_{TG_{AB}} \implies$\\$|\{e \mid e \in E_{IG_B} \land \mathrm{tgt}(e) = n \land \mathrm{type_e}(e) = et \}| \in \mathrm{in}(\mathrm{mult}_{TG_{B}}(et))$.
+    \item Each node that is present in both instance graphs may only be contained by one other node: $\forall n \in N_{IG_A} \cap N_{IG_B}\!: |\{e \mid e \in E_{IG_A} \cup E_{IG_B} \land \mathrm{tgt}(e) = n \land \mathrm{type_e}(e) \in contains_{TG_{AB}} \}| \leq 1$.
+    \item There may be no cycle in the containment edges of the combined instance graph: $\{( \mathrm{src}(e), \mathrm{tgt}(e) ) \mid e \in E_{IG_A} \cup E_{IG_B} \land \mathrm{type_e}(e) \in contains_{TG_{AB}} \}$ is acyclic.
+\end{itemize}
+
+Then $\mathrm{combine}(IG_A, IG_B)$ is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_combine_merge_correct}{GROOVE.Instance_Graph_Combination}
+\end{lem}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_correct} to show that $\mathrm{combine}(IG_A, IG_B)$ is a consistent type model. Use the assumptions given. Some assumptions of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_correct} are solved using multiple assumptions because part of the assumption became irrelevant.
+\end{proof}
+
+Finally, the concept of compatibility between two instance graphs is defined.
+
+\begin{defin}[Compatibility of instance graphs]
+\label{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}
+Assume instance graphs $IG_A$ and $IG_B$. We say that $IG_A$ is compatible with $IG_B$ if  $\mathrm{combine}(IG_A, IG_B)$ is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{defin}
+
+The notion of compatibility will be used later as a way to denote instance graphs that can be combined with other instance graphs without loss of validity.

@@ -1,0 +1,185 @@
+\subsection{Data field values}
+\label{subsec:library_of_transformations:instance_level_transformations:data_field_values}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics{images/05_library_of_transformations/03_instance_level_transformations/06_data_field_values/data_field_value.pdf}
+        \caption{$Im_{DataField}$ with one object and string value ``some value''}
+        \label{fig:library_of_transformations:instance_level_transformations:data_field_values:visualisation:ecore}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \input{images/05_library_of_transformations/03_instance_level_transformations/06_data_field_values/data_field_as_edge_type_value.tikz}
+        \caption{$IG_{DataField}$ with one node and string value ``some value''}
+        \label{fig:library_of_transformations:instance_level_transformations:data_field_values:visualisation:groove}
+    \end{subfigure}
+    \caption{Visualisation of the transformation of field values from fields typed by data types}
+    \label{fig:library_of_transformations:instance_level_transformations:data_field_values:visualisation}
+\end{figure}
+
+The previous sections have shown the instance level transformations of the introduction of all kinds of types and their instances. From this section onward, these types and their instances will be enriched by introducing fields. In this section, the instance level transformation belonging to the transformation of a data field is discussed. The type level transformation for data fields can be found in \cref{subsec:library_of_transformations:type_level_transformations:data_fields}. On the instance level, values for the data fields are introduced.
+
+\begin{defin}[Instance model $Im_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field}
+Let $Im_{DataField}$ be an instance model typed by $Tm_{DataField}$ (\cref{defin:library_of_transformations:type_level_transformations:data_fields:tmod_data_field}). Define a set $objects$, which represent the objects that will get a value for the field introduced by $Tm_{DataField}$. Furthermore, define a function $obids$ which maps each of these objects to their corresponding identifier and a function $values$, which maps each of these objects to its value for the field introduced by $Tm_{DataField}$. $Im_{DataField}$ is defined as:
+\begin{align*}
+Object =\ &objects \\
+\mathrm{ObjectClass} =\ & \begin{cases}
+    (ob, classtype) & \mathrm{if }\ ob \in objects
+\end{cases}\\
+\mathrm{ObjectId} =\ & \begin{cases}
+    (ob, obids(ob)) & \mathrm{if }\ ob \in objects
+\end{cases}\\
+\mathrm{FieldValue} =\ & \begin{cases}
+    ((ob, (classtype, name)), values(ob)) & \mathrm{if }\ ob \in objects
+\end{cases} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{align*}
+\isabellelref{imod_data_field}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{defin}
+
+\begin{thm}[Correctness of $Im_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field_correct}
+$Im_{DataField}$ (\cref{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field}) is a valid instance model in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\isabellelref{imod_data_field_correct}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{thm}
+
+A visual representation of $Im_{DataField}$ with $objects = \{ob\}$ and $obids(ob) = someId$ can be seen in \cref{fig:library_of_transformations:instance_level_transformations:data_field_values:visualisation:ecore}. In this visualisation, the field value for $ob$ is defined as $values(ob) = \text{``some value''}$. Although this visualisation only shows one object, it is required to define a value for all objects that contain the field. Failing to do so would result in an invalid instance model after it is combined with another model, as the next definition will show. The correctness proof of $Im_{DataField}$ only is already quite involved, but not be included here for conciseness. It can be found as part of the validated Isabelle proofs.
+
+In order to make composing transformation functions possible, $Im_{DataField}$ should be compatible with the instance model it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(Im, Im_{DataField})$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field_combine_correct}
+Assume an instance model $Im$ that is valid in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}. Then $Im$ is compatible with $Im_{DataField}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:data_fields:tmod_data_field_combine_correct} are met, to ensure the combination of the corresponding type models is valid;
+    \item The class type on which the field is defined by $Tm_{DataField}$ may not be extended by another class type in the type model corresponding to $Im$;
+    \item All of the objects in the set $objects$ must already be objects in $Im$;
+    \item All objects typed by the class type on which the field is defined must occur in the set $objects$ and thus have a value in $Im_{DataField}$;
+    \item For all of the objects in the set $objects$, the identifier set by $obids$ must be the same identifier as set by $Im$ for that object;
+    \item For all objects in set $objects$, the value set by the $values$ function must be valid.
+\end{itemize}
+\isabellelref{imod_data_field_combine_correct}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_models:imod_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(Im, Im_{DataField})$ is consistent in the sense of \cref{defin:formalisations:ecore_formalisation:instance_models:model_validity}.
+\end{proof}
+
+As explained earlier, $Im_{DataField}$ needs to introduce values for all objects that are typed by the class type on which the field is defined. This is enforced by the requirements of \cref{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field_combine_correct}. The proof is not included here for conciseness, but can be found as part of the validated proofs in Isabelle.
+
+The definitions and theorems for introducing values for fields of data types within Ecore are now complete. 
+
+\subsubsection{Encoding as edges and nodes}
+
+In the type level transformation of data fields, data fields were encoded in GROOVE as edge types to an primitive type. On the instance level, this edge type will be used and edges will be created to give a value to each node type that has the field defined. The encoding corresponding to $Im_{DataField}$ can then be represented as $IG_{DataField}$, defined in the following definition:
+
+\begin{defin}[Instance graph $IG_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type}
+Let $IG_{DataField}$ be the instance graph typed by type graph $TG_{DataField}$ (\cref{defin:library_of_transformations:type_level_transformations:data_fields:tg_data_field_as_edge_type}). Reuse the set $objects$ from $Im_{DataField}$. Moreover, reuse the functions $obids$ and $values$ from $Im_{DataField}$.
+The objects in the set $objects$ are converted to nodes in $Im_{DataField}$. For each of these objects, an edge of the encoded field is created. This edge targets a node that corresponds to the value set by $values$ for the corresponding object. Finally, the identity of the objects is defined using $obids$. $IG_{DataField}$ is defined as:
+\begin{align*}
+N =\ & objects \cup \{values(ob) \mid ob \in objects\} \\
+E =\ & \big\{\big(ob, (\mathrm{ns\_\!to\_\!list}(classtype), \langle name \rangle, fieldtype), values(ob)\big) \mid ob \in objects \big\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (obids(ob), ob) & \mathrm{if }\ ob \in objects
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (ob, \mathrm{ns\_\!to\_\!list}(classtype)) & \mathrm{if }\ ob \in objects
+\end{cases}
+\end{align*}
+\isabellelref{ig_data_field_as_edge_type}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{defin}
+
+\begin{thm}[Correctness of $IG_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type_correct}
+$IG_{DataField}$ (\cref{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type}) is a valid instance graph in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\isabellelref{ig_data_field_as_edge_type_correct}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{thm}
+
+A visual representation of $IG_{DataField}$ with $objects = \{ob\}$ and $obids(ob) = someId$ can be seen in \cref{fig:library_of_transformations:instance_level_transformations:data_field_values:visualisation:groove}. Like the previous visualisation, the field value for $ob$ is defined as $values(ob) = \text{``some value''}$. Although this visualisation only shows one node, it is required to define a value for all nodes typed by the node type corresponding to the field. Failing to do so would result in an invalid instance graph after it is combined with another graph, as the next definition will show. The correctness proof of $IG_{DataField}$ only is already quite involved, but not be included here for conciseness. It can be found as part of the validated Isabelle proofs.
+
+In order to make composing transformation functions possible, $IG_{DataField}$ should be compatible with the instance graph it is combined with.
+
+\begin{thm}[Correctness of $\mathrm{combine}(IG, IG_{DataField})$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type_combine_correct}
+Assume an instance graph $IG$ that is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}. Then $IG$ is compatible with $IG_{DataField}$ (in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:compatibility}) if:
+\begin{itemize}
+    \item All requirements of \cref{defin:library_of_transformations:type_level_transformations:data_fields:tg_data_field_as_edge_type_combine_correct} are met, to ensure the combination of the corresponding type graphs is valid;
+    \item The node type on which the corresponding field is defined is not extended by other node types within the type graph corresponding to $IG$;
+    \item All nodes in $IG$ that are typed by the node type on which the field is defined are also nodes in $IG_{DataField}$;
+    \item For all nodes shared between $IG$ and $IG_{DataField}$, each node must have the same identifier in both $IG$ and $IG_{DataField}$;
+    \item For all nodes for which the field is set, the $values$ function must define a valid value;
+    \item If an primitive type has incoming or outgoing edge types in the type graph corresponding to $IG$, then the lower multiplicity of these edge types must be 0.
+\end{itemize}
+\isabellelref{ig_data_field_as_edge_type_combine_correct}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{thm}
+
+\begin{proof}
+Use \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_instance_graphs:ig_combine_merge_correct}. It is possible to show that all assumptions hold. Now we have shown that $\mathrm{combine}(IG, IG_{DataField})$ is valid in the sense of \cref{defin:formalisations:groove_formalisation:instance_graphs:instance_graph_validity}.
+\end{proof}
+
+Like the definition for the combination of instance models, the combination of instance graphs also requires the user to set a value for all nodes that are typed by the node type that corresponds to the field type. This is to keep the graph valid.
+
+The next definitions define the transformation function from $Im_{DataField}$ to $IG_{DataField}$:
+
+\begin{defin}[Transformation function $f_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field_to_ig_data_field_as_edge_type}
+The transformation function $f_{DataField}(Im)$ is defined as:
+\begin{align*}
+N =\ & Object_{Im} \cup \{values(ob) \mid ob \in Object_{Im}\}  \\
+E =\ & \big\{\big(ob, (\mathrm{ns\_\!to\_\!list}(classtype), \langle name \rangle, fieldtype), values(ob)\big) \mid ob \in Object_{Im} \big\} \\
+\mathrm{ident} =\ & \begin{cases}
+    (obids(ob), ob) & \mathrm{if }\ ob \in Object_{Im}
+\end{cases}
+\end{align*}
+with
+\begin{align*}
+\mathrm{type}_n =\ & \begin{cases}
+    (ob, \mathrm{ns\_\!to\_\!list}(name)) & \mathrm{if }\ ob \in Object_{Im}
+\end{cases}
+\end{align*}
+\isabellelref{imod_data_field_to_ig_data_field_as_edge_type}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{defin}
+
+\begin{thm}[Correctness of $f_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field_to_ig_data_field_as_edge_type_func}
+$f_{DataField}(Im)$ (\cref{defin:library_of_transformations:instance_level_transformations:data_field_values:imod_data_field_to_ig_data_field_as_edge_type}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_model_instance_graph} transforming $Im_{DataField}$ into $IG_{DataField}$.
+\isabellelref{imod_data_field_to_ig_data_field_as_edge_type_func}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{thm}
+
+The proof of the correctness of $f_{DataField}$ will not be included here. Instead, it can be found in the validated Isabelle theories.
+
+Finally, to complete the transformation, the transformation function that transforms $IG_{DataField}$ into $Im_{DataField}$ is defined:
+
+\begin{defin}[Transformation function $f'_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type_to_imod_data_field}
+The transformation function $f'_{DataField}(IG)$ is defined as:
+\begin{align*}
+Object =\ &\{\mathrm{src}(e) \mid e \in E_{IG}\} \\
+\mathrm{ObjectClass} =\ & \begin{cases}
+    (ob, classtype) & \mathrm{if }\ ob \in \{\mathrm{src}(e) \mid e \in E_{IG}\}
+\end{cases}\\
+\mathrm{ObjectId} =\ & \begin{cases}
+    (ob, obids(ob)) & \mathrm{if }\ ob \in \{\mathrm{src}(e) \mid e \in E_{IG}\}
+\end{cases}\\
+\mathrm{FieldValue} =\ & \begin{cases}
+    ((ob, (classtype, name)), values(ob)) & \mathrm{if }\ ob \in \{\mathrm{src}(e) \mid e \in E_{IG}\}
+\end{cases} \\
+\mathrm{DefaultValue} =\ & \{\}
+\end{align*}
+\isabellelref{ig_data_field_as_edge_type_to_imod_data_field}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{defin}
+
+\begin{thm}[Correctness of $f'_{DataField}$]
+\label{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type_to_tmod_class_func}
+$f'_{DataField}(IG)$ (\cref{defin:library_of_transformations:instance_level_transformations:data_field_values:ig_data_field_as_edge_type_to_imod_data_field}) is a valid transformation function in the sense of \cref{defin:transformation_framework:instance_models_and_instance_graphs:combining_transformation_functions:transformation_function_instance_graph_instance_model} transforming $IG_{DataField}$ into $Im_{DataField}$.
+\isabellelref{ig_data_field_as_edge_type_to_imod_data_field_func}{Ecore-GROOVE-Mapping-Library.DataFieldValue}
+\end{thm}
+
+Once more, the correctness proof is not included here but can be found in the validated Isabelle proofs of this thesis.
